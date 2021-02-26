@@ -24,15 +24,15 @@ namespace KaderService.Services.Services
         }
 
         //Get
-        public async Task<Group> GetGroupAsync(int id)
+        public async Task<Group> GetGroupAsync(string id)
         {
             return await _context.Group.FindAsync(id);
         }
 
         //Put/ Update
-        public async Task UpdateGroupAsync(int id, Group group)
+        public async Task UpdateGroupAsync(string id, Group group)
         {
-            if (id != group.Id)
+            if (!id.Equals(group.Id))
             {
                 throw new Exception("Id is not equal to post.Id");
             }
@@ -49,21 +49,23 @@ namespace KaderService.Services.Services
                 {
                     throw new KeyNotFoundException();
                 }
+
                 throw;
             }
         }
-        private bool GroupExists(int id)
+
+        private bool GroupExists(string id)
         {
-            return _context.Group.Any(e => e.Id == id);
+            return _context.Group.Any(e => e.Id.Equals(id));
         }
 
         public async Task CreateGroupAsync(Group group)
         {
-            _context.Group.Add(group);
+            await _context.Group.AddAsync(@group);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteGroupAsync(int id)
+        public async Task DeleteGroupAsync(string id)
         {
             var group = await _context.Group.FindAsync(id);
             if (group == null)
@@ -74,6 +76,5 @@ namespace KaderService.Services.Services
             _context.Group.Remove(group);
             await _context.SaveChangesAsync();
         }
-
     }
 }

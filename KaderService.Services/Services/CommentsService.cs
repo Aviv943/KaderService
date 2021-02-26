@@ -21,21 +21,21 @@ namespace KaderService.Services.Services
         //Gets
 
         public async Task<IEnumerable<Comment>> GetCommentsAsync()
-        { 
+        {
             return await _context.Comment.ToListAsync();
         }
 
         //Get
 
-        public async Task<Comment> GetCommentAsync(int id)
+        public async Task<Comment> GetCommentAsync(string id)
         {
             return await _context.Comment.FindAsync(id);
         }
 
         //Put/ Update
-        public async Task UpdateCommentAsync(int id, Comment comment)
+        public async Task UpdateCommentAsync(string id, Comment comment)
         {
-            if (id != comment.Id)
+            if (id.Equals(comment.Id))
             {
                 throw new Exception("Id is not equal to comment.Id");
             }
@@ -52,25 +52,23 @@ namespace KaderService.Services.Services
                 {
                     throw new KeyNotFoundException();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
         }
-        private bool CommentExists(int id)
+        private bool CommentExists(string id)
         {
-            return _context.Comment.Any(e => e.Id == id);
+            return _context.Comment.Any(e => e.Id.Equals(id));
         }
 
         //Post/ Create
         public async Task CreateCommentAsync(Comment comment)
         {
-            _context.Comment.Add(comment);
+            await _context.Comment.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCommentAsync(int id)
+        public async Task DeleteCommentAsync(string id)
         {
             var comment = await _context.Comment.FindAsync(id);
             if (comment == null)

@@ -21,19 +21,19 @@ namespace KaderService.Services.Services
         //Gets
         public async Task<IEnumerable<Post>> GetPostsAsync()
         {
-           return await _context.Post.ToListAsync();
+            return await _context.Post.ToListAsync();
         }
 
         //Get
-        public async Task<Post> GetPostAsync(int id)
+        public async Task<Post> GetPostAsync(string id)
         {
             return await _context.Post.FindAsync(id);
         }
 
         //Put/ Update
-        public async Task UpdatePostAsync(int id, Post post)
+        public async Task UpdatePostAsync(string id, Post post)
         {
-            if (id != post.Id)
+            if (!id.Equals(post.Id))
             {
                 throw new Exception("Id is not equal to post.Id");
             }
@@ -44,7 +44,7 @@ namespace KaderService.Services.Services
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException e)
+            catch (DbUpdateConcurrencyException)
             {
                 if (!PostExists(id))
                 {
@@ -55,9 +55,9 @@ namespace KaderService.Services.Services
             }
         }
 
-        private bool PostExists(int id)
+        private bool PostExists(string id)
         {
-            return _context.Post.Any(e => e.Id == id);
+            return _context.Post.Any(e => e.Id.Equals(id));
         }
 
         //Post/ Create
@@ -69,16 +69,16 @@ namespace KaderService.Services.Services
 
         //Delete
 
-        public async Task DeletePostAsync(int id)
+        public async Task DeletePostAsync(string id)
         {
             var post = await _context.Post.FindAsync(id);
             if (post == null)
             {
                 throw new KeyNotFoundException();
             }
+
             _context.Post.Remove(post);
             await _context.SaveChangesAsync();
         }
-
     }
 }
