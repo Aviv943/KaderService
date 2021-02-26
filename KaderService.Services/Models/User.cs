@@ -1,17 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace KaderService.Services.Models
 {
-    public class User
+    public class User:IdentityUser
     {
-        //[Key]
-        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
         public double Rating { get; set; }
         public int NumberOfRatings { get; set; }
         public ICollection<Group> Groups { get; set; }

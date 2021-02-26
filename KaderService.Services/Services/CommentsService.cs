@@ -27,15 +27,15 @@ namespace KaderService.Services.Services
 
         //Get
 
-        public async Task<Comment> GetCommentAsync(int id)
+        public async Task<Comment> GetCommentAsync(string id)
         {
             return await _context.Comment.FindAsync(id);
         }
 
         //Put/ Update
-        public async Task UpdateCommentAsync(int id, Comment comment)
+        public async Task UpdateCommentAsync(string id, Comment comment)
         {
-            if (id != comment.Id)
+            if (!id.Equals(comment.Id))
             {
                 throw new Exception("Id is not equal to comment.Id");
             }
@@ -58,7 +58,7 @@ namespace KaderService.Services.Services
                 }
             }
         }
-        private bool CommentExists(int id)
+        private bool CommentExists(string id)
         {
             return _context.Comment.Any(e => e.Id == id);
         }
@@ -70,7 +70,7 @@ namespace KaderService.Services.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCommentAsync(int id)
+        public async Task DeleteCommentAsync(string id)
         {
             var comment = await _context.Comment.FindAsync(id);
             if (comment == null)

@@ -22,7 +22,7 @@ namespace KaderService.Services.Models
         public string Description { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public string Location { get; set; }
-        public string[] Images { get; set; }
+        public ICollection<string> Images { get; set; }
         public User Creator { get; set; }
         public string GroupId { get; set; }
         public DateTime Created { get; set; }

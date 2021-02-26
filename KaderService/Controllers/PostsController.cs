@@ -41,7 +41,7 @@ namespace KaderService.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetPostResponse>> GetPostAsync(int id)
+        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string id)
         {
             var post = await _service.GetPostAsync(id);
             
@@ -61,7 +61,7 @@ namespace KaderService.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, Post post)
+        public async Task<IActionResult> PutPost(string id, Post post)
         {
             await _service.UpdatePostAsync(id, post);
             return NoContent();
@@ -79,7 +79,7 @@ namespace KaderService.Controllers
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(int id)
+        public async Task<IActionResult> DeletePost(string id)
         {
 
             await _service.DeletePostAsync(id);
