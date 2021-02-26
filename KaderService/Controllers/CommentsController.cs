@@ -18,7 +18,7 @@ namespace KaderService.Controllers
         private readonly KaderContext _context;
         private readonly CommentsService _service;
 
-        public CommentsController(KaderContext context,CommentsService service)
+        public CommentsController(KaderContext context, CommentsService service)
         {
             _context = context;
             _service = service;
@@ -61,7 +61,7 @@ namespace KaderService.Controllers
         {
             await _service.CreateCommentAsync(comment);
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
+            return CreatedAtAction("GetComment", new {id = comment.Id}, comment);
         }
 
         // DELETE: api/Comments/5
@@ -72,7 +72,5 @@ namespace KaderService.Controllers
 
             return NoContent();
         }
-
-        
     }
 }

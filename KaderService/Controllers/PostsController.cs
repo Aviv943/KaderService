@@ -30,7 +30,7 @@ namespace KaderService.Controllers
         public async Task<ActionResult<GetPostsResponse>> GetPostsAsync()
         {
             IEnumerable<Post> posts = await _service.GetPostsAsync();
-            
+
             var response = new GetPostsResponse
             {
                 Posts = posts
@@ -44,7 +44,7 @@ namespace KaderService.Controllers
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string id)
         {
             var post = await _service.GetPostAsync(id);
-            
+
             if (post == null)
             {
                 return NotFound();
@@ -52,7 +52,7 @@ namespace KaderService.Controllers
 
             var response = new GetPostResponse
             {
-                Post=post
+                Post = post
             };
 
             return Ok(response);
@@ -74,14 +74,13 @@ namespace KaderService.Controllers
         {
             await _service.CreatePostAsync(post);
 
-            return CreatedAtAction("GetPostAsync", new { id = post.Id }, post);
+            return CreatedAtAction("GetPostAsync", new {id = post.Id}, post);
         }
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(string id)
         {
-
             await _service.DeletePostAsync(id);
             return NoContent();
         }
