@@ -20,13 +20,13 @@ namespace KaderService.Services.Services
         //Gets
         public async Task<IEnumerable<Group>> GetGroupsAsync()
         {
-            return await _context.Group.ToListAsync();
+            return await _context.Groups.ToListAsync();
         }
 
         //Get
         public async Task<Group> GetGroupAsync(string id)
         {
-            return await _context.Group.FindAsync(id);
+            return await _context.Groups.FindAsync(id);
         }
 
         //Put/ Update
@@ -56,24 +56,24 @@ namespace KaderService.Services.Services
 
         private bool GroupExists(string id)
         {
-            return _context.Group.Any(e => e.Id.Equals(id));
+            return _context.Groups.Any(e => e.Id.Equals(id));
         }
 
         public async Task CreateGroupAsync(Group group)
         {
-            await _context.Group.AddAsync(@group);
+            await _context.Groups.AddAsync(@group);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteGroupAsync(string id)
         {
-            var group = await _context.Group.FindAsync(id);
+            var group = await _context.Groups.FindAsync(id);
             if (group == null)
             {
                 throw new KeyNotFoundException();
             }
 
-            _context.Group.Remove(group);
+            _context.Groups.Remove(group);
             await _context.SaveChangesAsync();
         }
     }

@@ -18,7 +18,7 @@ namespace KaderService.Controllers
         private readonly KaderContext _context;
         private readonly CommentsService _service;
 
-        public CommentsController(KaderContext context,CommentsService service)
+        public CommentsController(KaderContext context, CommentsService service)
         {
             _context = context;
             _service = service;
@@ -33,7 +33,7 @@ namespace KaderService.Controllers
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Comment>> GetComment(int id)
+        public async Task<ActionResult<Comment>> GetComment(string id)
         {
             var comment = await _service.GetCommentAsync(id);
 
@@ -48,7 +48,7 @@ namespace KaderService.Controllers
         // PUT: api/Comments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutComment(int id, Comment comment)
+        public async Task<IActionResult> PutComment(string id, Comment comment)
         {
             await _service.UpdateCommentAsync(id, comment);
             return NoContent();
@@ -61,18 +61,16 @@ namespace KaderService.Controllers
         {
             await _service.CreateCommentAsync(comment);
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
+            return CreatedAtAction("GetComment", new {id = comment.Id}, comment);
         }
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteComment(int id)
+        public async Task<IActionResult> DeleteComment(string id)
         {
             await _service.DeleteCommentAsync(id);
 
             return NoContent();
         }
-
-        
     }
 }

@@ -11,7 +11,7 @@ namespace KaderService.Services.Models
 
         public DateTime Created { get; set; }
 
-        public Post PostId { get; set; }
-
+        public string PostId { get; set; }
+        public Post Post { get; set; }
     }
 }

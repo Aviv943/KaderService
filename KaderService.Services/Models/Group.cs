@@ -5,6 +5,13 @@ namespace KaderService.Services.Models
 {
     public class Group
     {
+        public Group()
+        {
+            GroupPrivacy = GroupPrivacy.Public;
+            Members = new List<User>();
+            Posts = new List<Post>();
+        }
+
         //[Key]
         public string Id { get; set; }
 
@@ -15,7 +22,9 @@ namespace KaderService.Services.Models
         public string Category { get; set; }
         public string Description { get; set; }
         public string MainLocation { get; set; }
+
         public bool Searchable { get; set; }
+
         //Privacy: Private/ Public/ Invisible
         public GroupPrivacy GroupPrivacy { get; set; }
         public ICollection<User> Members { get; set; }

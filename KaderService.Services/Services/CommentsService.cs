@@ -22,14 +22,14 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Comment>> GetCommentsAsync()
         {
-            return await _context.Comment.ToListAsync();
+            return await _context.Comments.ToListAsync();
         }
 
         //Get
 
         public async Task<Comment> GetCommentAsync(string id)
         {
-            return await _context.Comment.FindAsync(id);
+            return await _context.Comments.FindAsync(id);
         }
 
         //Put/ Update
@@ -58,25 +58,25 @@ namespace KaderService.Services.Services
         }
         private bool CommentExists(string id)
         {
-            return _context.Comment.Any(e => e.Id.Equals(id));
+            return _context.Comments.Any(e => e.Id.Equals(id));
         }
 
         //Post/ Create
         public async Task CreateCommentAsync(Comment comment)
         {
-            await _context.Comment.AddAsync(comment);
+            await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCommentAsync(string id)
         {
-            var comment = await _context.Comment.FindAsync(id);
+            var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
             {
                 throw new KeyNotFoundException();
             }
 
-            _context.Comment.Remove(comment);
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
         }
 

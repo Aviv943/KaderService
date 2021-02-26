@@ -9,6 +9,12 @@ namespace KaderService.Services.Models
 {
     public class Post
     {
+        public Post()
+        {
+            Comments = new List<Comment>();
+            ImagesUri = new List<string>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
@@ -20,11 +26,11 @@ namespace KaderService.Services.Models
         public string Category { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public ICollection<Comment> Comments { get; set; }
         public string Location { get; set; }
-        public string[] Images { get; set; }
         public User Creator { get; set; }
-        public string GroupId { get; set; }
+        public Group Group { get; set; }
         public DateTime Created { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<string> ImagesUri { get; set; }
     }
 }

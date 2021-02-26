@@ -1,18 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using KaderService.Services.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Data
 {
-    public class KaderContext : DbContext
+    public class KaderContext : IdentityDbContext
     {
-        public KaderContext (DbContextOptions<KaderContext> options)
-            : base(options)
+        public KaderContext(DbContextOptions<KaderContext> options) : base(options)
         {
         }
 
-        public DbSet<KaderService.Services.Models.Post> Post { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            //todo: Aviv validate that works as planned
+            modelBuilder.Entity<Post>().Property(p => p.ImagesUri).HasConversion(images => string.Join(',', images), images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
+        }
 
-        public DbSet<KaderService.Services.Models.Comment> Comment { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
-        public DbSet<KaderService.Services.Models.Group> Group { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
     }
 }
