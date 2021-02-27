@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KaderService.Contracts;
 using KaderService.Services.Models;
+using KaderService.Services.Models.AuthModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

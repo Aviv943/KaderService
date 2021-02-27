@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using KaderService.Services.Models;
+﻿using KaderService.Services.Models;
 
 namespace KaderService.Contracts.Responses
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using KaderService.Services.Constants;
-using Microsoft.VisualBasic;
 
 namespace KaderService.Services.Models
 {

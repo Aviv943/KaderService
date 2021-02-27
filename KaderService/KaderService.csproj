@@ -20,8 +20,4 @@
     <ProjectReference Include="..\KaderService.Services\KaderService.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>

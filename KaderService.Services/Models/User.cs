@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Services.Models
 {
-    public class User :IdentityUser
+    public class User : IdentityUser
     {
         public User()
         {
