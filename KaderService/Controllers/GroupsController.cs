@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
     [Authorize]
     [Route("api/groups")]
     [ApiController]
-    public class GroupsController : ControllerBase
+    public class GroupsController : MyControllerBase
     {
-        private readonly KaderContext _context;
         private readonly GroupsService _service;
 
-        public GroupsController(KaderContext context, GroupsService service)
+        public GroupsController(GroupsService service, UserManager<User> userManager) 
+            : base(userManager)
         {
-            _context = context;
             _service = service;
         }
 

@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using KaderService.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
     [Authorize]
     [Route("api/comments")]
     [ApiController]
-    public class CommentsController : ControllerBase
+    public class CommentsController : MyControllerBase
     {
-        private readonly KaderContext _context;
         private readonly CommentsService _service;
 
-        public CommentsController(KaderContext context, CommentsService service)
+        public CommentsController(CommentsService service, UserManager<User> userManager) 
+            : base(userManager)
         {
-            _context = context;
             _service = service;
         }
 

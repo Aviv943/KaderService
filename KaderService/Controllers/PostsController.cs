@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
-using KaderService.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
     [Authorize]
     [Route("api/posts")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsController : MyControllerBase
     {
-        private readonly KaderContext _context;
         private readonly PostsService _service;
 
-        public PostsController(KaderContext context, PostsService service)
+        public PostsController(PostsService service, UserManager<User> userManager) 
+            : base(userManager)
         {
-            _context = context;
             _service = service;
         }
 
@@ -70,7 +69,7 @@ namespace KaderService.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> CreatePostAsync(Post post)
         {
-            await _service.CreatePostAsync(post);
+            await _service.CreatePostAsync(post, LoggedInUser);
 
             return CreatedAtAction("GetPostAsync", new { id = post.Id }, post);
         }

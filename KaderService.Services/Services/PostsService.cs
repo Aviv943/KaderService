@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -11,10 +12,12 @@ namespace KaderService.Services.Services
     public class PostsService
     {
         private readonly KaderContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public PostsService(KaderContext context)
+        public PostsService(KaderContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         //Gets
@@ -60,8 +63,9 @@ namespace KaderService.Services.Services
         }
 
         //Post/ Create
-        public async Task CreatePostAsync(Post post)
+        public async Task CreatePostAsync(Post post, User user)
         {
+            post.Creator = user;
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
         }

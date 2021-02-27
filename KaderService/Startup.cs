@@ -19,12 +19,16 @@ namespace KaderService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             services.AddMyServices();
             services.AddMyIdentity();
             services.AddMyAuthentication(Configuration);
             services.AddMySwagger();
             services.AddMyDb(Configuration);
+            services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
