@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using KaderService.Services.Constants;
 
 namespace KaderService.Services.Models
@@ -12,7 +14,8 @@ namespace KaderService.Services.Models
             Posts = new List<Post>();
         }
 
-        //[Key]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         //Type: ISR-Anubis-Club

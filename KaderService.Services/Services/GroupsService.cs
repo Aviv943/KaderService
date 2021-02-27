@@ -34,7 +34,7 @@ namespace KaderService.Services.Services
         {
             if (!id.Equals(group.Id) )
             {
-                throw new Exception("Id is not equal to post.Id");
+                throw new Exception("Id is not equal to group.Id");
             }
 
             _context.Entry(group).State = EntityState.Modified;
@@ -60,7 +60,7 @@ namespace KaderService.Services.Services
 
         public async Task CreateGroupAsync(Group group)
         {
-            await _context.Groups.AddAsync(@group);
+            await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
         }
 
