@@ -20,12 +20,12 @@ namespace KaderService.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
 
         public AuthenticateController(UserManager<User> userManager, IConfiguration configuration)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
             _configuration = configuration;
         }
 
@@ -33,14 +33,14 @@ namespace KaderService.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            User user = await userManager.FindByNameAsync(model.Username);
+            User user = await _userManager.FindByNameAsync(model.Username);
 
-            if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 return Unauthorized();
             }
 
-            IList<string> userRoles = await userManager.GetRolesAsync(user);
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
             {
@@ -50,7 +50,7 @@ namespace KaderService.Controllers
 
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-            
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
@@ -70,8 +70,8 @@ namespace KaderService.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            User userExists = await userManager.FindByNameAsync(model.Username);
-            
+            User userExists = await _userManager.FindByNameAsync(model.Username);
+
             if (userExists != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
@@ -84,8 +84,8 @@ namespace KaderService.Controllers
                 UserName = model.Username
             };
 
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
-            
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
             if (!result.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response

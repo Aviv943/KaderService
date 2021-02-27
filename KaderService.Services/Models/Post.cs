@@ -23,13 +23,21 @@ namespace KaderService.Services.Models
 
         //Category: Sport/ School/ Cooking
         public string Category { get; set; }
+        
         public string Title { get; set; }
+        
         public string Description { get; set; }
+        
         public string Location { get; set; }
+        
         public User Creator { get; set; }
+        
         public Group Group { get; set; }
+        
         public DateTime Created { get; set; }
+        
         public ICollection<Comment> Comments { get; set; }
+        
         public ICollection<string> ImagesUri { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public enum GroupPrivacy
     {
-        Private, 
-        Invisible, 
+        Private,
+        Invisible,
         Public
     }
 }

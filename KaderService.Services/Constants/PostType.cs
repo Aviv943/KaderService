@@ -2,8 +2,8 @@
 {
     public enum PostType
     {
-        Request, 
-        Offer, 
+        Request,
+        Offer,
         Handover
     }
 }

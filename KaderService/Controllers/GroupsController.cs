@@ -4,9 +4,11 @@ using KaderService.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KaderService.Controllers
 {
+    [Authorize]
     [Route("api/groups")]
     [ApiController]
     public class GroupsController : ControllerBase
@@ -14,7 +16,7 @@ namespace KaderService.Controllers
         private readonly KaderContext _context;
         private readonly GroupsService _service;
 
-        public GroupsController(KaderContext context,GroupsService service)
+        public GroupsController(KaderContext context, GroupsService service)
         {
             _context = context;
             _service = service;
@@ -68,7 +70,5 @@ namespace KaderService.Controllers
 
             return NoContent();
         }
-
-        
     }
 }

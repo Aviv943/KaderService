@@ -72,7 +72,7 @@ namespace KaderService.Controllers
         {
             await _service.CreatePostAsync(post);
 
-            return CreatedAtAction("GetPostAsync", new {id = post.Id}, post);
+            return CreatedAtAction("GetPostAsync", new { id = post.Id }, post);
         }
 
         // DELETE: api/Posts/5

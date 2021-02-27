@@ -4,9 +4,11 @@ using KaderService.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KaderService.Controllers
 {
+    [Authorize]
     [Route("api/comments")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -57,7 +59,7 @@ namespace KaderService.Controllers
         {
             await _service.CreateCommentAsync(comment);
 
-            return CreatedAtAction("GetCommentsAsync", new {id = comment.Id}, comment);
+            return CreatedAtAction("GetCommentsAsync", new { id = comment.Id }, comment);
         }
 
         // DELETE: api/Comments/5

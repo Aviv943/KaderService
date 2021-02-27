@@ -32,7 +32,7 @@ namespace KaderService.Services.Services
         //Put/ Update
         public async Task UpdateGroupAsync(string id, Group group)
         {
-            if (!id.Equals(group.Id) )
+            if (!id.Equals(group.Id))
             {
                 throw new Exception("Id is not equal to group.Id");
             }

@@ -15,7 +15,12 @@ namespace KaderService.Services.Data
         {
             base.OnModelCreating(modelBuilder);
             //todo: Aviv validate that works as planned
-            modelBuilder.Entity<Post>().Property(p => p.ImagesUri).HasConversion(images => string.Join(',', images), images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
+            modelBuilder
+                .Entity<Post>()
+                .Property(p => p.ImagesUri)
+                .HasConversion(images => 
+                    string.Join(',', images),
+                    images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
         }
 
         public DbSet<Post> Posts { get; set; }
