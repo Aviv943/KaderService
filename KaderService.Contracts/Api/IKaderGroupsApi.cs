@@ -5,7 +5,7 @@ using Refit;
 
 namespace KaderService.Contracts.Api
 {
-    interface IKaderGroupsApi
+    public interface IKaderGroupsApi
     {
 
         [Get("/api/groups")]

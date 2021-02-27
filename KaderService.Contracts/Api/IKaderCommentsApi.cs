@@ -5,7 +5,7 @@ using Refit;
 
 namespace KaderService.Contracts.Api
 {
-    interface IKaderCommentsApi
+    public interface IKaderCommentsApi
     {
 
         [Get("/api/comments")]
