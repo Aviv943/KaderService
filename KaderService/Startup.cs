@@ -38,6 +38,7 @@ namespace KaderService
             services.AddTransient<PostsService>();
             services.AddTransient<CommentsService>();
             services.AddTransient<GroupsService>();
+            services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddDbContext<KaderContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("KaderContext")));
         }

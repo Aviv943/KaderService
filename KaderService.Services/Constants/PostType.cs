@@ -4,7 +4,6 @@
     {
         Request, 
         Offer, 
-        Handover,
-        Matan
+        Handover
     }
 }
