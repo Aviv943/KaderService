@@ -20,7 +20,7 @@ namespace KaderService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.ConfigureServices();
+            services.AddMyServices();
             services.AddMyIdentity();
             services.AddMyAuthentication(Configuration);
             services.AddMySwagger();

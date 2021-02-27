@@ -14,7 +14,7 @@ namespace KaderService.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureServices(this IServiceCollection services)
+        public static void AddMyServices(this IServiceCollection services)
         {
             services.AddTransient<PostsService>();
             services.AddTransient<CommentsService>();
