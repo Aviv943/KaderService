@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KaderService.Controllers
 {
+    [Authorize]
     [Route("api/posts")]
     [ApiController]
     public class PostsController : ControllerBase

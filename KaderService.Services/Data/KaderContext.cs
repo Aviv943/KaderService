@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Data
 {
-    public class KaderContext : IdentityDbContext
+    public class KaderContext : IdentityDbContext<User>
     {
         public KaderContext(DbContextOptions<KaderContext> options) : base(options)
         {
