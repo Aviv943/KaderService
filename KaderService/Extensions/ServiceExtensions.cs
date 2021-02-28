@@ -3,6 +3,7 @@ using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,8 +30,8 @@ namespace KaderService.Extensions
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
 
+                })
                 // Adding Jwt Bearer  
                 .AddJwtBearer(options =>
                 {
@@ -45,6 +46,19 @@ namespace KaderService.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Secret"]))
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("GroupManager", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new GroupManagerRequirement());
+                });
+            });
+            services.AddScoped<IAuthorizationHandler, MinimumAgeHandler>();
+
+            services.AddHttpContextAccessor();
+
         }
 
         public static void AddMySwagger(this IServiceCollection services)

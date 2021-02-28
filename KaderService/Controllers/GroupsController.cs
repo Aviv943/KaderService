@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/groups")]
     [ApiController]
     public class GroupsController : MyControllerBase
@@ -30,6 +30,7 @@ namespace KaderService.Controllers
 
         // GET: api/Groups/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<Group>> GetGroupAsync(string id)
         {
             var group = await _service.GetGroupAsync(id);

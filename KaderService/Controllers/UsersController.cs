@@ -66,6 +66,7 @@ namespace KaderService.Controllers
         }
 
         [HttpPut("role/{userId}")]
+        [Authorize(Policy = "GroupManager")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutRoleAsync(string userId, string newRole)
         {
