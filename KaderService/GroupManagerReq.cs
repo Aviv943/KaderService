@@ -26,13 +26,19 @@ namespace KaderService
         {
             HttpContext httpContext = _httpContextAccessor.HttpContext;
 
-            var groupId = httpContext?.Request?.RouteValues["id"]?.ToString();
-            var user = _userManager.FindByNameAsync(context.User.Identity.Name).Result;
+            var groupId = httpContext?.Request.RouteValues["id"]?.ToString();
+            string? userName = context.User.Identity.Name;
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                return Task.CompletedTask;
+            }
+
+            User user = _userManager.FindByNameAsync(userName).Result;
             Group group = _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId).Result;
 
             if (user == null || group == null)
             {
-                context.Fail();
                 return Task.CompletedTask;
             }
 
@@ -42,7 +48,6 @@ namespace KaderService
                 return Task.CompletedTask;
             }
 
-            context.Fail();
             return Task.CompletedTask;
         }
     }

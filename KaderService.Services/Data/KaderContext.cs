@@ -22,13 +22,11 @@ namespace KaderService.Services.Data
                     string.Join(',', images),
                     images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
-
             modelBuilder
                 .Entity<Group>()
                 .HasMany(group => group.Managers)
                 .WithMany(user => user.ManagerInGroups)
                 .UsingEntity(j => j.ToTable("GroupsManagers"));
-
 
             modelBuilder
                 .Entity<Group>()
@@ -42,6 +40,5 @@ namespace KaderService.Services.Data
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Group> Groups { get; set; }
-        
     }
 }

@@ -55,10 +55,9 @@ namespace KaderService.Extensions
                     policy.Requirements.Add(new GroupManagerRequirement());
                 });
             });
+
             services.AddScoped<IAuthorizationHandler, MinimumAgeHandler>();
-
             services.AddHttpContextAccessor();
-
         }
 
         public static void AddMySwagger(this IServiceCollection services)
