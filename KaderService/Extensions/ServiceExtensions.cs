@@ -19,6 +19,7 @@ namespace KaderService.Extensions
             services.AddTransient<PostsService>();
             services.AddTransient<CommentsService>();
             services.AddTransient<GroupsService>();
+            services.AddTransient<UsersService>();
         }
 
         public static void AddMyAuthentication(this IServiceCollection services, IConfiguration config)
