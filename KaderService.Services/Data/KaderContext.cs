@@ -21,6 +21,20 @@ namespace KaderService.Services.Data
                 .HasConversion(images => 
                     string.Join(',', images),
                     images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+
+            modelBuilder
+                .Entity<Group>()
+                .HasMany(group => group.Managers)
+                .WithMany(user => user.ManagerInGroups)
+                .UsingEntity(j => j.ToTable("GroupsManagers"));
+
+
+            modelBuilder
+                .Entity<Group>()
+                .HasMany(group => group.Members)
+                .WithMany(user => user.MemberInGroups)
+                .UsingEntity(j => j.ToTable("GroupsMembers"));
         }
 
         public DbSet<Post> Posts { get; set; }
@@ -28,5 +42,6 @@ namespace KaderService.Services.Data
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Group> Groups { get; set; }
+        
     }
 }
