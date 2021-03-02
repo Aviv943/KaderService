@@ -87,6 +87,7 @@ namespace KaderService.Services.Services
             return result.Succeeded;
         }
 
+
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _context.Users.ToListAsync();
@@ -95,6 +96,16 @@ namespace KaderService.Services.Services
         public async Task<User> GetUserAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
+        }
+
+        public async Task<IdentityRole> GetRoleAsync(string roleName)
+        {
+            IdentityRole role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null)
+            {
+                throw new Exception($"The {roleName} was not found");
+            }
+            return role;
         }
 
         public async Task PutRoleAsync(string id, string newRole)
@@ -106,6 +117,19 @@ namespace KaderService.Services.Services
         public async Task PostRoleAsync(string roleName)
         {
             await _roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+
+        public async Task DeleteRoleAsync(string roleName)
+        {
+            try
+            {
+                var role = await GetRoleAsync(roleName);
+                await _roleManager.DeleteAsync(role);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"The {roleName} failed to delete, error: {e}");
+            }
         }
     }
 }

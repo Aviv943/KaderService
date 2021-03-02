@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
-using KaderService.Contracts;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using KaderService.Contracts.Responses;
+using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
-using KaderService.Services.Models.AuthModels;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using KaderService.Services.Models.AuthModels;
+using KaderService.Contracts;
 
 namespace KaderService.Controllers
 {
@@ -79,6 +81,14 @@ namespace KaderService.Controllers
         public async Task<IActionResult> PostRoleAsync(string roleName)
         {
             await _service.PostRoleAsync(roleName);
+            return Ok();
+        }
+
+        [HttpDelete("role/{roleName}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> DeleteRoleAsync(string roleName)
+        {
+            await _service.DeleteRoleAsync(roleName);
             return Ok();
         }
     }
