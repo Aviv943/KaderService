@@ -21,14 +21,14 @@ namespace KaderService.Controllers
             _service = service;
         }
 
-        // GET: api/Groups
+        // GET: api/MemberInGroups
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroupsAsync()
         {
             return Ok(await _service.GetGroupsAsync());
         }
 
-        // GET: api/Groups/5
+        // GET: api/MemberInGroups/5
         [HttpGet("{id}")]
         [Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<Group>> GetGroupAsync(string id)
@@ -43,7 +43,7 @@ namespace KaderService.Controllers
             return Ok(group);
         }
 
-        // PUT: api/Groups/5
+        // PUT: api/MemberInGroups/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGroupAsync(string id, Group group)
@@ -52,7 +52,7 @@ namespace KaderService.Controllers
             return NoContent();
         }
 
-        // POST: api/Groups
+        // POST: api/MemberInGroups
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Group>> PostGroupAsync(Group group)
@@ -62,7 +62,7 @@ namespace KaderService.Controllers
             return CreatedAtAction("GetGroupsAsync", new { id = group.Id }, group);
         }
 
-        // DELETE: api/Groups/5
+        // DELETE: api/MemberInGroups/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGroupAsync(string id)
         {

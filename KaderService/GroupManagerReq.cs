@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService
@@ -11,31 +13,42 @@ namespace KaderService
     {
         private readonly KaderContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
 
-        public MinimumAgeHandler(KaderContext context, IHttpContextAccessor httpContextAccessor)
+        public MinimumAgeHandler(KaderContext context, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, GroupManagerRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, GroupManagerRequirement requirement)
         {
             HttpContext httpContext = _httpContextAccessor.HttpContext;
 
-            var groupId = httpContext.Request.RouteValues["id"].ToString();
-            User user = await _context.Users.FindAsync(context.User.Identity.Name);
-            Group group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+            var groupId = httpContext?.Request.RouteValues["id"]?.ToString();
+            string? userName = context.User.Identity.Name;
 
-            if (user == null && group == null)
+            if (string.IsNullOrWhiteSpace(userName))
             {
-                context.Fail();
-                return;
+                return Task.CompletedTask;
+            }
+
+            User user = _userManager.FindByNameAsync(userName).Result;
+            Group group = _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId).Result;
+
+            if (user == null || group == null)
+            {
+                return Task.CompletedTask;
             }
 
             if (group.Managers.Contains(user))
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
     }
 

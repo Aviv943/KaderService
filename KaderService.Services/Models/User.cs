@@ -7,9 +7,10 @@ namespace KaderService.Services.Models
     {
         public User()
         {
-            Groups = new List<Group>();
+            MemberInGroups = new List<Group>();
             Posts = new List<Post>();
             Comments = new List<Comment>();
+            ManagerInGroups = new List<Group>();
         }
 
         //[Key]
@@ -18,14 +19,17 @@ namespace KaderService.Services.Models
         public string LastName { get; set; }
         
         public double Rating { get; set; }
+
         public int NumberOfRatings { get; set; }
-        
-        public ICollection<Group> Groups { get; set; }
-        
+
+        public string ImageUri { get; set; }
+
         public ICollection<Post> Posts { get; set; }
         
         public ICollection<Comment> Comments { get; set; }
-        
-        public string ImageUri { get; set; }
+
+        public ICollection<Group> MemberInGroups { get; set; }
+
+        public ICollection<Group> ManagerInGroups { get; set; }
     }
 }

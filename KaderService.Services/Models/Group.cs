@@ -31,9 +31,9 @@ namespace KaderService.Services.Models
 
         //Privacy: Private/ Public/ Invisible
         public GroupPrivacy GroupPrivacy { get; set; }
+        
         public ICollection<User> Members { get; set; }
 
-        //todo ask yoni what the fuck does it want from my relationships god dam fucking shit motherfucker
         public ICollection<User> Managers { get; set; }
 
         public ICollection<Post> Posts { get; set; }
