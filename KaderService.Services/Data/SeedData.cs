@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
+using KaderService.Services.Models.AuthModels;
+using KaderService.Services.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,11 +15,18 @@ namespace KaderService.Services.Data
 {
     public class SeedData
     {
+        private readonly UsersService _service;
+
         private static readonly string DirectoryPath =
             AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin", StringComparison.Ordinal));
 
         private static UserManager<User> _userManager;
         private static RoleManager<IdentityRole> _roleManager;
+
+        public SeedData(UsersService service)
+        {
+            _service = service;
+        }
 
         public static async Task Initialize(IServiceProvider serviceProvider, string adminPassword)
         {
@@ -39,7 +48,7 @@ namespace KaderService.Services.Data
 
             if (!roleExists)
             {
-                var role = new IdentityRole {Name = admin};
+                var role = new IdentityRole { Name = admin };
                 await _roleManager.CreateAsync(role);
                 await AddAdmins(_userManager, adminPassword);
             }
@@ -57,7 +66,8 @@ namespace KaderService.Services.Data
                     LastName = "Gross",
                     Rating = 1.3,
                     NumberOfRatings = 100,
-                    Groups = null,
+                    ManagerInGroups = null,
+                    MemberInGroups = null,
                     Posts = null,
                     Comments = null,
                     ImageUri = ""
@@ -68,7 +78,7 @@ namespace KaderService.Services.Data
                     LastName = "Hassin",
                     Rating = 4.9,
                     NumberOfRatings = 2000,
-                    Groups = null,
+                    ManagerInGroups = null,
                     Posts = null,
                     Comments = null,
                     ImageUri = ""
@@ -79,7 +89,7 @@ namespace KaderService.Services.Data
                     LastName = "Miranda",
                     Rating = 0.5,
                     NumberOfRatings = 1,
-                    Groups = null,
+                    ManagerInGroups = null,
                     Posts = null,
                     Comments = null,
                     ImageUri = ""
@@ -90,7 +100,7 @@ namespace KaderService.Services.Data
                     LastName = "Isakov",
                     Rating = 4.2,
                     NumberOfRatings = 250,
-                    Groups = null,
+                    ManagerInGroups = null,
                     Posts = null,
                     Comments = null,
                     ImageUri = ""
@@ -99,8 +109,12 @@ namespace KaderService.Services.Data
 
             foreach (var user in admins)
             {
-                var result = await userManager.CreateAsync(user, adminPassword);
+                var model = new RegisterModel(user.FirstName, user.Email, adminPassword);
+                var isRegistered = await _service.RegisterAsync(model);
 
+
+                var result = await userManager.CreateAsync(user, adminPassword);
+                var bolila = 2;
                 //Add default User to Role Admin    
                 if (result.Succeeded)
                 {
@@ -557,6 +571,10 @@ namespace KaderService.Services.Data
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
             };
+            foreach (var post in posts)
+            {
+                context.Posts.Add(post);
+            }
 
             context.Posts.AsNoTracking();
             context.SaveChanges();
