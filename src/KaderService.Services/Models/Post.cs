@@ -29,7 +29,7 @@ namespace KaderService.Services.Models
         public string Description { get; set; }
         
         public string Location { get; set; }
-        
+
         public User Creator { get; set; }
         
         public Group Group { get; set; }

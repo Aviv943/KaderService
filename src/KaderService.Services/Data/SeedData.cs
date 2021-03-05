@@ -99,8 +99,8 @@ namespace KaderService.Services.Data
                 return;
             }
 
-            await SeedPostsAsync(context);
             await SeedGroupsAsync(context);
+            await SeedPostsAsync(context);
             //await SeedCommentsAsync(context);
             //SeedOrdersAndPayments(context, items, stores);
         }
@@ -119,7 +119,8 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Area 51 Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    
                 },
                 new Group()
                 {
@@ -542,10 +543,25 @@ namespace KaderService.Services.Data
 
             foreach (Post post in posts)
             {
-                context.Posts.Add(post);
+                try
+                {
+                    Group group = await context.Groups.OrderBy(g => Guid.NewGuid()).Take(1).FirstAsync();
+                    post.Group = group;
+                    context.Posts.Add(post);
+                    await context.SaveChangesAsync();
+
+
+                    group.Posts.Add(post);
+                    context.Entry(group).State = EntityState.Modified;
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    
+                }
             }
 
-            context.Posts.AsNoTracking();
+            //context.Posts.AsNoTracking();
             await context.SaveChangesAsync();
         }
     }

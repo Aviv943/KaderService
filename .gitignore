@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /KaderService.Services/Migrations
+/src/KaderService.Services/Migrations
