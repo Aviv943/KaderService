@@ -34,11 +34,7 @@ namespace KaderService.Services.Data
                 .WithMany(user => user.MemberInGroups)
                 .UsingEntity(j => j.ToTable("GroupsMembers"));
 
-            modelBuilder
-                .Entity<Post>()
-                .HasOne(post => post.Group)
-                .WithMany(group => group.Posts)
-                .HasForeignKey<string>(p => p.);
+            modelBuilder.Entity<Post>().HasOne(post => post.Group).WithMany(group => group.Posts);
         }
 
         public DbSet<Post> Posts { get; set; }

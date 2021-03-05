@@ -35,9 +35,9 @@ namespace KaderService.Services.Services
         //Put/ Update
         public async Task UpdatePostAsync(string id, Post post)
         {
-            if (!id.Equals(post.Id))
+            if (!id.Equals(post.PostId))
             {
-                throw new Exception("Id is not equal to post.Id");
+                throw new Exception("PostId is not equal to post.PostId");
             }
 
             _context.Entry(post).State = EntityState.Modified;
@@ -59,7 +59,7 @@ namespace KaderService.Services.Services
 
         private bool PostExists(string id)
         {
-            return _context.Posts.Any(e => e.Id.Equals(id));
+            return _context.Posts.Any(e => e.PostId.Equals(id));
         }
 
         //Post/ Create

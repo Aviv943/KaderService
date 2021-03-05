@@ -17,7 +17,7 @@ namespace KaderService.Services.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string GroupId { get; set; }
 
         //Type: ISR-Anubis-Club
         public string Name { get; set; }

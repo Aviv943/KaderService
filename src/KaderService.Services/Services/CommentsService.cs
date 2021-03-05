@@ -36,7 +36,7 @@ namespace KaderService.Services.Services
         {
             if (!id.Equals(comment.Id))
             {
-                throw new Exception("Id is not equal to comment.Id");
+                throw new Exception("PostId is not equal to comment.PostId");
             }
 
             _context.Entry(comment).State = EntityState.Modified;

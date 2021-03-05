@@ -20,7 +20,7 @@ namespace KaderService.Services.Data
             await using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
             _userManager = serviceProvider.GetService<UserManager<User>>();
             _roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-            
+
             await SeedRolesAndUsersAsync(context, adminPassword);
             await SeedDataBaseAsync(context);
         }
@@ -28,7 +28,7 @@ namespace KaderService.Services.Data
         private static async Task SeedRolesAndUsersAsync(DbContext context, string adminPassword)
         {
             const string admin = "Admin";
-            var role = new IdentityRole { Name = admin };
+            var role = new IdentityRole {Name = admin};
             bool roleExists = await _roleManager.RoleExistsAsync(admin);
 
             if (!roleExists)
@@ -101,6 +101,7 @@ namespace KaderService.Services.Data
 
             await SeedGroupsAsync(context);
             await SeedPostsAsync(context);
+            await PopulatePostsInGroups(context);
             //await SeedCommentsAsync(context);
             //SeedOrdersAndPayments(context, items, stores);
         }
@@ -120,7 +121,6 @@ namespace KaderService.Services.Data
                     Description = "Area 51 Group Description",
                     Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public,
-                    
                 },
                 new Group()
                 {
@@ -201,7 +201,6 @@ namespace KaderService.Services.Data
                 context.Groups.Add(group);
             }
 
-            context.Groups.AsNoTracking();
             await context.SaveChangesAsync();
         }
 
@@ -541,28 +540,26 @@ namespace KaderService.Services.Data
                 },
             };
 
-            foreach (Post post in posts)
+          
+
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task PopulatePostsInGroups(KaderContext context)
+        {
+            var posts = context.Posts.AsEnumerable();
+
+            foreach (var post in posts)
             {
-                try
-                {
-                    Group group = await context.Groups.OrderBy(g => Guid.NewGuid()).Take(1).FirstAsync();
-                    post.Group = group;
-                    context.Posts.Add(post);
-                    await context.SaveChangesAsync();
+                post.Group = await context.Groups.OrderBy(g => Guid.NewGuid()).Take(1).FirstAsync();
 
-
-                    group.Posts.Add(post);
-                    context.Entry(group).State = EntityState.Modified;
-                    await context.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    
-                }
             }
 
-            //context.Posts.AsNoTracking();
+
+
             await context.SaveChangesAsync();
+
+
         }
     }
 }

@@ -29,12 +29,20 @@ namespace KaderService.Services.Services
             return await _context.Groups.FindAsync(id);
         }
 
+        //Get Group's posts
+        public async Task<ICollection<Post>> GetGroupPostsByIdAsync(string id)
+        {
+            var group = await GetGroupAsync(id);
+
+            return group.Posts;
+        }
+
         //Put/ Update
         public async Task UpdateGroupAsync(string id, Group group)
         {
-            if (!id.Equals(group.Id))
+            if (!id.Equals(group.GroupId))
             {
-                throw new Exception("Id is not equal to group.Id");
+                throw new Exception("PostId is not equal to group.PostId");
             }
 
             _context.Entry(group).State = EntityState.Modified;
@@ -53,9 +61,10 @@ namespace KaderService.Services.Services
                 throw;
             }
         }
+
         private bool GroupExists(string id)
         {
-            return _context.Groups.Any(e => e.Id.Equals(id));
+            return _context.Groups.Any(e => e.GroupId.Equals(id));
         }
 
         public async Task CreateGroupAsync(Group group)

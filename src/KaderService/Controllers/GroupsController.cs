@@ -28,7 +28,7 @@ namespace KaderService.Controllers
             return Ok(await _service.GetGroupsAsync());
         }
 
-        // GET: api/MemberInGroups/5
+        // GET: api/groups/5
         [HttpGet("{id}")]
         [Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<Group>> GetGroupAsync(string id)
@@ -40,9 +40,24 @@ namespace KaderService.Controllers
                 return NotFound();
             }
 
+
             return Ok(group);
         }
 
+        [HttpGet("{id}/posts")]
+        public async Task<ActionResult<ICollection<Post>>> GetGroupPostsByIdAsync(string id)
+        {
+            var groupPosts = await _service.GetGroupPostsByIdAsync(id);
+
+
+            if (groupPosts == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(groupPosts);
+        }
         // PUT: api/MemberInGroups/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -59,7 +74,7 @@ namespace KaderService.Controllers
         {
             await _service.CreateGroupAsync(group);
 
-            return CreatedAtAction("GetGroupsAsync", new { id = group.Id }, group);
+            return CreatedAtAction("GetGroupsAsync", new { id = group.GroupId }, group);
         }
 
         // DELETE: api/MemberInGroups/5

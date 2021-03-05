@@ -35,7 +35,7 @@ namespace KaderService
             }
 
             User user = _userManager.FindByNameAsync(userName).Result;
-            Group group = _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId).Result;
+            Group group = _context.Groups.FirstOrDefaultAsync(g => g.GroupId == groupId).Result;
 
             if (user == null || group == null)
             {

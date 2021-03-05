@@ -14,6 +14,9 @@ namespace KaderService.Contracts.Api
         [Get("/api/groups/{id}")]
         Task<Group> GetGroupAsync(string id);
 
+        [Get("/api/groups/{id}/posts")]
+        Task<ICollection<Post>> GetGroupPostsByIdAsync(string id);
+
         [Put("/api/groups/{id}")]
         Task UpdateGroupAsync(string id, Group group);
 

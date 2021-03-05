@@ -16,7 +16,7 @@ namespace KaderService.Services.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string PostId { get; set; }
 
         //Type: Request help/ Offer help/ Handover an item
         public PostType Type { get; set; }

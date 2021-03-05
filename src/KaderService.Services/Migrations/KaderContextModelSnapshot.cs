@@ -21,13 +21,13 @@ namespace KaderService.Services.Migrations
 
             modelBuilder.Entity("GroupUser", b =>
                 {
-                    b.Property<string>("ManagerInGroupsId")
+                    b.Property<string>("ManagerInGroupsGroupId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ManagersId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ManagerInGroupsId", "ManagersId");
+                    b.HasKey("ManagerInGroupsGroupId", "ManagersId");
 
                     b.HasIndex("ManagersId");
 
@@ -36,13 +36,13 @@ namespace KaderService.Services.Migrations
 
             modelBuilder.Entity("GroupUser1", b =>
                 {
-                    b.Property<string>("MemberInGroupsId")
+                    b.Property<string>("MemberInGroupsGroupId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MembersId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("MemberInGroupsId", "MembersId");
+                    b.HasKey("MemberInGroupsGroupId", "MembersId");
 
                     b.HasIndex("MembersId");
 
@@ -78,7 +78,7 @@ namespace KaderService.Services.Migrations
 
             modelBuilder.Entity("KaderService.Services.Models.Group", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("GroupId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -100,14 +100,14 @@ namespace KaderService.Services.Migrations
                     b.Property<bool>("Searchable")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("GroupId");
 
                     b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("KaderService.Services.Models.Post", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("PostId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -138,7 +138,7 @@ namespace KaderService.Services.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("PostId");
 
                     b.HasIndex("CreatorId");
 
@@ -362,7 +362,7 @@ namespace KaderService.Services.Migrations
                 {
                     b.HasOne("KaderService.Services.Models.Group", null)
                         .WithMany()
-                        .HasForeignKey("ManagerInGroupsId")
+                        .HasForeignKey("ManagerInGroupsGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -377,7 +377,7 @@ namespace KaderService.Services.Migrations
                 {
                     b.HasOne("KaderService.Services.Models.Group", null)
                         .WithMany()
-                        .HasForeignKey("MemberInGroupsId")
+                        .HasForeignKey("MemberInGroupsGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
