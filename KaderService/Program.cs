@@ -23,10 +23,8 @@ namespace KaderService
                 context.Database.Migrate();
 
                 var config = host.Services.GetRequiredService<IConfiguration>();
-                string adminPassword = config["Bolila1!"];
-                SeedData.Initialize(services, adminPassword).Wait();
+                SeedData.Initialize(services, config["AdminKey"]).Wait();
             }
-
             catch (Exception e)
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();

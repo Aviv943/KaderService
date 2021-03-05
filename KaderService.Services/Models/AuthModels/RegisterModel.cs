@@ -4,12 +4,6 @@ namespace KaderService.Services.Models.AuthModels
 {
     public class RegisterModel
     {
-        public RegisterModel(string username, string email, string password)
-        {
-            this.Username = username;
-            this.Email = email;
-            this.Password = password;
-        }
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }
 
