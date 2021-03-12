@@ -20,19 +20,16 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        //Gets
         public async Task<IEnumerable<Post>> GetPostsAsync()
         {
             return await _context.Posts.ToListAsync();
         }
 
-        //Get
         public async Task<Post> GetPostAsync(string id)
         {
             return await _context.Posts.FindAsync(id);
         }
 
-        //Put/ Update
         public async Task UpdatePostAsync(string id, Post post)
         {
             if (!id.Equals(post.PostId))
@@ -62,7 +59,6 @@ namespace KaderService.Services.Services
             return _context.Posts.Any(e => e.PostId.Equals(id));
         }
 
-        //Post/ Create
         public async Task CreatePostAsync(Post post, User user)
         {
             post.Creator = user;
@@ -70,11 +66,19 @@ namespace KaderService.Services.Services
             await _context.SaveChangesAsync();
         }
 
-        //Delete
+        public async Task CreatePostsAsync(Post post, User user, ICollection<string> groupsIds)
+        {
+            foreach (var groupId in groupsIds)
+            {
+                post.Group = await _context.Groups.FindAsync(groupId);
+                await CreatePostAsync(post, user);
+            }
+        }
 
         public async Task DeletePostAsync(string id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            Post post = await _context.Posts.FindAsync(id);
+
             if (post == null)
             {
                 throw new KeyNotFoundException();

@@ -40,7 +40,7 @@ namespace KaderService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string id)
         {
-            var post = await _service.GetPostAsync(id);
+            Post post = await _service.GetPostAsync(id);
 
             if (post == null)
             {
@@ -66,12 +66,18 @@ namespace KaderService.Controllers
 
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("post")]
         public async Task<ActionResult<Post>> CreatePostAsync(Post post)
         {
             await _service.CreatePostAsync(post, LoggedInUser);
-
             return CreatedAtAction("GetPostAsync", new { id = post.PostId }, post);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreatePostsAsync(Post post, ICollection<string> groupsIds)
+        {
+            await _service.CreatePostsAsync(post, LoggedInUser, groupsIds);
+            return Ok();
         }
 
         // DELETE: api/Posts/5

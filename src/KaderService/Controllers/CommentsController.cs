@@ -32,7 +32,7 @@ namespace KaderService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetCommentAsync(string id)
         {
-            var comment = await _service.GetCommentAsync(id);
+            Comment comment = await _service.GetCommentAsync(id);
 
             if (comment == null)
             {
