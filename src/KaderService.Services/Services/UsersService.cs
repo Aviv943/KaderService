@@ -51,7 +51,7 @@ namespace KaderService.Services.Services
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
-            JwtSecurityToken token = new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 expires: DateTime.Now.AddHours(3),
@@ -68,7 +68,7 @@ namespace KaderService.Services.Services
 
         public async Task<bool> RegisterAsync(RegisterModel registerModel)
         {
-            var userExists = await _userManager.FindByNameAsync(registerModel.Username);
+            User userExists = await _userManager.FindByNameAsync(registerModel.Username);
 
             if (userExists != null)
             {

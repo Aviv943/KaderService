@@ -67,9 +67,9 @@ namespace KaderService.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("post")]
-        public async Task<ActionResult<Post>> CreatePostAsync(Post post)
+        public async Task<ActionResult<Post>> CreatePostAsync(Post post, string groupId)
         {
-            await _service.CreatePostAsync(post, LoggedInUser);
+            await _service.CreatePostAsync(post, LoggedInUser, groupId);
             return CreatedAtAction("GetPostAsync", new { id = post.PostId }, post);
         }
 

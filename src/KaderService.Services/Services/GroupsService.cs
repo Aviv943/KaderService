@@ -11,25 +11,24 @@ namespace KaderService.Services.Services
     public class GroupsService
     {
         private readonly KaderContext _context;
+        private readonly PostsService _postsService;
 
-        public GroupsService(KaderContext context)
+        public GroupsService(KaderContext context, PostsService postsService)
         {
             _context = context;
+            _postsService = postsService;
         }
 
-        //Gets
         public async Task<IEnumerable<Group>> GetGroupsAsync()
         {
             return await _context.Groups.ToListAsync();
         }
 
-        //Get
         public async Task<Group> GetGroupAsync(string id)
         {
             return await _context.Groups.FindAsync(id);
         }
 
-        //Get Group's posts
         public async Task<ICollection<Post>> GetGroupPostsByIdAsync(string id)
         {
             var group = await GetGroupAsync(id);
@@ -37,7 +36,6 @@ namespace KaderService.Services.Services
             return group.Posts;
         }
 
-        //Put/ Update
         public async Task UpdateGroupAsync(string id, Group group)
         {
             if (!id.Equals(group.GroupId))
@@ -75,11 +73,14 @@ namespace KaderService.Services.Services
 
         public async Task DeleteGroupAsync(string id)
         {
-            var group = await _context.Groups.FindAsync(id);
+            Group group = await _context.Groups.FindAsync(id);
+
             if (group == null)
             {
                 throw new KeyNotFoundException();
             }
+
+            await _postsService.DeletePostsAsync(group.Posts);
 
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync();

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -12,12 +11,12 @@ namespace KaderService.Services.Services
     public class PostsService
     {
         private readonly KaderContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly CommentsService _commentsService;
 
-        public PostsService(KaderContext context, UserManager<User> userManager)
+        public PostsService(KaderContext context, CommentsService commentsService)
         {
             _context = context;
-            _userManager = userManager;
+            _commentsService = commentsService;
         }
 
         public async Task<IEnumerable<Post>> GetPostsAsync()
@@ -59,9 +58,11 @@ namespace KaderService.Services.Services
             return _context.Posts.Any(e => e.PostId.Equals(id));
         }
 
-        public async Task CreatePostAsync(Post post, User user)
+        public async Task CreatePostAsync(Post post, User user, string groupId)
         {
             post.Creator = user;
+            post.Group = await _context.Groups.FindAsync(groupId);
+
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
         }
@@ -70,22 +71,31 @@ namespace KaderService.Services.Services
         {
             foreach (var groupId in groupsIds)
             {
-                post.Group = await _context.Groups.FindAsync(groupId);
-                await CreatePostAsync(post, user);
+                await CreatePostAsync(post, user, groupId);
             }
         }
 
-        public async Task DeletePostAsync(string id)
+        public async Task DeletePostAsync(string postId)
         {
-            Post post = await _context.Posts.FindAsync(id);
+            Post post = await _context.Posts.FindAsync(postId);
 
             if (post == null)
             {
                 throw new KeyNotFoundException();
             }
 
+            await _commentsService.DeleteCommentsAsync(post.Comments);
+
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePostsAsync(ICollection<Post> posts)
+        {
+            foreach (Post post in posts)
+            {
+                await DeletePostAsync(post.PostId);
+            }
         }
     }
 }
