@@ -33,7 +33,7 @@ namespace KaderService.Services.Services
 
         public async Task<TokenInfo> LoginAsync(LoginModel loginModel)
         {
-            var user = await _userManager.FindByNameAsync(loginModel.Username);
+            User user = await _userManager.FindByNameAsync(loginModel.Username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
@@ -44,8 +44,8 @@ namespace KaderService.Services.Services
 
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new (ClaimTypes.Name, user.UserName),
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
@@ -90,12 +90,21 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.MemberInGroups)
+                .ThenInclude(g => g.Members)
+                .Include(u => u.ManagerInGroups)
+                .ThenInclude(u => u.Managers).ToListAsync();
         }
 
         public async Task<User> GetUserAsync(string id)
         {
-            return await _userManager.FindByIdAsync(id);
+            return await _context.Users
+                .Include(u => u.MemberInGroups)
+                .ThenInclude(g => g.Members)
+                .Include(u => u.ManagerInGroups)
+                .ThenInclude(u => u.Managers)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IdentityRole> GetRoleAsync(string roleName)
@@ -130,6 +139,12 @@ namespace KaderService.Services.Services
             {
                 Console.WriteLine($"The {roleName} failed to delete, error: {e}");
             }
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            await _userManager.UpdateAsync(user);
+            //_context.Entry(user).State = EntityState.Modified;
         }
     }
 }

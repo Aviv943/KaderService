@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace KaderService.Services.Services
@@ -26,13 +27,17 @@ namespace KaderService.Services.Services
 
         public async Task<Group> GetGroupAsync(string id)
         {
-            return await _context.Groups.FindAsync(id);
+            return await _context.Groups
+                .Include(g => g.Members)
+                .ThenInclude(u => u.MemberInGroups)
+                .Include(g => g.Managers)
+                .ThenInclude(u => u.ManagerInGroups)
+                .FirstOrDefaultAsync(g => g.GroupId == id);
         }
 
         public async Task<ICollection<Post>> GetGroupPostsByIdAsync(string id)
         {
-            var group = await GetGroupAsync(id);
-
+            Group group = await GetGroupAsync(id);
             return group.Posts;
         }
 
@@ -73,7 +78,7 @@ namespace KaderService.Services.Services
 
         public async Task DeleteGroupAsync(string id)
         {
-            Group group = await _context.Groups.FindAsync(id);
+            Group group = await GetGroupAsync(id);
 
             if (group == null)
             {
@@ -81,9 +86,105 @@ namespace KaderService.Services.Services
             }
 
             await _postsService.DeletePostsAsync(group.Posts);
-
+            DeleteAllGroupManagers(group);
+            DeleteAllGroupMembers(group);
             _context.Groups.Remove(group);
+
             await _context.SaveChangesAsync();
+        }
+
+        private static void DeleteAllGroupManagers(Group group)
+        {
+            group.Managers = new List<User>();
+        }
+
+        private static void DeleteAllGroupMembers(Group group)
+        {
+            group.Managers = new List<User>();
+        }
+
+        public async Task LeaveGroupAsync(string id, User user)
+        {
+            Group group = await GetGroupAsync(id);
+
+            if (!group.Members.Contains(user))
+            {
+                throw new AggregateException($"User does not a member in this group ({group.Name})");
+            }
+
+            if (group.Managers.Count <= 1)
+            {
+                await DeleteGroupAsync(id);
+                return;
+            }
+
+            await _postsService.DeletePostsAsync(user, group);
+            await RemoveRoleFromGroupMemberAsync(id, user, "Member");
+            await UpdateGroupAsync(id, group);
+        }
+
+        public async Task AddUserRoleToGroupMemberAsync(string id, User user, string role)
+        {
+            Group group = await GetGroupAsync(id);
+
+            switch (role)
+            {
+                case "Member":
+                    {
+                        group.Members.Add(user);
+                        break;
+                    }
+                case "Manager":
+                    {
+                        if (!group.Members.Contains(user))
+                        {
+                            await AddUserRoleToGroupMemberAsync(id, user, "Member");
+                        }
+
+                        group.Managers.Add(user);
+                        break;
+                    }
+                default:
+                    throw new Exception("Role cannot be found");
+            }
+
+            await UpdateGroupAsync(id, group);
+        }
+
+        public async Task RemoveRoleFromGroupMemberAsync(string id, User user, string role)
+        {
+            Group group = await GetGroupAsync(id);
+
+            switch (role)
+            {
+                case "Member":
+                    {
+                        if (group.Managers.Contains(user))
+                        {
+                            await RemoveRoleFromGroupMemberAsync(id, user, "Manager");
+                        }
+
+                        group.Members.Remove(user);
+                        break;
+                    }
+                case "Manager":
+                    {
+                        if (!group.Members.Contains(user))
+                        {
+                            throw new AggregateException("User cannot be added as manager without being a member");
+                        }
+
+                        if (group.Managers.Count <= 1)
+                        {
+                            throw new Exception("User can not be removed from a group when he is the only manager in the group, add another manager or remove the group");
+                        }
+
+                        group.Managers.Remove(user);
+                        break;
+                    }
+                default:
+                    throw new Exception("Role cannot be found");
+            }
         }
     }
 }

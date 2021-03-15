@@ -30,7 +30,7 @@ namespace KaderService.Controllers
 
         // GET: api/groups/5
         [HttpGet("{id}")]
-        [Authorize(Policy = "GroupManager")]
+        //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<Group>> GetGroupAsync(string id)
         {
             var group = await _service.GetGroupAsync(id);
@@ -49,7 +49,6 @@ namespace KaderService.Controllers
         {
             var groupPosts = await _service.GetGroupPostsByIdAsync(id);
 
-
             if (groupPosts == null)
             {
                 return NotFound();
@@ -64,6 +63,28 @@ namespace KaderService.Controllers
         public async Task<IActionResult> PutGroupAsync(string id, Group group)
         {
             await _service.UpdateGroupAsync(id, group);
+            return NoContent();
+        }
+
+        [HttpPut("leave/{id}")]
+        [Authorize(Policy = "GroupMember")]
+        public async Task<IActionResult> LeaveGroupAsync(string id)
+        {
+            await _service.LeaveGroupAsync(id, LoggedInUser);
+            return NoContent();
+        }
+
+        [HttpPut("join/{id}")]
+        public async Task<IActionResult> JoinGroupAsync(string id)
+        {
+            await _service.AddUserRoleToGroupMemberAsync(id, LoggedInUser, "Member");
+            return NoContent();
+        }
+
+        [HttpPut("manager/add/{id}")]
+        public async Task<IActionResult> AddManagerAsync(string id)
+        {
+            await _service.AddUserRoleToGroupMemberAsync(id, LoggedInUser, "Manager");
             return NoContent();
         }
 

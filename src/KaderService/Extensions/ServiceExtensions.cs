@@ -46,7 +46,10 @@ namespace KaderService.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Secret"]))
                     };
                 });
+        }
 
+        public static void AddMyAuthorization(this IServiceCollection services)
+        {
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("GroupManager", policy =>
@@ -54,9 +57,16 @@ namespace KaderService.Extensions
                     policy.RequireAuthenticatedUser();
                     policy.Requirements.Add(new GroupManagerRequirement());
                 });
+
+                options.AddPolicy("GroupMember", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new GroupMemberRequirement());
+                });
             });
 
-            services.AddScoped<IAuthorizationHandler, MinimumAgeHandler>();
+            services.AddScoped<IAuthorizationHandler, GroupManagerHandler>();
+            services.AddScoped<IAuthorizationHandler, GroupMemberHandler>();
             services.AddHttpContextAccessor();
         }
 

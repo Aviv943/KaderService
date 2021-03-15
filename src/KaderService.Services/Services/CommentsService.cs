@@ -46,10 +46,8 @@ namespace KaderService.Services.Services
                 {
                     throw new KeyNotFoundException();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
         }
         private bool CommentExists(string id)

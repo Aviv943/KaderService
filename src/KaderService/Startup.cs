@@ -26,6 +26,7 @@ namespace KaderService
             services.AddMyServices();
             services.AddMyIdentity();
             services.AddMyAuthentication(Configuration);
+            services.AddMyAuthorization();
             services.AddMySwagger();
             services.AddMyDb(Configuration);
             services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);

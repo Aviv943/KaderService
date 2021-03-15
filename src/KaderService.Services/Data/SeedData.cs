@@ -94,7 +94,7 @@ namespace KaderService.Services.Data
 
         private static async Task SeedDataBaseAsync(KaderContext context)
         {
-            if (context.Posts.Any())
+            if (context.Posts.Any() || context.Groups.Any() || context.Comments.Any())
             {
                 return;
             }
@@ -555,11 +555,7 @@ namespace KaderService.Services.Data
 
             }
 
-
-
             await context.SaveChangesAsync();
-
-
         }
     }
 }

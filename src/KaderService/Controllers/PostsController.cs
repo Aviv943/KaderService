@@ -74,7 +74,7 @@ namespace KaderService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreatePostsAsync(Post post, ICollection<string> groupsIds)
+        public async Task<ActionResult> CreatePostsAsync(Post post, [FromRoute] string[] groupsIds)
         {
             await _service.CreatePostsAsync(post, LoggedInUser, groupsIds);
             return Ok();
