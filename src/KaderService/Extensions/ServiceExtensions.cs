@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Net.Http;
+using System.Text;
+using KaderService.Contracts.Api;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Refit;
 
 namespace KaderService.Extensions
 {
@@ -121,6 +125,23 @@ namespace KaderService.Extensions
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<KaderContext>()
                 .AddDefaultTokenProviders(); ;
+        }
+
+        public static void AddMyRefitClient(this IServiceCollection services, IConfiguration config)
+        {
+            void ConfigureClient(HttpClient c) => c.BaseAddress = new Uri(config.GetSection("Apis:Url").Value);
+
+            services.AddRefitClient<IKaderCommentsApi>()
+                .ConfigureHttpClient(ConfigureClient);
+
+            services.AddRefitClient<IKaderGroupsApi>()
+                .ConfigureHttpClient(ConfigureClient);
+
+            services.AddRefitClient<IKaderPostsApi>()
+                .ConfigureHttpClient(ConfigureClient);
+
+            services.AddRefitClient<IKaderUsersApi>()
+                .ConfigureHttpClient(ConfigureClient);
         }
     }
 }

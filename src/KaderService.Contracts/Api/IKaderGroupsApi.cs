@@ -7,7 +7,6 @@ namespace KaderService.Contracts.Api
 {
     public interface IKaderGroupsApi
     {
-
         [Get("/api/groups")]
         Task<IEnumerable<Group>> GetGroupsAsync();
 
@@ -21,6 +20,7 @@ namespace KaderService.Contracts.Api
         Task UpdateGroupAsync(string id, Group group);
 
         [Post("/api/groups")]
+        [Headers("Authorization: Bearer")]
         Task CreateGroupAsync(Group group);
 
         [Delete("/api/groups/{id}")]

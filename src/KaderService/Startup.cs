@@ -29,6 +29,7 @@ namespace KaderService
             services.AddMyAuthorization();
             services.AddMySwagger();
             services.AddMyDb(Configuration);
+            services.AddMyRefitClient(Configuration);
             services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
         }
 

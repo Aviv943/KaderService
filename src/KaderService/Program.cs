@@ -23,7 +23,7 @@ namespace KaderService
                 context.Database.Migrate();
 
                 var config = host.Services.GetRequiredService<IConfiguration>();
-                SeedData.Initialize(services, config["AdminKey"]).Wait();
+                //AdminsCreator.Initialize(services, config["AdminKey"]).Wait();
             }
             catch (Exception e)
             {

@@ -1,235 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace KaderService.Services.Data
+namespace KaderService.Seeder.Seeds
 {
-    public class SeedData
+    public class Posts : Seeds
     {
-        private static List<User> _admins;
-        private static UserManager<User> _userManager;
-        private static RoleManager<IdentityRole> _roleManager;
-
-        public static async Task Initialize(IServiceProvider serviceProvider, string adminPassword)
+        public override async Task SeedAsync()
         {
-            await using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
-            _userManager = serviceProvider.GetService<UserManager<User>>();
-            _roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+            List<Post> posts = GetData<Post>();
+            User user = await GetRandomUserAsync();
 
-            await SeedRolesAndUsersAsync(context, adminPassword);
-            await SeedDataBaseAsync(context);
-        }
-
-        private static async Task SeedRolesAndUsersAsync(DbContext context, string adminPassword)
-        {
-            const string admin = "Admin";
-            var role = new IdentityRole {Name = admin};
-            bool roleExists = await _roleManager.RoleExistsAsync(admin);
-
-            if (!roleExists)
+            foreach (Post post in posts)
             {
-                await _roleManager.CreateAsync(role);
-                await CreateAdminsAsync(_userManager, adminPassword);
-                await context.SaveChangesAsync();
+                Group group = await GetRandomGroupAsync();
+                await PostsClient.CreatePostAsync(post, user, group.GroupId);
             }
         }
 
-        private static async Task CreateAdminsAsync(UserManager<User> userManager, string adminPassword)
+        public virtual List<T> GetData<T>()
         {
-            _admins = new List<User>
-            {
-                new User
-                {
-                    UserName = "Yoni",
-                    Email = "yonatan2gross@gmail.com",
-                    FirstName = "Yoni",
-                    LastName = "Gross",
-                    Rating = 1.3,
-                    NumberOfRatings = 100,
-                },
-                new User
-                {
-                    UserName = "Matan",
-                    Email = "matan18061806@gmail.com",
-                    FirstName = "Matan",
-                    LastName = "Hassin",
-                    Rating = 1.9,
-                    NumberOfRatings = 1,
-                },
-                new User
-                {
-                    UserName = "Aviv",
-                    Email = "aviv943@gmail.com",
-                    FirstName = "Aviv",
-                    LastName = "Miranda",
-                    Rating = 4.9,
-                    NumberOfRatings = 2000,
-                },
-                new User
-                {
-                    UserName = "Diana",
-                    Email = "isakovDiana1@gmail.com",
-                    FirstName = "Diana",
-                    LastName = "Isakov",
-                    Rating = 4.2,
-                    NumberOfRatings = 250,
-                }
-            };
-
-            foreach (User user in _admins)
-            {
-                IdentityResult result = await userManager.CreateAsync(user, adminPassword);
-
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Admin");
-                }
-            }
-        }
-
-        private static async Task SeedDataBaseAsync(KaderContext context)
-        {
-            if (context.Posts.Any() || context.Groups.Any() || context.Comments.Any())
-            {
-                return;
-            }
-
-            await SeedGroupsAsync(context);
-            await SeedPostsAsync(context);
-            await PopulatePostsInGroups(context);
-            //await SeedCommentsAsync(context);
-            //SeedOrdersAndPayments(context, items, stores);
-        }
-
-        private static async Task SeedCommentsAsync(KaderContext context)
-        {
-        }
-
-        private static async Task SeedGroupsAsync(KaderContext context)
-        {
-            var groups = new[]
-            {
-                new Group()
-                {
-                    Name = "Area 51",
-                    Category = "Sport",
-                    Description = "Area 51 Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public,
-                    Members = {_admins[1],_admins[2],_admins[3]},
-                    Managers = {_admins[1]}
-        },
-                new Group()
-                {
-                    Name = "Jokes",
-                    Category = "Sport",
-                    Description = "Jokes Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private,
-                    Members = {_admins[0],_admins[2]},
-                    Managers = {_admins[0]}
-                },
-                new Group()
-                {
-                    Name = "Students In Colman",
-                    Category = "Sport",
-                    Description = "Students In Colman Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Invisible,
-                    Members = {_admins[0],_admins[3]},
-                    Managers = {_admins[0]}
-                },
-                new Group()
-                {
-                    Name = "Cars Pishpeshok",
-                    Category = "Sport",
-                    Description = "Cars Pishpeshok Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private,
-                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
-                    Managers = {_admins[1],_admins[2]}
-                },
-                new Group()
-                {
-                    Name = "Junior Developers Petah-Tikva",
-                    Category = "Sport",
-                    Description = "Junior Developers Petah-Tikva Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public,
-                    Members = {_admins[1],_admins[2]},
-                    Managers = {_admins[2]}
-                },
-                new Group()
-                {
-                    Name = "Senior Developers Holon",
-                    Category = "Sport",
-                    Description = "Senior Developers Holon Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private,
-                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
-                    Managers = {_admins[1], _admins[2], _admins[3] }
-                },
-                new Group()
-                {
-                    Name = "Budapest for travelers",
-                    Category = "Sport",
-                    Description = "Budapest for travelers Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public,
-                    Members = {_admins[1],_admins[2]},
-                    Managers = {_admins[1]}
-                },
-                new Group()
-                {
-                    Name = "Prague for travelers",
-                    Category = "Sport",
-                    Description = "Prague for travelers Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Invisible,
-                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
-                    Managers = {_admins[2]}
-                },
-                new Group()
-                {
-                    Name = "Cheap stuff",
-                    Category = "Sport",
-                    Description = "Cheap stuff Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private,
-                    Members = {_admins[1],_admins[2]},
-                    Managers = {_admins[1]}
-                },
-                new Group()
-                {
-                    Name = "Bitcoin mining",
-                    Category = "Crypto Coin",
-                    Description = "Bitcoin mining Group Description",
-                    Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public,
-                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
-                    Managers = {_admins[0], _admins[1], _admins[2] }
-                },
-            };
-
-            foreach (Group group in groups)
-            {
-                context.Groups.Add(group);
-            }
-
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task SeedPostsAsync(KaderContext context)
-        {
-            var posts = new[]
-            {
-                new Post
+            Post[] posts = {
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Food",
@@ -239,7 +35,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Food",
@@ -249,7 +45,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Food",
@@ -259,7 +55,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Food",
@@ -269,7 +65,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Food",
@@ -279,7 +75,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Food",
@@ -289,7 +85,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Food",
@@ -299,7 +95,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Food",
@@ -309,7 +105,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Food",
@@ -319,7 +115,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -329,7 +125,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -339,7 +135,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -349,7 +145,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Technology",
@@ -359,7 +155,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Technology",
@@ -369,7 +165,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Technology",
@@ -379,7 +175,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Technology",
@@ -389,7 +185,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Technology",
@@ -399,7 +195,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Music",
@@ -409,7 +205,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Music",
@@ -419,7 +215,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Music",
@@ -429,7 +225,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Music",
@@ -439,7 +235,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Music",
@@ -449,7 +245,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Music",
@@ -459,7 +255,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Music",
@@ -469,7 +265,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Music",
@@ -479,7 +275,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Music",
@@ -489,7 +285,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Music",
@@ -499,7 +295,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -509,7 +305,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Technology",
@@ -519,7 +315,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Request,
                     Category = "Technology",
@@ -529,7 +325,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -539,7 +335,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Handover,
                     Category = "Technology",
@@ -549,7 +345,7 @@ namespace KaderService.Services.Data
                     Created = DateTime.Now,
                     ImagesUri = new List<string> {"rak", "sarah"}
                 },
-                new Post
+                new()
                 {
                     Type = PostType.Offer,
                     Category = "Technology",
@@ -561,22 +357,7 @@ namespace KaderService.Services.Data
                 },
             };
 
-          
-
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task PopulatePostsInGroups(KaderContext context)
-        {
-            var posts = context.Posts.AsEnumerable();
-
-            foreach (var post in posts)
-            {
-                post.Group = await context.Groups.OrderBy(g => Guid.NewGuid()).Take(1).FirstAsync();
-
-            }
-
-            await context.SaveChangesAsync();
+            return (List<T>)Convert.ChangeType(posts, typeof(List<Post>));
         }
     }
 }

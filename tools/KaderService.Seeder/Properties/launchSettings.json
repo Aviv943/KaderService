@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "KaderService.Seeder": {
+      "commandName": "Project",
+      "commandLineArgs": "-groups"
+    }
+  }
+}

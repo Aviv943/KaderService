@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/groups")]
     [ApiController]
     public class GroupsController : MyControllerBase
@@ -93,7 +93,7 @@ namespace KaderService.Controllers
         [HttpPost]
         public async Task<ActionResult<Group>> PostGroupAsync(Group group)
         {
-            await _service.CreateGroupAsync(group);
+            await _service.CreateGroupAsync(group, LoggedInUser);
 
             return CreatedAtAction("GetGroupsAsync", new { id = group.GroupId }, group);
         }

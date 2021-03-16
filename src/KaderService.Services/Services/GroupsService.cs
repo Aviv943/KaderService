@@ -70,10 +70,12 @@ namespace KaderService.Services.Services
             return _context.Groups.Any(e => e.GroupId.Equals(id));
         }
 
-        public async Task CreateGroupAsync(Group group)
+        public async Task CreateGroupAsync(Group group, User user)
         {
             await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
+
+            await AddUserRoleToGroupMemberAsync(group.GroupId, user, "Manager");
         }
 
         public async Task DeleteGroupAsync(string id)

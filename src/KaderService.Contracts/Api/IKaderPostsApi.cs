@@ -18,7 +18,7 @@ namespace KaderService.Contracts.Api
         Task UpdatePostAsync(string id, Post post);
 
         [Post("/api/posts")]
-        Task CreatePostAsync(Post post);
+        Task CreatePostAsync(Post post, User user, string groupId);
 
         [Delete("/api/posts/{id}")]
         Task DeletePostAsync(string id);
