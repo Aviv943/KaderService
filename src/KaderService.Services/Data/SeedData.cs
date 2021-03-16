@@ -12,6 +12,7 @@ namespace KaderService.Services.Data
 {
     public class SeedData
     {
+        private static List<User> _admins;
         private static UserManager<User> _userManager;
         private static RoleManager<IdentityRole> _roleManager;
 
@@ -41,7 +42,7 @@ namespace KaderService.Services.Data
 
         private static async Task CreateAdminsAsync(UserManager<User> userManager, string adminPassword)
         {
-            var admins = new List<User>
+            _admins = new List<User>
             {
                 new User
                 {
@@ -81,7 +82,7 @@ namespace KaderService.Services.Data
                 }
             };
 
-            foreach (User user in admins)
+            foreach (User user in _admins)
             {
                 IdentityResult result = await userManager.CreateAsync(user, adminPassword);
 
@@ -121,14 +122,18 @@ namespace KaderService.Services.Data
                     Description = "Area 51 Group Description",
                     Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public,
-                },
+                    Members = {_admins[1],_admins[2],_admins[3]},
+                    Managers = {_admins[1]}
+        },
                 new Group()
                 {
                     Name = "Jokes",
                     Category = "Sport",
                     Description = "Jokes Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Members = {_admins[0],_admins[2]},
+                    Managers = {_admins[0]}
                 },
                 new Group()
                 {
@@ -136,7 +141,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Students In Colman Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Invisible
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Members = {_admins[0],_admins[3]},
+                    Managers = {_admins[0]}
                 },
                 new Group()
                 {
@@ -144,7 +151,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Cars Pishpeshok Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
+                    Managers = {_admins[1],_admins[2]}
                 },
                 new Group()
                 {
@@ -152,7 +161,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Junior Developers Petah-Tikva Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Members = {_admins[1],_admins[2]},
+                    Managers = {_admins[2]}
                 },
                 new Group()
                 {
@@ -160,7 +171,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Senior Developers Holon Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
+                    Managers = {_admins[1], _admins[2], _admins[3] }
                 },
                 new Group()
                 {
@@ -168,7 +181,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Budapest for travelers Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Members = {_admins[1],_admins[2]},
+                    Managers = {_admins[1]}
                 },
                 new Group()
                 {
@@ -176,7 +191,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Prague for travelers Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Invisible
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
+                    Managers = {_admins[2]}
                 },
                 new Group()
                 {
@@ -184,7 +201,9 @@ namespace KaderService.Services.Data
                     Category = "Sport",
                     Description = "Cheap stuff Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Members = {_admins[1],_admins[2]},
+                    Managers = {_admins[1]}
                 },
                 new Group()
                 {
@@ -192,7 +211,9 @@ namespace KaderService.Services.Data
                     Category = "Crypto Coin",
                     Description = "Bitcoin mining Group Description",
                     Searchable = true,
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Members = {_admins[0],_admins[1],_admins[2],_admins[3]},
+                    Managers = {_admins[0], _admins[1], _admins[2] }
                 },
             };
 
