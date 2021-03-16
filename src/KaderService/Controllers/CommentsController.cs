@@ -54,10 +54,9 @@ namespace KaderService.Controllers
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostCommentAsync(Comment comment)
+        public async Task<ActionResult<Comment>> CreateCommentAsync(Comment comment, string postId)
         {
-            await _service.CreateCommentAsync(comment);
-
+            await _service.CreateCommentAsync(comment, LoggedInUser, postId);
             return CreatedAtAction("GetCommentsAsync", new { id = comment.Id }, comment);
         }
 

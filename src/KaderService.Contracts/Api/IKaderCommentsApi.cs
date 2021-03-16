@@ -18,7 +18,7 @@ namespace KaderService.Contracts.Api
         Task UpdateCommentAsync(string id, Comment comment);
 
         [Post("/api/comments")]
-        Task CreateCommentAsync(Comment comment);
+        Task CreateCommentAsync(Comment comment, User user, string postId);
 
         [Delete("/api/comments/{id}")]
         Task DeleteCommentAsync(string id);

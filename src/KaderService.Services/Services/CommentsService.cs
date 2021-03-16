@@ -55,7 +55,7 @@ namespace KaderService.Services.Services
             return _context.Comments.Any(e => e.Id.Equals(id));
         }
 
-        public async Task CreateCommentAsync(Comment comment)
+        public async Task CreateCommentAsync(Comment comment, User user, string postId)
         {
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();

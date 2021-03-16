@@ -33,7 +33,7 @@ namespace KaderService.Controllers
         //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<Group>> GetGroupAsync(string id)
         {
-            var group = await _service.GetGroupAsync(id);
+            Group group = await _service.GetGroupAsync(id);
 
             if (group == null)
             {
@@ -47,7 +47,7 @@ namespace KaderService.Controllers
         [HttpGet("{id}/posts")]
         public async Task<ActionResult<ICollection<Post>>> GetGroupPostsByIdAsync(string id)
         {
-            var groupPosts = await _service.GetGroupPostsByIdAsync(id);
+            ICollection<Post> groupPosts = await _service.GetGroupPostsByIdAsync(id);
 
             if (groupPosts == null)
             {
@@ -91,10 +91,9 @@ namespace KaderService.Controllers
         // POST: api/MemberInGroups
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Group>> PostGroupAsync(Group group)
+        public async Task<ActionResult<Group>> CreateGroupAsync(Group group)
         {
             await _service.CreateGroupAsync(group, LoggedInUser);
-
             return CreatedAtAction("GetGroupsAsync", new { id = group.GroupId }, group);
         }
 
