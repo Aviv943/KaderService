@@ -16,13 +16,14 @@ namespace KaderService.Seeder.Seeds
 
             foreach (Group group in groups)
             {
+                await LoginAsync();
                 await GroupsClient.CreateGroupAsync(group);
             }
         }
 
         public virtual List<T> GetData<T>()
         {
-            var groups =  new List<Group>
+            var groups = new List<Group>
             {
                 new()
                 {

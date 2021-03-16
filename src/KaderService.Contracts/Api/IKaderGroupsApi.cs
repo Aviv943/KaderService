@@ -11,22 +11,18 @@ namespace KaderService.Contracts.Api
         Task<IEnumerable<Group>> GetGroupsAsync();
 
         [Get("/api/groups/{id}")]
-        [Headers("Authorization: Bearer")]
         Task<Group> GetGroupAsync(string id);
 
         [Get("/api/groups/{id}/posts")]
         Task<ICollection<Post>> GetGroupPostsByIdAsync(string id);
 
         [Put("/api/groups/{id}")]
-        [Headers("Authorization: Bearer")]
         Task UpdateGroupAsync(string id, Group group);
 
         [Post("/api/groups")]
-        [Headers("Authorization: Bearer")]
         Task CreateGroupAsync(Group group);
 
         [Delete("/api/groups/{id}")]
-        [Headers("Authorization: Bearer")]
         Task DeleteGroupAsync(string id);
     }
 }

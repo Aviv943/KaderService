@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using KaderService.Contracts.Api;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
@@ -129,19 +130,30 @@ namespace KaderService.Extensions
 
         public static void AddMyRefitClient(this IServiceCollection services, IConfiguration config)
         {
+            services.AddTransient<AuthorizationMessageHandler>();
+
             void ConfigureClient(HttpClient c) => c.BaseAddress = new Uri(config.GetSection("Apis:Url").Value);
+            
+            var a = new RefitSettings
+            {
+                AuthorizationHeaderValueGetter = () => Task.FromResult("token")
+            };
 
-            services.AddRefitClient<IKaderCommentsApi>()
-                .ConfigureHttpClient(ConfigureClient);
+            services.AddRefitClient<IKaderCommentsApi>(a)
+                .ConfigureHttpClient(ConfigureClient)
+                .AddHttpMessageHandler<AuthorizationMessageHandler>();
 
-            services.AddRefitClient<IKaderGroupsApi>()
-                .ConfigureHttpClient(ConfigureClient);
+            services.AddRefitClient<IKaderGroupsApi>(a)
+                .ConfigureHttpClient(ConfigureClient)
+                .AddHttpMessageHandler<AuthorizationMessageHandler>();
 
-            services.AddRefitClient<IKaderPostsApi>()
-                .ConfigureHttpClient(ConfigureClient);
+            services.AddRefitClient<IKaderPostsApi>(a)
+                .ConfigureHttpClient(ConfigureClient)
+                .AddHttpMessageHandler<AuthorizationMessageHandler>();
 
-            services.AddRefitClient<IKaderUsersApi>()
-                .ConfigureHttpClient(ConfigureClient);
+            services.AddRefitClient<IKaderUsersApi>(a)
+                .ConfigureHttpClient(ConfigureClient)
+                .AddHttpMessageHandler<AuthorizationMessageHandler>();
         }
     }
 }

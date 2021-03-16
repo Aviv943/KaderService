@@ -22,31 +22,44 @@ namespace KaderService.Seeder.Seeds
 
         public static async Task<Seeds> CreateAsync(Type type)
         {
-            const string baseUrl = "http://localhost:5000";
-            UsersClient = RestService.For<IKaderUsersApi>(baseUrl);
-            TokenInfo tokenInfo = await LoginAsync();
-            var httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
-
-            GroupsClient = RestService.For<IKaderGroupsApi>(httpClient);
-            PostsClient = RestService.For<IKaderPostsApi>(httpClient);
-            CommentsClient = RestService.For<IKaderCommentsApi>(httpClient);
-
-            return (Seeds) Activator.CreateInstance(type);
+            return (Seeds)Activator.CreateInstance(type);
         }
 
-        private static async Task<TokenInfo> LoginAsync()
+        public static async Task<TokenInfo> LoginAsync()
         {
-            return await UsersClient.LoginAsync(new LoginModel
+            const string baseUrl = "http://localhost:5000";
+            var client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+            UsersClient = RestService.For<IKaderUsersApi>(client);
+            User user = await GetRandomUserAsync(true);
+
+            TokenInfo tokenInfo = await UsersClient.LoginAsync(new LoginModel
             {
-                Username = "aviv",
+                Username = user.UserName,
                 Password = "Bolila1!"
             });
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
+
+            GroupsClient = RestService.For<IKaderGroupsApi>(client);
+            PostsClient = RestService.For<IKaderPostsApi>(client);
+            CommentsClient = RestService.For<IKaderCommentsApi>(client);
+
+            return tokenInfo;
         }
 
-        public async Task<User> GetRandomUserAsync()
+        public static async Task<User> GetRandomUserAsync(bool adminsOnly)
         {
-            IEnumerable<User> users = await UsersClient.GetUsersAsync();
+            IEnumerable<User> users;
+
+            if (adminsOnly)
+            {
+                users = await UsersClient.GetAdminsAsync();
+            }
+            else
+            {
+                users = await UsersClient.GetUsersAsync();
+            }
+
             List<User> usersList = users.ToList();
 
             if (!usersList.Any())

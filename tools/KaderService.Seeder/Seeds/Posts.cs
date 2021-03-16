@@ -13,18 +13,18 @@ namespace KaderService.Seeder.Seeds
         public override async Task SeedAsync()
         {
             List<Post> posts = GetData<Post>();
-            User user = await GetRandomUserAsync();
 
             foreach (Post post in posts)
             {
+                await LoginAsync();
                 Group group = await GetRandomGroupAsync();
-                await PostsClient.CreatePostAsync(post, user, group.GroupId);
+                await PostsClient.CreatePostAsync(post, group.GroupId);
             }
         }
 
         public virtual List<T> GetData<T>()
         {
-            Post[] posts = {
+            var posts = new List<Post> {
                 new()
                 {
                     Type = PostType.Handover,

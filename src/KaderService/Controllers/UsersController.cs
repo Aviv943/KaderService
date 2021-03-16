@@ -54,10 +54,15 @@ namespace KaderService.Controllers
         }
 
         [HttpGet]
-        [Authorize] //TODO : ADD ROLE ADMIN
         public async Task<IActionResult> GetUsersAsync()
         {
             return Ok(await _service.GetUsersAsync());
+        }
+
+        [HttpGet("admins")]
+        public async Task<IActionResult> GetAdminsAsync()
+        {
+            return Ok(await _service.GetAdminsAsync());
         }
 
         [HttpGet("{id}")]

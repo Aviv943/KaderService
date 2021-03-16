@@ -97,6 +97,11 @@ namespace KaderService.Services.Services
                 .ThenInclude(u => u.Managers).ToListAsync();
         }
 
+        public async Task<IList<User>> GetAdminsAsync()
+        {
+            return await _userManager.GetUsersInRoleAsync("Admin");
+        }
+
         public async Task<User> GetUserAsync(string id)
         {
             return await _context.Users

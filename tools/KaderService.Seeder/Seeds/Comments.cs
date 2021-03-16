@@ -12,145 +12,145 @@ namespace KaderService.Seeder.Seeds
         public override async Task SeedAsync()
         {
             List<Comment> comments = GetData<Comment>();
-            User user = await GetRandomUserAsync();
 
             foreach (Comment comment in comments)
             {
+                await LoginAsync();
                 Post post = await GetRandomPostAsync();
-                await CommentsClient.CreateCommentAsync(comment, user, post.PostId);
+                await CommentsClient.CreateCommentAsync(comment, post.PostId);
             }
         }
 
         public virtual List<T> GetData<T>()
         {
-            var comments = new[]
+            var comments = new List<Comment>
             {
-                new Comment
+                new()
                 {
                     Content = "Fancy a rice cake?",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Oh, yeah. Cheers, pal.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Hey. Here’s your pen back.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Ta, mate.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Wow! You fixed my bike! Thanks a bunch!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "You’ll go get me a coffee? Thanks a million! Really. I just don’t have the time!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "A £75 fine for a bill that’s one day late? Great. Thanks a million.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Oh, and Laurie? Really, thanks so much for covering my shift at work",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Hey, Freya! Thank you so much for Alex’s birthday present. I’m sure he’ll love it!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Hey! Excuse me. You dropped your phone!, Oh! Thanks a lot!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "You rule!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Flowers? For me? How thoughtful!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Don’t mention it.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Not at all!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "It’s nothing.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "That’s all right.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "It’s my pleasure.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Thanks so much for the positive feedback.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Hey this is really a great lesson for me thanks a lot.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Thanks so much for your huge efforts it helped me a lot",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Thanks for the positive feedback. It’s great to hear that learners like you are benefiting from it.",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "thanks!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "No. Thank YOU!",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Thanks so much",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "Thank you. This is very, very useful. ",
                     Created = DateTime.Now
                 },
-                new Comment
+                new()
                 {
                     Content = "No worries!",
                     Created = DateTime.Now

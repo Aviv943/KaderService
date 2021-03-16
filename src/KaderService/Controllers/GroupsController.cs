@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
@@ -102,7 +103,6 @@ namespace KaderService.Controllers
         public async Task<IActionResult> DeleteGroupAsync(string id)
         {
             await _service.DeleteGroupAsync(id);
-
             return NoContent();
         }
     }

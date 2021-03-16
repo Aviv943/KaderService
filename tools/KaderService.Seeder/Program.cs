@@ -17,7 +17,6 @@ namespace KaderService.Seeder
         private static async Task Main(string[] args)
         {
             Thread.Sleep(TimeSpan.FromSeconds(5));
-
             var seedTypes = new List<string>();
 
             foreach (var arg in args)

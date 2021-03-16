@@ -23,16 +23,9 @@ namespace KaderService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetPostsResponse>> GetPostsAsync()
+        public async Task<ActionResult<IEnumerable<Comment>>> GetPostsAsync()
         {
-            IEnumerable<Post> posts = await _service.GetPostsAsync();
-
-            var response = new GetPostsResponse
-            {
-                Posts = posts
-            };
-
-            return Ok(response);
+            return Ok(await _service.GetPostsAsync());
         }
 
         [HttpGet("{id}")]

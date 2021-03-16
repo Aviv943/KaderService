@@ -18,6 +18,9 @@ namespace KaderService.Contracts.Api
         [Get("/api/users")]
         Task<IEnumerable<User>> GetUsersAsync();
 
+        [Get("/api/users/admins")]
+        Task<IEnumerable<User>> GetAdminsAsync();
+
         [Get("/api/users/{id}")]
         Task<User> GetUserAsync(string id);
 
