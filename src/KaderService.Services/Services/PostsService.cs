@@ -26,7 +26,9 @@ namespace KaderService.Services.Services
 
         public async Task<Post> GetPostAsync(string id)
         {
-            return await _context.Posts.FindAsync(id);
+            return await _context.Posts
+                .Include(p => p.Group)
+                .FirstOrDefaultAsync(p => p.PostId == id);
         }
 
         public async Task UpdatePostAsync(string id, Post post)
@@ -61,17 +63,8 @@ namespace KaderService.Services.Services
         public async Task CreatePostAsync(Post post, User user, string groupId)
         {
             post.Group = await _context.Groups.FindAsync(groupId);
-
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task CreatePostsAsync(Post post, User user, ICollection<string> groupsIds)
-        {
-            foreach (var groupId in groupsIds)
-            {
-                await CreatePostAsync(post, user, groupId);
-            }
         }
 
         public async Task DeletePostAsync(string postId)

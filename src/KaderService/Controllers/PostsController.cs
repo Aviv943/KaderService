@@ -22,7 +22,6 @@ namespace KaderService.Controllers
             _service = service;
         }
 
-        // GET: api/posts
         [HttpGet]
         public async Task<ActionResult<GetPostsResponse>> GetPostsAsync()
         {
@@ -36,7 +35,6 @@ namespace KaderService.Controllers
             return Ok(response);
         }
 
-        // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string id)
         {
@@ -55,17 +53,13 @@ namespace KaderService.Controllers
             return Ok(response);
         }
 
-        // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPostAsync(string id, Post post)
+        public async Task<IActionResult> UpdatePostAsync(string id, Post post)
         {
             await _service.UpdatePostAsync(id, post);
             return NoContent();
         }
 
-        // POST: api/Posts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("post/{groupId}")]
         public async Task<ActionResult<Post>> CreatePostAsync(Post post, string groupId)
         {
@@ -73,14 +67,6 @@ namespace KaderService.Controllers
             return CreatedAtAction("GetPostAsync", new { id = post.PostId }, post);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreatePostsAsync(Post post, [FromRoute] string[] groupsIds)
-        {
-            await _service.CreatePostsAsync(post, LoggedInUser, groupsIds);
-            return Ok();
-        }
-
-        // DELETE: api/Posts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePostAsync(string id)
         {
