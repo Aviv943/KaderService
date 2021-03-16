@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KaderService.Services\KaderService.Services.csproj" />
+    <Compile Remove="Requests\**" />
+    <EmbeddedResource Remove="Requests\**" />
+    <None Remove="Requests\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Requests\" />
+    <ProjectReference Include="..\KaderService.Services\KaderService.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
