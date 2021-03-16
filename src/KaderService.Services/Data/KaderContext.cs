@@ -14,7 +14,7 @@ namespace KaderService.Services.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //todo: Aviv validate that works as planned
+            
             modelBuilder
                 .Entity<Post>()
                 .Property(p => p.ImagesUri)
@@ -34,7 +34,21 @@ namespace KaderService.Services.Data
                 .WithMany(user => user.MemberInGroups)
                 .UsingEntity(j => j.ToTable("GroupsMembers"));
 
-            modelBuilder.Entity<Post>().HasOne(post => post.Group).WithMany(group => group.Posts);
+            modelBuilder
+                .Entity<Post>()
+                .HasOne(p => p.Group)
+                .WithMany(g => g.Posts)
+                .HasForeignKey("GroupId");
+
+            modelBuilder.Entity<Group>()
+                .Navigation(b => b.Posts)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+
+            modelBuilder.Entity<Post>().HasOne(post => post.Creator).WithMany(user => user.Posts);
+            //modelBuilder.Entity<Post>().HasOne(post => post.Group).WithMany(group => group.Posts);
+            modelBuilder.Entity<Comment>().HasOne(post => post.Creator).WithMany(user => user.Comments);
+            modelBuilder.Entity<Comment>().HasOne(comment => comment.Post).WithMany(post => post.Comments);
         }
 
         public DbSet<Post> Posts { get; set; }
