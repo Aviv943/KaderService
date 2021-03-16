@@ -92,7 +92,9 @@ namespace KaderService.Services.Services
 
         public async Task DeletePostsAsync(User user, Group group)
         {
-            List<Post> posts = await _context.Posts.Where(u => u.Creator.Id == user.Id && u.Group.GroupId == group.GroupId).ToListAsync();
+            List<Post> posts = await _context.Posts
+                .Where(u => u.Creator.Id == user.Id && u.Group.GroupId == group.GroupId)
+                .ToListAsync();
 
             await DeletePostsAsync(posts);
         }
