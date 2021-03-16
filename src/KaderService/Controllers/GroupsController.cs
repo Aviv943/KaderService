@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/groups")]
     [ApiController]
     public class GroupsController : MyControllerBase

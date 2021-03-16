@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/posts")]
     [ApiController]
     public class PostsController : MyControllerBase
