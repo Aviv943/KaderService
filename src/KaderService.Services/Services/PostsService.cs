@@ -60,7 +60,6 @@ namespace KaderService.Services.Services
 
         public async Task CreatePostAsync(Post post, User user, string groupId)
         {
-            post.Creator = user;
             post.Group = await _context.Groups.FindAsync(groupId);
 
             await _context.Posts.AddAsync(post);

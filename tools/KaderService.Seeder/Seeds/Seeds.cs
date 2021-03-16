@@ -22,7 +22,7 @@ namespace KaderService.Seeder.Seeds
 
         public static async Task<Seeds> CreateAsync(Type type)
         {
-            const string baseUrl = "http://kader.cs.colman.ac.il:5000";
+            const string baseUrl = "http://localhost:5000";
             UsersClient = RestService.For<IKaderUsersApi>(baseUrl);
             TokenInfo tokenInfo = await LoginAsync();
             var httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };

@@ -31,7 +31,9 @@ namespace KaderService.Services.Models
         public string Location { get; set; }
 
         public User Creator { get; set; }
-        
+        [ForeignKey("GroupId")]
+        public string GroupId { get; set; }
+
         public Group Group { get; set; }
         
         public DateTime Created { get; set; }
