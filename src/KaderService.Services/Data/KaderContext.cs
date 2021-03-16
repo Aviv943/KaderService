@@ -40,10 +40,14 @@ namespace KaderService.Services.Data
                 .WithMany(g => g.Posts)
                 .HasForeignKey(p => p.GroupId);
 
+            modelBuilder
+                .Entity<Comment>()
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId);
+
             modelBuilder.Entity<Post>().HasOne(post => post.Creator).WithMany(user => user.Posts);
-            //modelBuilder.Entity<Post>().HasOne(post => post.Group).WithMany(group => group.Posts);
             modelBuilder.Entity<Comment>().HasOne(post => post.Creator).WithMany(user => user.Comments);
-            modelBuilder.Entity<Comment>().HasOne(comment => comment.Post).WithMany(post => post.Comments);
         }
 
         public DbSet<Post> Posts { get; set; }

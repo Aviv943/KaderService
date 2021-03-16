@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Services.Models
@@ -13,7 +14,6 @@ namespace KaderService.Services.Models
             ManagerInGroups = new List<Group>();
         }
 
-        //[Key]
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -21,6 +21,8 @@ namespace KaderService.Services.Models
         public double Rating { get; set; }
 
         public int NumberOfRatings { get; set; }
+
+        public DateTime Created { get; set; }
 
         public string ImageUri { get; set; }
 

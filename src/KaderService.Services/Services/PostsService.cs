@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -12,11 +13,13 @@ namespace KaderService.Services.Services
     {
         private readonly KaderContext _context;
         private readonly CommentsService _commentsService;
+        private readonly UserManager<User> _userManager;
 
-        public PostsService(KaderContext context, CommentsService commentsService)
+        public PostsService(KaderContext context, CommentsService commentsService, UserManager<User> userManager)
         {
             _context = context;
             _commentsService = commentsService;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<Post>> GetPostsAsync()
@@ -63,6 +66,7 @@ namespace KaderService.Services.Services
         public async Task CreatePostAsync(Post post, User user, string groupId)
         {
             post.Group = await _context.Groups.FindAsync(groupId);
+            post.Creator = await _userManager.FindByIdAsync(user.Id);
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
         }

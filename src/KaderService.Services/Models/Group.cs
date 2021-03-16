@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using KaderService.Services.Constants;
@@ -22,14 +23,22 @@ namespace KaderService.Services.Models
         //Type: ISR-Anubis-Club
         public string Name { get; set; }
 
-        //Category: Sport/ School/ Cooking
+        /// <summary>
+        /// Sport/ School/ Cooking etc
+        /// </summary>
         public string Category { get; set; }
+        
         public string Description { get; set; }
+        
         public string MainLocation { get; set; }
 
         public bool Searchable { get; set; }
 
-        //Privacy: Private/ Public/ Invisible
+        public DateTime Created { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Private/ Public/ Invisible
+        /// </summary>
         public GroupPrivacy GroupPrivacy { get; set; }
         
         public ICollection<User> Members { get; set; }
@@ -37,7 +46,5 @@ namespace KaderService.Services.Models
         public ICollection<User> Managers { get; set; }
 
         public ICollection<Post> Posts { get; set; }
-
-        //  public DateTime GroupCreated { get; set; }
     }
 }

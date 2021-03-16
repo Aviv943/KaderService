@@ -8,14 +8,15 @@ namespace KaderService.Services.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string CommentId { get; set; }
 
         public string Content { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
 
         public User Creator { get; set; }
-        
+
+        [ForeignKey(nameof(PostId))]
         public string PostId { get; set; }
         
         public Post Post { get; set; }

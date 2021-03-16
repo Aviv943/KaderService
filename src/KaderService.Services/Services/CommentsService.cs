@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -11,10 +12,12 @@ namespace KaderService.Services.Services
     public class CommentsService
     {
         private readonly KaderContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CommentsService(KaderContext context)
+        public CommentsService(KaderContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsAsync()
@@ -24,12 +27,15 @@ namespace KaderService.Services.Services
 
         public async Task<Comment> GetCommentAsync(string id)
         {
-            return await _context.Comments.FindAsync(id);
+            return await _context.Comments
+                .Include(c => c.Creator)
+                .Include(c => c.Post)
+                .FirstOrDefaultAsync(c => c.CommentId == id);
         }
 
         public async Task UpdateCommentAsync(string id, Comment comment)
         {
-            if (!id.Equals(comment.Id))
+            if (!id.Equals(comment.CommentId))
             {
                 throw new Exception("PostId is not equal to comment.PostId");
             }
@@ -52,11 +58,20 @@ namespace KaderService.Services.Services
         }
         private bool CommentExists(string id)
         {
-            return _context.Comments.Any(e => e.Id.Equals(id));
+            return _context.Comments.Any(e => e.CommentId.Equals(id));
         }
 
         public async Task CreateCommentAsync(Comment comment, User user, string postId)
         {
+            Post post = await _context.Posts.FindAsync(postId);
+
+            if (post == null)
+            {
+                throw new Exception("Cannot find post id");
+            }
+
+            comment.Post = post;
+            comment.Creator = await _userManager.FindByIdAsync(user.Id);
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
@@ -78,7 +93,7 @@ namespace KaderService.Services.Services
         {
             foreach (Comment comment in comments)
             {
-                await DeleteCommentAsync(comment.Id);
+                await DeleteCommentAsync(comment.CommentId);
             }
         }
     }

@@ -21,7 +21,9 @@ namespace KaderService.Services.Models
         //Type: Request help/ Offer help/ Handover an item
         public PostType Type { get; set; }
 
-        //Category: Sport/ School/ Cooking
+        /// <summary>
+        /// Sport/ School/ Cooking etc
+        /// </summary>
         public string Category { get; set; }
         
         public string Title { get; set; }
@@ -37,7 +39,7 @@ namespace KaderService.Services.Models
 
         public Group Group { get; set; }
         
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         
         public ICollection<Comment> Comments { get; set; }
         
