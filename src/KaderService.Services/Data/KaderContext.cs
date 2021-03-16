@@ -38,12 +38,7 @@ namespace KaderService.Services.Data
                 .Entity<Post>()
                 .HasOne(p => p.Group)
                 .WithMany(g => g.Posts)
-                .HasForeignKey("GroupId");
-
-            modelBuilder.Entity<Group>()
-                .Navigation(b => b.Posts)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
+                .HasForeignKey(p => p.GroupId);
 
             modelBuilder.Entity<Post>().HasOne(post => post.Creator).WithMany(user => user.Posts);
             //modelBuilder.Entity<Post>().HasOne(post => post.Group).WithMany(group => group.Posts);
