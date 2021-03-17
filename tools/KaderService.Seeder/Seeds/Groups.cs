@@ -30,7 +30,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Area 51",
                     Category = "Sport",
                     Description = "Area 51 Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public,
                 },
                 new()
@@ -38,7 +37,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Jokes",
                     Category = "Sport",
                     Description = "Jokes Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Private
                 },
                 new()
@@ -46,7 +44,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Students In Colman",
                     Category = "Sport",
                     Description = "Students In Colman Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Invisible
                 },
                 new()
@@ -54,7 +51,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Cars Pishpeshok",
                     Category = "Sport",
                     Description = "Cars Pishpeshok Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Private
                 },
                 new()
@@ -62,7 +58,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Junior Developers Petah-Tikva",
                     Category = "Sport",
                     Description = "Junior Developers Petah-Tikva Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public
                 },
                 new()
@@ -70,7 +65,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Senior Developers Holon",
                     Category = "Sport",
                     Description = "Senior Developers Holon Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Private
                 },
                 new()
@@ -78,7 +72,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Budapest for travelers",
                     Category = "Sport",
                     Description = "Budapest for travelers Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public
                 },
                 new()
@@ -86,7 +79,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Prague for travelers",
                     Category = "Sport",
                     Description = "Prague for travelers Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Invisible
                 },
                 new()
@@ -94,7 +86,6 @@ namespace KaderService.Seeder.Seeds
                     Name = "Cheap stuff",
                     Category = "Sport",
                     Description = "Cheap stuff Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Private
                 },
                 new()
@@ -102,9 +93,8 @@ namespace KaderService.Seeder.Seeds
                     Name = "Bitcoin mining",
                     Category = "Crypto Coin",
                     Description = "Bitcoin mining Group Description",
-                    Searchable = true,
                     GroupPrivacy = GroupPrivacy.Public
-                },
+                }
             };
 
             return (List<T>) Convert.ChangeType(groups, typeof(List<Group>));

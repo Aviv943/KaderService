@@ -32,8 +32,6 @@ namespace KaderService.Services.Models
         
         public string MainLocation { get; set; }
 
-        public bool Searchable { get; set; }
-
         public DateTime Created { get; set; } = DateTime.Now;
 
         /// <summary>
