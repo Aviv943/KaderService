@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using KaderService.Services.Constants;
+using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Services.Services
 {
@@ -13,11 +15,30 @@ namespace KaderService.Services.Services
     {
         private readonly KaderContext _context;
         private readonly PostsService _postsService;
+        private readonly UserManager<User> _userManager;
 
-        public GroupsService(KaderContext context, PostsService postsService)
+        public GroupsService(KaderContext context, PostsService postsService, UserManager<User> userManager)
         {
             _context = context;
             _postsService = postsService;
+            _userManager = userManager;
+        }
+
+        public async Task<IEnumerable<Group>> GetRelevantGroupsAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var a = await _context.Groups
+                .Where(g =>
+                    g.Members.Contains(user) ||
+                    g.GroupPrivacy == GroupPrivacy.Public ||
+                    g.GroupPrivacy == GroupPrivacy.Private)
+                .Include(g => g.Posts)
+                .Include(g => g.Members)
+                .Include(g => g.Managers)
+                .ToListAsync();
+
+            return await _context.Groups.ToListAsync();
         }
 
         public async Task<IEnumerable<Group>> GetGroupsAsync()
