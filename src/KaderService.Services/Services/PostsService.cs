@@ -24,12 +24,16 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Post>> GetPostsAsync()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts
+                .Include(p => p.Creator)
+                .Include(p => p.Group)
+                .ToListAsync();
         }
 
         public async Task<Post> GetPostAsync(string id)
         {
             return await _context.Posts
+                .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .FirstOrDefaultAsync(p => p.PostId == id);
         }

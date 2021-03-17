@@ -27,7 +27,7 @@ namespace KaderService.Seeder.Seeds
 
         public static async Task<TokenInfo> LoginAsync()
         {
-            const string baseUrl = "http://localhost:5000";
+            const string baseUrl = "http://kader.cs.colman.ac.il:5000";
             var client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
             UsersClient = RestService.For<IKaderUsersApi>(client);
             User user = await GetRandomUserAsync(true);
