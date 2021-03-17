@@ -42,6 +42,7 @@ namespace KaderService.Services.Services
         {
             return await _context.Posts
                 .Include(p => p.Comments)
+                .ThenInclude(c => c.Creator)
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .FirstOrDefaultAsync(p => p.PostId == id);
