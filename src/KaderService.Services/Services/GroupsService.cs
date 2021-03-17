@@ -25,10 +25,10 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<GroupView>> GetGroupsForUserAsync(string userId)
+        public async Task<IEnumerable<Group>> GetGroupsForUserAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
-            List<Group> groups = await _context.Groups
+            return await _context.Groups
                 .Where(g =>
                     g.Members.Contains(user) ||
                     g.GroupPrivacy == GroupPrivacy.Public ||
@@ -38,19 +38,6 @@ namespace KaderService.Services.Services
                 .Include(g => g.Managers)
                 .ToListAsync();
 
-            return groups.Select(group => new GroupView
-            {
-                Name = group.Name,
-                Category = group.Category,
-                Created = group.Created,
-                Description = group.Description,
-                GroupId = group.GroupId,
-                GroupPrivacy = group.GroupPrivacy,
-                MainLocation = group.MainLocation,
-                ManagersCount = group.Managers.Count,
-                MembersCount = group.Members.Count,
-                PostsCount = group.Posts.Count
-            }).ToList();
         }
 
         public async Task<IEnumerable<Group>> GetGroupsAsync()

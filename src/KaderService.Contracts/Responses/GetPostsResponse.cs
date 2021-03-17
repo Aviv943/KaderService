@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using KaderService.Services.Constants;
 using KaderService.Services.Models;
+using KaderService.Services.ViewModels;
 
 namespace KaderService.Contracts.Responses
 {
     public class GetPostsResponse
     {
-        public IEnumerable<Post> Posts { get; set; }
+        public List<GroupView> GroupView { get; set; }
     }
 }

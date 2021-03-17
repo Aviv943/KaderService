@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using KaderService.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -29,9 +32,27 @@ namespace KaderService.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroupsForUserAsync(string userId)
+        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetGroupsForUserAsync(string userId)
         {
-            return Ok(await _service.GetGroupsForUserAsync(userId));
+            IEnumerable<Group> groupsForUserAsync = await _service.GetGroupsForUserAsync(userId);
+            IEnumerable<GroupView> groupViews = groupsForUserAsync.Select(group => new GroupView
+            {
+                Name = group.Name,
+                Category = group.Category,
+                Created = group.Created,
+                Description = group.Description,
+                GroupId = group.GroupId,
+                GroupPrivacy = group.GroupPrivacy,
+                MainLocation = group.MainLocation,
+                ManagersCount = group.Managers.Count,
+                MembersCount = group.Members.Count,
+                PostsCount = group.Posts.Count
+            });
+
+            return Ok(new GetPostsResponse
+            {
+                GroupView = groupViews.ToList()
+            });
         }
 
         [HttpGet("{id}")]
