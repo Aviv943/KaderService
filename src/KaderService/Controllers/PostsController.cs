@@ -23,9 +23,20 @@ namespace KaderService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetPostsAsync()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPostsAsync()
         {
             return Ok(await _service.GetPostsAsync());
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPostsForUserAsync(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return BadRequest("UserId cannot be null");
+            }
+
+            return Ok(await _service.GetPostsForUserAsync(userId));
         }
 
         [HttpGet("{id}")]

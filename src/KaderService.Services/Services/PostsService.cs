@@ -30,6 +30,17 @@ namespace KaderService.Services.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Post>> GetPostsForUserAsync(string userId)
+        {
+            User user = await _userManager.FindByIdAsync(userId);
+            
+            return await _context.Posts
+                .Where(post => post.Group.Members.Contains(user))
+                .Include(p => p.Creator)
+                .Include(p => p.Group)
+                .ToListAsync();
+        }
+
         public async Task<Post> GetPostAsync(string id)
         {
             return await _context.Posts

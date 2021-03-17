@@ -10,6 +10,9 @@ namespace KaderService.Contracts.Api
         [Get("/api/posts")]
         Task<IEnumerable<Post>> GetPostsAsync();
 
+        [Get("/api/posts/{userId}")]
+        Task<IEnumerable<Post>> GetPostForUserAsync(string userId);
+
         [Get("/api/posts/{id}")]
         Task<Post> GetPostAsync(string id);
 
