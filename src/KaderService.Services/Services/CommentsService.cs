@@ -25,15 +25,13 @@ namespace KaderService.Services.Services
             return await _context.Comments.ToListAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsForPostAsync(string PostId)
+        public async Task<IEnumerable<Comment>> GetCommentsForPostAsync(string postId)
         {
-            var Comment = await _context.Comments
-                .Where(c => c.PostId == PostId)
+            return await _context.Comments
+                .Where(c => c.PostId == postId)
                 .Include(c => c.Creator)
                 .Include(c => c.Post)
                 .ToListAsync();
-
-            return Comment;
         }
 
         public async Task<Comment> GetCommentAsync(string id)
@@ -74,7 +72,7 @@ namespace KaderService.Services.Services
 
         public async Task CreateCommentAsync(Comment comment, User user, string postId)
         {
-            Post post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts.FindAsync(postId);
 
             if (post == null)
             {
@@ -89,7 +87,7 @@ namespace KaderService.Services.Services
 
         public async Task DeleteCommentAsync(string id)
         {
-            Comment comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.FindAsync(id);
 
             if (comment == null)
             {
@@ -102,7 +100,7 @@ namespace KaderService.Services.Services
 
         public async Task DeleteCommentsAsync(ICollection<Comment> comments)
         {
-            foreach (Comment comment in comments)
+            foreach (var comment in comments)
             {
                 await DeleteCommentAsync(comment.CommentId);
             }

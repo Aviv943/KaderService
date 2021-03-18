@@ -69,7 +69,7 @@ namespace KaderService.Controllers
         [HttpGet("/post/{postId}")]
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
         {
-            Post post = await _service.GetPostAsync(postId);
+            var post = await _service.GetPostAsync(postId);
 
             if (post == null)
             {

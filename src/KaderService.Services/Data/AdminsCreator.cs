@@ -79,9 +79,9 @@ namespace KaderService.Services.Data
                 }
             };
 
-            foreach (User user in _admins)
+            foreach (var user in _admins)
             {
-                IdentityResult result = await userManager.CreateAsync(user, adminPassword);
+                var result = await userManager.CreateAsync(user, adminPassword);
 
                 if (result.Succeeded)
                 {

@@ -29,7 +29,7 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Post>> GetPostsForUserAsync(string userId)
         {
-            User user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
             
             return await _context.Posts
                 .Where(post => post.Group.Members.Contains(user))
@@ -87,7 +87,7 @@ namespace KaderService.Services.Services
 
         public async Task DeletePostAsync(string postId)
         {
-            Post post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts.FindAsync(postId);
 
             if (post == null)
             {
@@ -102,7 +102,7 @@ namespace KaderService.Services.Services
 
         public async Task DeletePostsAsync(ICollection<Post> posts)
         {
-            foreach (Post post in posts)
+            foreach (var post in posts)
             {
                 await DeletePostAsync(post.PostId);
             }
