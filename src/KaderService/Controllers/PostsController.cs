@@ -39,14 +39,17 @@ namespace KaderService.Controllers
             {
                 return BadRequest("UserId cannot be null");
             }
-
             IEnumerable<Post> postsForUserAsync = await _service.GetPostsForUserAsync(userId);
-            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
-            {
-                FirstName = p.Creator.FirstName,
-                LastName = p.Creator.LastName,
-                Rating = p.Creator.Rating,
-                NumberOfRating = p.Creator.NumberOfRatings,
+            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView{
+                UserView = new UserView
+                {
+                    UserId = p.Creator.Id,
+                    UserName = p.Creator.UserName,
+                    FirstName = p.Creator.FirstName,
+                    LastName = p.Creator.LastName,
+                    Rating = p.Creator.Rating,
+                    NumberOfRating = p.Creator.NumberOfRatings
+                },
                 Created = p.Created,
                 GroupId = p.GroupId,
                 GroupName = p.Group.Name,

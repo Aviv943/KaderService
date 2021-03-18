@@ -43,14 +43,20 @@ namespace KaderService.Controllers
             IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsForPostAsync(postId);
             IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
             {
+                UserView = new UserView
+                {
+                    UserId = c.Creator.Id,
+                    UserName = c.Creator.UserName,
+                    FirstName = c.Creator.FirstName,
+                    LastName = c.Creator.LastName,
+                    Rating = c.Creator.Rating,
+                    NumberOfRating = c.Creator.NumberOfRatings
+                },
                 PostId = c.PostId,
                 CommentId = c.CommentId,
                 Content = c.Content,
                 Created = c.Created,
-                FirstName = c.Creator.FirstName,
-                LastName = c.Creator.LastName,
-                Rating = c.Creator.Rating,
-                NumberOfRating=c.Creator.NumberOfRatings
+                
             });
             return Ok(new GetCommentsResponse
             {
