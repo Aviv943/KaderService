@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,14 +24,16 @@ namespace KaderService.Controllers
             _service = service;
         }
 
+        // GET: api/posts/
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPostsAsync()
         {
             return Ok(await _service.GetPostsAsync());
         }
 
-        [HttpGet("/users/{userId}")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPostsForUserAsync(string userId)
+        // GET: api/posts/{userId}
+        [HttpGet("/{userId}")]
+        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetPostsForUserAsync(string userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
@@ -37,13 +41,35 @@ namespace KaderService.Controllers
             }
 
             IEnumerable<Post> postsForUserAsync = await _service.GetPostsForUserAsync(userId);
-            return Ok(postsForUserAsync);
+            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
+            {
+                FirstName = p.Creator.FirstName,
+                LastName = p.Creator.LastName,
+                Rating = p.Creator.Rating,
+                NumberOfRating = p.Creator.NumberOfRatings,
+                Created = p.Created,
+                GroupId = p.GroupId,
+                GroupName = p.Group.Name,
+                Type = p.Type,
+                Category = p.Category,
+                PostId = p.PostId,
+                Title = p.Title,
+                Description = p.Description,
+                Location = p.Location,
+                ImagesUri = p.ImagesUri,
+                CommentsCount = p.Comments.Count
+            });
+            return Ok(new GetPostsResponse
+            {
+                PostViews = postViews.ToList()
+            });
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string id)
+        // GET: api/posts/post/{postId}
+        [HttpGet("/post/{postId}")]
+        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
         {
-            Post post = await _service.GetPostAsync(id);
+            Post post = await _service.GetPostAsync(postId);
 
             if (post == null)
             {

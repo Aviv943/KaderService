@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using KaderService.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
+using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,6 +29,33 @@ namespace KaderService.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsAsync()
         {
             return Ok(await _service.GetCommentsAsync());
+        }
+
+        // GET: api/Comments/{PostId}
+        [HttpGet("/{postId}")]
+        public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsForPostAsync(string postId)
+        {
+            if (string.IsNullOrWhiteSpace(postId))
+            {
+                return BadRequest("PostId cannot be null");
+            }
+
+            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsForPostAsync(postId);
+            IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
+            {
+                PostId = c.PostId,
+                CommentId = c.CommentId,
+                Content = c.Content,
+                Created = c.Created,
+                FirstName = c.Creator.FirstName,
+                LastName = c.Creator.LastName,
+                Rating = c.Creator.Rating,
+                NumberOfRating=c.Creator.NumberOfRatings
+            });
+            return Ok(new GetCommentsResponse
+            {
+                CommentViews = commentViews.ToList()
+            });
         }
 
         // GET: api/Comments/5

@@ -3,8 +3,8 @@ using KaderService.Services.ViewModels;
 
 namespace KaderService.Contracts.Responses
 {
-    public class GetPostsResponse
+    public class GetGroupsResponse
     {
-        public List<PostView> PostViews { get; set; }
+        public List<GroupView> GroupView { get; set; }
     }
 }
