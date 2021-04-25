@@ -32,7 +32,7 @@ namespace KaderService.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetGroupsForUserAsync(string userId)
+        public async Task<ActionResult<IEnumerable<GetGroupsResponse>>> GetGroupsForUserAsync(string userId)
         {
             IEnumerable<Group> groupsForUserAsync = await _service.GetGroupsForUserAsync(userId);
             IEnumerable<GroupView> groupViews = groupsForUserAsync.Select(group => new GroupView
@@ -49,7 +49,7 @@ namespace KaderService.Controllers
                 PostsCount = group.Posts.Count
             });
 
-            return Ok(new GetPostsResponse
+            return Ok(new GetGroupsResponse
             {
                 GroupView = groupViews.ToList()
             });
@@ -57,7 +57,7 @@ namespace KaderService.Controllers
 
         [HttpGet("{id}")]
         //[Authorize(Policy = "GroupManager")]
-        public async Task<ActionResult<Group>> GetGroupAsync(string id)
+        public async Task<ActionResult<GetGroupResponse>> GetGroupAsync(string id)
         {
             Group group = await _service.GetGroupAsync(id);
 
@@ -66,8 +66,13 @@ namespace KaderService.Controllers
                 return NotFound();
             }
 
+            var response = new GetGroupResponse
+            {
+                Group = group
+            };
 
-            return Ok(group);
+
+            return Ok(response);
         }
 
         [HttpGet("{id}/posts")]

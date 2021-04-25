@@ -27,7 +27,7 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Group>> GetGroupsForUserAsync(string userId)
         {
-            User user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
             return await _context.Groups
                 .Where(g =>
                     g.Members.Contains(user) ||
@@ -59,7 +59,7 @@ namespace KaderService.Services.Services
 
         public async Task<ICollection<Post>> GetGroupPostsByIdAsync(string id)
         {
-            Group group = await GetGroupAsync(id);
+            var group = await GetGroupAsync(id);
             return group.Posts;
         }
 
@@ -102,7 +102,7 @@ namespace KaderService.Services.Services
 
         public async Task DeleteGroupAsync(string id)
         {
-            Group group = await GetGroupAsync(id);
+            var group = await GetGroupAsync(id);
 
             if (group == null)
             {
@@ -129,7 +129,7 @@ namespace KaderService.Services.Services
 
         public async Task LeaveGroupAsync(string id, User user)
         {
-            Group group = await GetGroupAsync(id);
+            var group = await GetGroupAsync(id);
 
             if (!group.Members.Contains(user))
             {
@@ -149,7 +149,7 @@ namespace KaderService.Services.Services
 
         public async Task AddUserRoleToGroupMemberAsync(string id, User user, string role)
         {
-            Group group = await GetGroupAsync(id);
+            var group = await GetGroupAsync(id);
 
             switch (role)
             {
@@ -177,7 +177,7 @@ namespace KaderService.Services.Services
 
         public async Task RemoveRoleFromGroupMemberAsync(string id, User user, string role)
         {
-            Group group = await GetGroupAsync(id);
+            var group = await GetGroupAsync(id);
 
             switch (role)
             {

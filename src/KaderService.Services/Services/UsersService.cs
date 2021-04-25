@@ -33,7 +33,7 @@ namespace KaderService.Services.Services
 
         public async Task<TokenInfo> LoginAsync(LoginModel loginModel)
         {
-            User user = await _userManager.FindByNameAsync(loginModel.Username);
+            var user = await _userManager.FindByNameAsync(loginModel.Username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
@@ -69,7 +69,7 @@ namespace KaderService.Services.Services
 
         public async Task<bool> RegisterAsync(RegisterModel registerModel)
         {
-            User userExists = await _userManager.FindByNameAsync(registerModel.Username);
+            var userExists = await _userManager.FindByNameAsync(registerModel.Username);
 
             if (userExists != null)
             {
@@ -115,7 +115,7 @@ namespace KaderService.Services.Services
 
         public async Task<IdentityRole> GetRoleAsync(string roleName)
         {
-            IdentityRole role = await _roleManager.FindByNameAsync(roleName);
+            var role = await _roleManager.FindByNameAsync(roleName);
             if (role == null)
             {
                 throw new Exception($"The {roleName} was not found");
