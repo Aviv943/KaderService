@@ -62,7 +62,8 @@ namespace KaderService.Services.Services
             return new TokenInfo
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo
+                Expiration = token.ValidTo,
+                UserId = user.Id
             };
         }
 
