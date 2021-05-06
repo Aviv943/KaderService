@@ -24,6 +24,25 @@ namespace KaderService.Controllers
             _service = service;
         }
 
+        // GET: api/posts/post/{postId}
+        [HttpGet("post/{postId}")]
+        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
+        {
+            var post = await _service.GetPostAsync(postId, LoggedInUser);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            var response = new GetPostResponse
+            {
+                Post = post
+            };
+
+            return Ok(response);
+        }
+
         // GET: api/posts/
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPostsAsync()
@@ -34,14 +53,15 @@ namespace KaderService.Controllers
         }
 
         // GET: api/posts/{userId}
-        [HttpGet("/{userId}")]
-        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetPostsForUserAsync(string userId)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetPostsByUserAsync(string userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
                 return BadRequest("UserId cannot be null");
             }
-            IEnumerable<Post> postsForUserAsync = await _service.GetPostsForUserAsync(userId);
+
+            IEnumerable<Post> postsForUserAsync = await _service.GetPostsByUserAsync(userId);
             IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView{
                 UserView = new UserView
                 {
@@ -64,29 +84,51 @@ namespace KaderService.Controllers
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count
             });
+
             return Ok(new GetPostsResponse
             {
                 PostViews = postViews.ToList()
             });
         }
 
-        // GET: api/posts/post/{postId}
-        [HttpGet("post/{postId}")]
-        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
+        // GET: api/posts/{userId}
+        [HttpGet("{userId}/recommended")]
+        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetRecommendedPostsAsync(string userId)
         {
-            var post = await _service.GetPostAsync(postId, LoggedInUser);
-
-            if (post == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                return NotFound();
+                return BadRequest("UserId cannot be null");
             }
 
-            var response = new GetPostResponse
+            IEnumerable<Post> postsForUserAsync = await _service.GetRecommendedPostsAsync(LoggedInUser);
+            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
             {
-                Post = post
-            };
+                UserView = new UserView
+                {
+                    UserId = p.Creator.Id,
+                    UserName = p.Creator.UserName,
+                    FirstName = p.Creator.FirstName,
+                    LastName = p.Creator.LastName,
+                    Rating = p.Creator.Rating,
+                    NumberOfRating = p.Creator.NumberOfRatings
+                },
+                Created = p.Created,
+                GroupId = p.GroupId,
+                GroupName = p.Group.Name,
+                Type = p.Type,
+                Category = p.Category,
+                PostId = p.PostId,
+                Title = p.Title,
+                Description = p.Description,
+                Location = p.Location,
+                ImagesUri = p.ImagesUri,
+                CommentsCount = p.Comments.Count
+            });
 
-            return Ok(response);
+            return Ok(new GetPostsResponse
+            {
+                PostViews = postViews.ToList()
+            });
         }
 
         [HttpPut("{id}")]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaderService.ML.DTO;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace KaderService.Services.Services
             return posts;
         }
 
-        public async Task<IEnumerable<Post>> GetPostsForUserAsync(string userId)
+        public async Task<IEnumerable<Post>> GetPostsByUserAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
             
@@ -38,6 +39,30 @@ namespace KaderService.Services.Services
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Post>> GetRecommendedPostsAsync(User user)
+        {
+            List<ItemsCustomers> relatedPostsList = _context.RelatedPosts.Select(post => new ItemsCustomers() { UserId = user.Id, PostId = post.PostId }).ToList();
+
+            var mlRequest = new Request
+            {
+                RelatedPostsList = relatedPostsList,
+                UserId = user.Id,
+                PostsIds = _context.Posts.Select(post => post.PostId).Distinct().ToList(),
+            };
+
+            try
+            {
+                Dictionary<string, double> postsScore = await ML.Core.Run(mlRequest);
+                IEnumerable<KeyValuePair<string, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
+                IQueryable<Post> posts = _context.Posts.Take(int.MaxValue);
+                return (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostId select post).ToList();
+            }
+            catch (Exception exception)
+            {
+                return null;
+            }
         }
 
         public async Task<Post> GetPostAsync(string id, User user)
@@ -55,6 +80,7 @@ namespace KaderService.Services.Services
             if (!relatedItems)
             {
                 await _context.RelatedPosts.AddAsync(relatedPost);
+                await _context.SaveChangesAsync();
             }
 
             return post;

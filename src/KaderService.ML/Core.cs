@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using KaderService.Contracts.ML;
+using KaderService.ML.DTO;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 
 namespace KaderService.ML
 {
-    public class ML
+    public class Core
     {
         private const string TrainingDataLocation = @"D:\Compare.txt";
-        public static async Task<Dictionary<int, double>> Run(Request request)
+        public static async Task<Dictionary<string, double>> Run(Request request)
         {
-            CreateFile(request.ItemCustomersList);
+            CreateFile(request.RelatedPostsList);
             var mlContext = new MLContext();
             IDataView dataView = mlContext.Data.LoadFromTextFile(path: TrainingDataLocation,
                                                       new[]
@@ -39,13 +39,13 @@ namespace KaderService.ML
             MatrixFactorizationTrainer est = mlContext.Recommendation().Trainers.MatrixFactorization(options);
             ITransformer model = est.Fit(dataView);
             PredictionEngine<ProductEntry, PredictionScore> predictionEngine = mlContext.Model.CreatePredictionEngine<ProductEntry, PredictionScore>(model);
-            var scores = new Dictionary<int, double>();
+            var scores = new Dictionary<string, double>();
 
-            foreach (int itemId in request.AllItemsIds)
+            foreach (string itemId in request.PostsIds)
             {
                 var entry = new ProductEntry
                 {
-                    UserNumber = (uint)request.CustomerNumber.GetHashCode(),
+                    UserNumber = (uint)request.UserId.GetHashCode(),
                     RelatedPostId = (uint)itemId.GetHashCode()
                 };
 
@@ -64,20 +64,10 @@ namespace KaderService.ML
             File.Delete(@"D:\Compare.txt");
             File.AppendAllText(@"D:\Compare.txt", $"ProductID	ProductID_Copurchased{Environment.NewLine}");
 
-            foreach (var customerItem in customersItems)
+            foreach (ItemsCustomers customerItem in customersItems)
             {
-                File.AppendAllText(@"D:\Compare.txt", $"{customerItem.CustomerNumber}	{customerItem.PostId}{Environment.NewLine}");
+                File.AppendAllText(@"D:\Compare.txt", $"{customerItem.UserId.GetHashCode()}	{customerItem.PostId.GetHashCode()}{Environment.NewLine}");
             }
         }
-
-        //public static string GetAbsolutePath(string relativeDatasetPath)
-        //{
-        //    FileInfo _dataRoot = new FileInfo(typeof(Program).Assembly.Location);
-        //    string assemblyFolderPath = _dataRoot.Directory.FullName;
-
-        //    string fullPath = Path.Combine(assemblyFolderPath, relativeDatasetPath);
-
-        //    return fullPath;
-        //}
     }
 }
