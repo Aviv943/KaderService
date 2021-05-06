@@ -24,12 +24,14 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Post>> GetPostsAsync()
         {
-            return await _context.Posts.ToListAsync();
+            IEnumerable<Post> posts =  _context.Posts.AsEnumerable();
+
+            return posts;
         }
 
         public async Task<IEnumerable<Post>> GetPostsForUserAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            User user = await _userManager.FindByIdAsync(userId);
             
             return await _context.Posts
                 .Where(post => post.Group.Members.Contains(user))
@@ -38,14 +40,24 @@ namespace KaderService.Services.Services
                 .ToListAsync();
         }
 
-        public async Task<Post> GetPostAsync(string id)
+        public async Task<Post> GetPostAsync(string id, User user)
         {
-            return await _context.Posts
+            Post post = await _context.Posts
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.Creator)
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .FirstOrDefaultAsync(p => p.PostId == id);
+
+            var relatedPost = new RelatedPost(user.Id, id);
+            bool relatedItems = _context.RelatedPosts.Any(rp => rp.PostId == post.PostId && rp.UserId == user.Id);
+
+            if (!relatedItems)
+            {
+                await _context.RelatedPosts.AddAsync(relatedPost);
+            }
+
+            return post;
         }
 
         public async Task UpdatePostAsync(string id, Post post)

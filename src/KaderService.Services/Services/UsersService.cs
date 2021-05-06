@@ -46,6 +46,10 @@ namespace KaderService.Services.Services
             {
                 new (ClaimTypes.Name, user.UserName),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new ("userid", user.Id),
+                new ("email", user.Email),
+                new ("firstname", user.FirstName),
+                new ("lastname", user.LastName)
             };
 
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
@@ -63,7 +67,6 @@ namespace KaderService.Services.Services
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
-                UserId = user.Id
             };
         }
 

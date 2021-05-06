@@ -28,7 +28,9 @@ namespace KaderService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPostsAsync()
         {
-            return Ok(await _service.GetPostsAsync());
+            IEnumerable<Post> postsAsync = await _service.GetPostsAsync();
+
+            return Ok(postsAsync);
         }
 
         // GET: api/posts/{userId}
@@ -69,10 +71,10 @@ namespace KaderService.Controllers
         }
 
         // GET: api/posts/post/{postId}
-        [HttpGet("/post/{postId}")]
+        [HttpGet("post/{postId}")]
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
         {
-            var post = await _service.GetPostAsync(postId);
+            var post = await _service.GetPostAsync(postId, LoggedInUser);
 
             if (post == null)
             {
@@ -98,7 +100,7 @@ namespace KaderService.Controllers
         public async Task<ActionResult<Post>> CreatePostAsync(Post post, string groupId)
         {
             await _service.CreatePostAsync(post, LoggedInUser, groupId);
-            return CreatedAtAction("GetPostAsync", new { id = post.PostId }, post);
+            return CreatedAtAction("GetPostAsync", new { postId = post.PostId }, post);
         }
 
         [HttpDelete("{id}")]

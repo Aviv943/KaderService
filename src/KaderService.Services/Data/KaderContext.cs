@@ -14,11 +14,11 @@ namespace KaderService.Services.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder
                 .Entity<Post>()
                 .Property(p => p.ImagesUri)
-                .HasConversion(images => 
+                .HasConversion(images =>
                     string.Join(',', images),
                     images => images.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
@@ -46,8 +46,19 @@ namespace KaderService.Services.Data
                 .WithMany(p => p.Comments)
                 .HasForeignKey(c => c.PostId);
 
-            modelBuilder.Entity<Post>().HasOne(post => post.Creator).WithMany(user => user.Posts);
-            modelBuilder.Entity<Comment>().HasOne(post => post.Creator).WithMany(user => user.Comments);
+            modelBuilder
+                .Entity<Post>()
+                .HasOne(post => post.Creator)
+                .WithMany(user => user.Posts);
+
+            modelBuilder
+                .Entity<Comment>()
+                .HasOne(post => post.Creator)
+                .WithMany(user => user.Comments);
+            
+            modelBuilder
+                .Entity<RelatedPost>()
+                .HasKey(table => new { CustomerId = table.UserId, ItemId = table.PostId });
         }
 
         public DbSet<Post> Posts { get; set; }
@@ -55,5 +66,7 @@ namespace KaderService.Services.Data
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Group> Groups { get; set; }
+
+        public DbSet<RelatedPost> RelatedPosts { get; set; }
     }
 }
