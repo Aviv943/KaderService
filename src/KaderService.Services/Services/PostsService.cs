@@ -23,10 +23,8 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<List<Post>> GetPostsByUserAsync(string userId)
+        public async Task<List<Post>> GetPosts(User user)
         {
-            User user = await _userManager.FindByIdAsync(userId);
-            
             return await _context.Posts
                 .Where(post => post.Group.Members.Contains(user))
                 .Include(p => p.Creator)
