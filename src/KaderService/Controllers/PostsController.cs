@@ -45,10 +45,11 @@ namespace KaderService.Controllers
 
         // GET: api/posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetPosts()
+        public async Task<ActionResult<List<PostView>>> GetPosts()
         {
-            List<Post> postsForUserAsync = await _service.GetPosts(LoggedInUser);
-            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
+            List<Post> posts = await _service.GetPosts(LoggedInUser);
+            
+            return posts.Select(p => new PostView
             {
                 Creator = new UserView
                 {
@@ -71,12 +72,7 @@ namespace KaderService.Controllers
                 Location = p.Location,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count
-            });
-
-            return Ok(new GetPostsResponse
-            {
-                PostViews = postViews.ToList()
-            });
+            }).ToList();
         }
 
         // GET: api/posts/{userId}

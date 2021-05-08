@@ -14,6 +14,8 @@ namespace KaderService.Controllers
             _userManager = userManager;
         }
 
-        public User LoggedInUser => !string.IsNullOrWhiteSpace(User?.Identity?.Name) ? _userManager.FindByNameAsync(User?.Identity?.Name).Result : throw new Exception("User is not logged in");
+        public User LoggedInUser => !string.IsNullOrWhiteSpace(User?.Identity?.Name) 
+            ? _userManager.FindByNameAsync(User?.Identity?.Name).Result 
+            : throw new Exception("User is not logged in");
     }
 }
