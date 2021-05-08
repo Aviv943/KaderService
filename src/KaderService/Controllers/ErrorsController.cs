@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
+using KaderService.Logger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -13,21 +14,28 @@ namespace KaderService.Controllers
     [ApiController]
     public class ErrorsController : ControllerBase
     {
-        [Route("error")]
-        public async Task<ActionResult<ErrorResponse>> ReturnErrorAsync()
+        private readonly ILoggerManager _logger;
+
+        public ErrorsController(ILoggerManager logger)
         {
-            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            Exception exception = context.Error;
-            
+            _logger = logger;
+        }
+
+        [Route("error")]
+        public async Task<ActionResult<ErrorResponse>> Response(int errorCode, string internalCode, string message)
+        {
             var errorResponse = new ErrorResponse
             {
-                Error = exception.Message
+                InternalCode = internalCode,
+                Message = message
             };
 
-            return exception switch
+            _logger.LogError($"[{internalCode}] Exception: {message}");
+            
+            return errorCode switch
             {
-                KeyNotFoundException => NotFound(errorResponse),
-                UnauthorizedAccessException => Unauthorized(errorResponse),
+                404 => NotFound(errorResponse),
+                401 => Unauthorized(errorResponse),
                 _ => BadRequest(errorResponse)
             };
         }

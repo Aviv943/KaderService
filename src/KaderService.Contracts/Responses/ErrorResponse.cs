@@ -8,8 +8,8 @@ namespace KaderService.Contracts.Responses
 {
     public class ErrorResponse
     {
-        public string Error { get; set; }
+        public string InternalCode { get; set; }
 
-
+        public string Message { get; set; }
     }
 }

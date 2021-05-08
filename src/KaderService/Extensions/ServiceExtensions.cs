@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.Contracts.Api;
+using KaderService.Logger;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
@@ -26,6 +27,7 @@ namespace KaderService.Extensions
             services.AddTransient<CommentsService>();
             services.AddTransient<GroupsService>();
             services.AddTransient<UsersService>();
+            services.AddScoped<ILoggerManager, LoggerManager>();
         }
 
         public static void AddMyAuthentication(this IServiceCollection services, IConfiguration config)

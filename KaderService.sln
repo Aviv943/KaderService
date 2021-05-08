@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C717A6E8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaderService.Seeder", "tools\KaderService.Seeder\KaderService.Seeder.csproj", "{4D98D09F-E0F3-4241-87B2-D7CAF2EA35FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaderService.ML", "src\KaderService.ML\KaderService.ML.csproj", "{2966B988-D8F1-4677-8DBD-971A187B59FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaderService.ML", "src\KaderService.ML\KaderService.ML.csproj", "{2966B988-D8F1-4677-8DBD-971A187B59FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaderService.Logger", "src\KaderService.Logger\KaderService.Logger.csproj", "{5F0DC625-5F83-441A-8177-43FAFAF21708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{2966B988-D8F1-4677-8DBD-971A187B59FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2966B988-D8F1-4677-8DBD-971A187B59FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2966B988-D8F1-4677-8DBD-971A187B59FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0DC625-5F83-441A-8177-43FAFAF21708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0DC625-5F83-441A-8177-43FAFAF21708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0DC625-5F83-441A-8177-43FAFAF21708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0DC625-5F83-441A-8177-43FAFAF21708}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{5671F335-0260-4CCD-92B6-EBA4211E8E49} = {21205893-89ED-4A06-A464-B827EBE3AEF1}
 		{4D98D09F-E0F3-4241-87B2-D7CAF2EA35FE} = {C717A6E8-1BB2-424D-99A9-8F5997CE9ABC}
 		{2966B988-D8F1-4677-8DBD-971A187B59FC} = {21205893-89ED-4A06-A464-B827EBE3AEF1}
+		{5F0DC625-5F83-441A-8177-43FAFAF21708} = {21205893-89ED-4A06-A464-B827EBE3AEF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF9E440-E3A2-4010-A5BE-54D68BA6B4E3}

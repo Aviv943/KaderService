@@ -31,6 +31,7 @@ namespace KaderService
                 logger.LogError(e, "An error occurred seeding the DB.");
             }
 
+            
             host.Run();
         }
 
