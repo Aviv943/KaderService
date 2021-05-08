@@ -29,6 +29,8 @@ namespace KaderService.Services.ViewModels
 
         public int CommentsCount { get; set; }
 
+        public ICollection<CommentView> Comments { get; set; }
+
         public ICollection<string> ImagesUri { get; set; }
 
         public UserView Creator { get; set; }

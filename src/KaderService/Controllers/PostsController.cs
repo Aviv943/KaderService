@@ -51,7 +51,6 @@ namespace KaderService.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PostView>>> GetPosts()
         {
-            Console.WriteLine(Request.Headers["Authorization"]);
             List<Post> posts = await _service.GetPosts(LoggedInUser);
             
             return posts.Select(p => new PostView
@@ -76,7 +75,13 @@ namespace KaderService.Controllers
                 Description = p.Description,
                 Location = p.Location,
                 ImagesUri = p.ImagesUri,
-                CommentsCount = p.Comments.Count
+                CommentsCount = p.Comments.Count,
+                Comments = new List<CommentView>(p.Comments.Select(comment => new CommentView
+                {
+                    CommentId = comment.CommentId,
+                    Content = comment.Content,
+                    Created = comment.Created
+                }))
             }).ToList();
         }
 
