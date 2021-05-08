@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KaderService.Contracts.ML
 {
-    public class Request
+    public class MLRequest
     {
         public List<ItemsCustomers> ItemCustomersList { get; set; }
 

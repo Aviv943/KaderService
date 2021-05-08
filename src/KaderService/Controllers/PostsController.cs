@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
+using KaderService.ML.DTO;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Primitives;
 
 namespace KaderService.Controllers
 {
@@ -47,6 +51,7 @@ namespace KaderService.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PostView>>> GetPosts()
         {
+            Console.WriteLine(Request.Headers["Authorization"]);
             List<Post> posts = await _service.GetPosts(LoggedInUser);
             
             return posts.Select(p => new PostView
