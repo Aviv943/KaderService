@@ -41,6 +41,7 @@ namespace KaderService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandler("/error");
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KaderService v1"));
             app.UseHttpsRedirection();
