@@ -31,6 +31,6 @@ namespace KaderService.Services.ViewModels
 
         public ICollection<string> ImagesUri { get; set; }
 
-        public UserView UserView { get; set; }
+        public UserView Creator { get; set; }
     }
 }

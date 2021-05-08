@@ -43,15 +43,6 @@ namespace KaderService.Controllers
             return Ok(response);
         }
 
-        // GET: api/posts/
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPostsAsync()
-        {
-            IEnumerable<Post> postsAsync = await _service.GetPostsAsync();
-
-            return Ok(postsAsync);
-        }
-
         // GET: api/posts/{userId}
         [HttpGet("{userId}")]
         public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetPostsByUserAsync(string userId)
@@ -61,16 +52,18 @@ namespace KaderService.Controllers
                 return BadRequest("UserId cannot be null");
             }
 
-            IEnumerable<Post> postsForUserAsync = await _service.GetPostsByUserAsync(userId);
-            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView{
-                UserView = new UserView
+            List<Post> postsForUserAsync = await _service.GetPostsByUserAsync(userId);
+            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
+            {
+                Creator = new UserView
                 {
                     UserId = p.Creator.Id,
                     UserName = p.Creator.UserName,
                     FirstName = p.Creator.FirstName,
                     LastName = p.Creator.LastName,
                     Rating = p.Creator.Rating,
-                    NumberOfRating = p.Creator.NumberOfRatings
+                    NumberOfRating = p.Creator.NumberOfRatings,
+                    ImageUri = p.Creator.ImageUri
                 },
                 Created = p.Created,
                 GroupId = p.GroupId,
@@ -103,7 +96,7 @@ namespace KaderService.Controllers
             IEnumerable<Post> postsForUserAsync = await _service.GetRecommendedPostsAsync(LoggedInUser);
             IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
             {
-                UserView = new UserView
+                Creator = new UserView
                 {
                     UserId = p.Creator.Id,
                     UserName = p.Creator.UserName,

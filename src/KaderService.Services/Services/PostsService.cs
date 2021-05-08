@@ -23,14 +23,7 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<Post>> GetPostsAsync()
-        {
-            IEnumerable<Post> posts =  _context.Posts.AsEnumerable();
-
-            return posts;
-        }
-
-        public async Task<IEnumerable<Post>> GetPostsByUserAsync(string userId)
+        public async Task<List<Post>> GetPostsByUserAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
             
@@ -73,6 +66,11 @@ namespace KaderService.Services.Services
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .FirstOrDefaultAsync(p => p.PostId == id);
+
+            if (post == null)
+            {
+                throw new Exception("Post can not be found");
+            }
 
             var relatedPost = new RelatedPost(user.Id, id);
             bool relatedItems = _context.RelatedPosts.Any(rp => rp.PostId == post.PostId && rp.UserId == user.Id);
