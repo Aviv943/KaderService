@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
@@ -46,6 +47,17 @@ namespace KaderService.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("post/{postId}/image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<GetPostResponse>> CreatePostImageAsync(string postId)
+        {
+            IFormFile file = Request.Form.Files.First();
+            string serverImageUrl = await _service.CreatePostImageAsync(postId, LoggedInUser, file);
+            
+            return Ok(serverImageUrl);
+        }
+
 
         // GET: api/posts
         [HttpGet]

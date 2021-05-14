@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.ML.DTO;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -150,6 +152,25 @@ namespace KaderService.Services.Services
                 .ToListAsync();
 
             await DeletePostsAsync(posts);
+        }
+
+        public async Task<string> CreatePostImageAsync(string postId, User loggedInUser, IFormFile file)
+        {
+            const string fileName = "main.jpg";
+            var serverFilePath = $"/{loggedInUser.Id}/{postId}";
+            DirectoryInfo baseUserDirectory = Directory.CreateDirectory($"c:/inetpub/wwwroot/{loggedInUser.Id}/{postId}");
+            string filePath = Path.Combine(baseUserDirectory.FullName, fileName);
+
+            await using var fileStream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(fileStream);
+            fileStream.Close();
+
+            Post post = await _context.Posts.FindAsync(postId);
+            post.ImagesUri = new List<string>() { serverFilePath };
+            _context.Update(post);
+            await _context.SaveChangesAsync();
+
+            return $"{serverFilePath}/{fileName}";
         }
     }
 }

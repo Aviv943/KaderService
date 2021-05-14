@@ -33,7 +33,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Technology Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -43,7 +43,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for apples Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -53,7 +53,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for melons Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -63,7 +63,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for garlic Please",
                     Location = "Ramat-Gan",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -73,7 +73,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for ketchup Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -83,7 +83,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Fish Please",
                     Location = "Lod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -93,7 +93,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Milk Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -103,7 +103,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Cheese Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -113,7 +113,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Eggs Please",
                     Location = "Ramat-Gan",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -123,7 +123,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for BasketBall Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -133,7 +133,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Jump Ropes Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -143,7 +143,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for SoftBalls Please",
                     Location = "Lod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -153,7 +153,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Bats Please",
                     Location = "Ramat-Gan",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -163,7 +163,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for FootBalls Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -173,7 +173,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Hockey Sticks Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -183,7 +183,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Hula Hoops Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -193,7 +193,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Gloves Please",
                     Location = "Ramat-Gan",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -203,7 +203,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Harp Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -213,7 +213,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Piano Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -223,7 +223,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Cello Please",
                     Location = "Lod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -233,7 +233,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Bass drum Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -243,7 +243,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Bass Guitar Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -253,7 +253,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Guitar Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -263,7 +263,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Harmonica Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -273,7 +273,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Bell Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -283,7 +283,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Tuba Please",
                     Location = "Lod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -293,7 +293,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Microphone Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -303,7 +303,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Mouse Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -313,7 +313,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for HeadPhones Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -323,7 +323,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for USB Stick Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -333,7 +333,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Router Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -343,7 +343,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Laptop Please",
                     Location = "Tel-Aviv",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -353,7 +353,7 @@ namespace KaderService.Seeder.Seeds
                     Description = "Looking for Web cam Please",
                     Location = "Ashdod",
                     Created = DateTime.Now,
-                    ImagesUri = new List<string> {"rak", "sarah"}
+                    ImagesUri = new List<string>()
                 },
             };
 
