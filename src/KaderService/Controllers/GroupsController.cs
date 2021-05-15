@@ -18,35 +18,59 @@ namespace KaderService.Controllers
     public class GroupsController : MyControllerBase
     {
         private readonly GroupsService _service;
+        private readonly UserManager<User> _userManager;
 
         public GroupsController(GroupsService service, UserManager<User> userManager) 
             : base(userManager)
         {
             _service = service;
+            _userManager = userManager;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroupsAsync()
-        {
-            return Ok(await _service.GetGroupsAsync());
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Group>>> GetGroupsAsync()
+        //{
+        //    return Ok(await _service.GetGroupsAsync());
+        //}
 
-        [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<GetGroupsResponse>>> GetGroupsForUserAsync(string userId)
+        [HttpGet("users")]
+        public async Task<ActionResult<IEnumerable<GetGroupsResponse>>> GetGroupsAsync([FromQuery] string userId)
         {
-            IEnumerable<Group> groupsForUserAsync = await _service.GetGroupsForUserAsync(userId);
-            IEnumerable<GroupView> groupViews = groupsForUserAsync.Select(group => new GroupView
+            User user;
+
+            if (!string.IsNullOrWhiteSpace(userId))
             {
-                Name = group.Name,
-                Category = group.Category,
-                Created = group.Created,
-                Description = group.Description,
-                GroupId = group.GroupId,
-                GroupPrivacy = group.GroupPrivacy,
-                MainLocation = group.MainLocation,
-                ManagersCount = group.Managers.Count,
-                MembersCount = group.Members.Count,
-                PostsCount = group.Posts.Count
+                user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new KeyNotFoundException("User can NOT be found");
+                }
+            }
+            else
+            {
+                user = LoggedInUser;
+            }
+
+            IEnumerable<Group> groups = await _service.GetGroupsAsync(user);
+            IEnumerable<GroupView> groupViews = groups.Select(group =>
+            {
+                User userManager = group.Managers.FirstOrDefault(us => us.Id == user.Id);
+
+                return new GroupView
+                {
+                    Name = group.Name,
+                    Category = group.Category,
+                    Created = group.Created,
+                    Description = group.Description,
+                    GroupId = group.GroupId,
+                    GroupPrivacy = group.GroupPrivacy,
+                    MainLocation = group.MainLocation,
+                    ManagersCount = group.Managers.Count,
+                    MembersCount = group.Members.Count,
+                    PostsCount = group.Posts.Count,
+                    IsManager = userManager != null
+                };
             });
 
             return Ok(new GetGroupsResponse

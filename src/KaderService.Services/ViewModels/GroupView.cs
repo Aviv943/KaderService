@@ -28,5 +28,7 @@ namespace KaderService.Services.ViewModels
         public int ManagersCount { get; set; }
 
         public int PostsCount { get; set; }
+
+        public bool? IsManager { get; set; }
     }
 }

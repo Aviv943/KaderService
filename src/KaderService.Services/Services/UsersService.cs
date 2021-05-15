@@ -67,6 +67,7 @@ namespace KaderService.Services.Services
             return new TokenInfo
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
+                UserId = user.Id,
                 Expiration = token.ValidTo,
             };
         }
@@ -110,10 +111,10 @@ namespace KaderService.Services.Services
         private async Task<User> GetUserAsync(string id)
         {
             return await _context.Users
-                .Include(u => u.MemberInGroups)
-                .ThenInclude(g => g.Members)
-                .Include(u => u.ManagerInGroups)
-                .ThenInclude(u => u.Managers)
+                //.Include(u => u.MemberInGroups)
+                //.ThenInclude(g => g.Members)
+                //.Include(u => u.ManagerInGroups)
+                //.ThenInclude(u => u.Managers)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -126,33 +127,33 @@ namespace KaderService.Services.Services
                 throw new Exception($"User is not exist by id '{userId}'");
             }
 
-            List<GroupView> managersGroupViews = user.ManagerInGroups.Select(group => new GroupView
-            {
-                Name = group.Name,
-                Category = group.Category,
-                Created = group.Created,
-                Description = group.Description,
-                GroupId = group.GroupId,
-                GroupPrivacy = group.GroupPrivacy,
-                MainLocation = group.MainLocation,
-                ManagersCount = group.Managers.Count,
-                MembersCount = group.Members.Count,
-                PostsCount = group.Posts.Count
-            }).ToList();
+            //List<GroupView> managersGroupViews = user.ManagerInGroups.Select(group => new GroupView
+            //{
+            //    Name = group.Name,
+            //    Category = group.Category,
+            //    Created = group.Created,
+            //    Description = group.Description,
+            //    GroupId = group.GroupId,
+            //    GroupPrivacy = group.GroupPrivacy,
+            //    MainLocation = group.MainLocation,
+            //    ManagersCount = group.Managers.Count,
+            //    MembersCount = group.Members.Count,
+            //    PostsCount = group.Posts.Count
+            //}).ToList();
 
-            List<GroupView> membersGroupViews = user.MemberInGroups.Select(group => new GroupView
-            {
-                Name = group.Name,
-                Category = group.Category,
-                Created = group.Created,
-                Description = group.Description,
-                GroupId = group.GroupId,
-                GroupPrivacy = group.GroupPrivacy,
-                MainLocation = group.MainLocation,
-                ManagersCount = group.Managers.Count,
-                MembersCount = group.Members.Count,
-                PostsCount = group.Posts.Count
-            }).ToList();
+            //List<GroupView> membersGroupViews = user.MemberInGroups.Select(group => new GroupView
+            //{
+            //    Name = group.Name,
+            //    Category = group.Category,
+            //    Created = group.Created,
+            //    Description = group.Description,
+            //    GroupId = group.GroupId,
+            //    GroupPrivacy = group.GroupPrivacy,
+            //    MainLocation = group.MainLocation,
+            //    ManagersCount = group.Managers.Count,
+            //    MembersCount = group.Members.Count,
+            //    PostsCount = group.Posts.Count
+            //}).ToList();
 
             return new UserView
             {
@@ -163,8 +164,8 @@ namespace KaderService.Services.Services
                 NumberOfRating = user.NumberOfRatings,
                 Rating = user.Rating,
                 UserId = userId,
-                ManagerInGroups = managersGroupViews,
-                MemberInGroups = membersGroupViews,
+                //ManagerInGroups = managersGroupViews,
+                //MemberInGroups = membersGroupViews,
             };
         }
 

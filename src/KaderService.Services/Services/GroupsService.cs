@@ -25,9 +25,8 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<Group>> GetGroupsForUserAsync(string userId)
+        public async Task<IEnumerable<Group>> GetGroupsAsync(User user)
         {
-            var user = await _userManager.FindByIdAsync(userId);
             return await _context.Groups
                 .Where(g =>
                     g.Members.Contains(user) ||
