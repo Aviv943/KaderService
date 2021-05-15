@@ -9,6 +9,7 @@ using KaderService.Services.Constants;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
+using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -106,7 +107,7 @@ namespace KaderService.Services.Services
             return await _userManager.GetUsersInRoleAsync("Admin");
         }
 
-        public async Task<User> GetUserAsync(string id)
+        private async Task<User> GetUserAsync(string id)
         {
             return await _context.Users
                 .Include(u => u.MemberInGroups)
@@ -116,19 +117,96 @@ namespace KaderService.Services.Services
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<UserView> GetUserViewAsync(string userId)
+        {
+            User user = await GetUserAsync(userId);
+
+            if (user == null)
+            {
+                throw new Exception($"User is not exist by id '{userId}'");
+            }
+
+            List<GroupView> managersGroupViews = user.ManagerInGroups.Select(group => new GroupView
+            {
+                Name = group.Name,
+                Category = group.Category,
+                Created = group.Created,
+                Description = group.Description,
+                GroupId = group.GroupId,
+                GroupPrivacy = group.GroupPrivacy,
+                MainLocation = group.MainLocation,
+                ManagersCount = group.Managers.Count,
+                MembersCount = group.Members.Count,
+                PostsCount = group.Posts.Count
+            }).ToList();
+
+            List<GroupView> membersGroupViews = user.MemberInGroups.Select(group => new GroupView
+            {
+                Name = group.Name,
+                Category = group.Category,
+                Created = group.Created,
+                Description = group.Description,
+                GroupId = group.GroupId,
+                GroupPrivacy = group.GroupPrivacy,
+                MainLocation = group.MainLocation,
+                ManagersCount = group.Managers.Count,
+                MembersCount = group.Members.Count,
+                PostsCount = group.Posts.Count
+            }).ToList();
+
+            List<PostView> postViews = user.Posts.Select(post => new PostView
+            {
+                GroupId = post.GroupId,
+                Category = post.Category,
+                CommentsCount = post.Comments.Count,
+                Created = post.Created,
+                Description = post.Description,
+                GroupName = post.Group.Name,
+                Location = post.Location,
+                Creator = new UserView
+                {
+                    FirstName = post.Creator.FirstName,
+                    LastName = post.Creator.LastName,
+                    Rating = post.Creator.Rating,
+                    NumberOfRating = post.Creator.NumberOfRatings,
+                    ImageUri = post.Creator.ImageUri
+                },
+                PostId = post.PostId,
+                Title = post.Title,
+                Type = post.Type,
+                ImagesUri = post.ImagesUri
+            }).ToList();
+
+            return new UserView
+            {
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ImageUri = user.ImageUri,
+                NumberOfRating = user.NumberOfRatings,
+                Rating = user.Rating,
+                UserId = userId,
+                ManagerInGroups = managersGroupViews,
+                MemberInGroups = membersGroupViews,
+                Posts = postViews
+            };
+        }
+
         public async Task<IdentityRole> GetRoleAsync(string roleName)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
+            IdentityRole role = await _roleManager.FindByNameAsync(roleName);
+            
             if (role == null)
             {
                 throw new Exception($"The {roleName} was not found");
             }
+            
             return role;
         }
 
         public async Task PutRoleAsync(string id, string newRole)
         {
-            var user = await GetUserAsync(id);
+            User user = await GetUserAsync(id);
             await _userManager.AddToRoleAsync(user, newRole);
         }
 
@@ -141,7 +219,7 @@ namespace KaderService.Services.Services
         {
             try
             {
-                var role = await GetRoleAsync(roleName);
+                IdentityRole role = await GetRoleAsync(roleName);
                 await _roleManager.DeleteAsync(role);
             }
             catch (Exception e)

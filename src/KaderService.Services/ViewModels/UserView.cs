@@ -21,5 +21,11 @@ namespace KaderService.Services.ViewModels
         public int NumberOfRating { get; set; }
 
         public string ImageUri { get; set; }
+
+        public ICollection<PostView> Posts { get; set; }
+
+        public ICollection<GroupView> MemberInGroups { get; set; }
+
+        public ICollection<GroupView> ManagerInGroups { get; set; }
     }
 }

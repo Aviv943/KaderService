@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
+using KaderService.Logger;
 using KaderService.ML.DTO;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
@@ -22,11 +23,13 @@ namespace KaderService.Controllers
     public class PostsController : MyControllerBase
     {
         private readonly PostsService _service;
+        private readonly ILoggerManager _logger;
 
-        public PostsController(PostsService service, UserManager<User> userManager) 
+        public PostsController(PostsService service, UserManager<User> userManager, ILoggerManager logger) 
             : base(userManager)
         {
             _service = service;
+            _logger = logger;
         }
 
         // GET: api/posts/post/{postId}
@@ -52,12 +55,12 @@ namespace KaderService.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<GetPostResponse>> CreatePostImageAsync(string postId)
         {
+            _logger.LogDebug($"[{LoggedInUser.UserName}] Request to create post image for postId {postId}");
             IFormFile file = Request.Form.Files.First();
             string serverImageUrl = await _service.CreatePostImageAsync(postId, LoggedInUser, file);
             
             return Ok(serverImageUrl);
         }
-
 
         // GET: api/posts
         [HttpGet]
