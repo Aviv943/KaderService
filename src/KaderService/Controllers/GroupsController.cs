@@ -27,14 +27,8 @@ namespace KaderService.Controllers
             _userManager = userManager;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Group>>> GetGroupsAsync()
-        //{
-        //    return Ok(await _service.GetGroupsAsync());
-        //}
-
         [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<GetGroupsResponse>>> GetGroupsAsync([FromQuery] string userId)
+        public async Task<ActionResult<IEnumerable<GroupView>>> GetGroupsAsync([FromQuery] string userId)
         {
             User user;
 
@@ -53,7 +47,7 @@ namespace KaderService.Controllers
             }
 
             IEnumerable<Group> groups = await _service.GetGroupsAsync(user);
-            IEnumerable<GroupView> groupViews = groups.Select(group =>
+            IEnumerable<GroupView> groupsViews = groups.Select(group =>
             {
                 User userManager = group.Managers.FirstOrDefault(us => us.Id == user.Id);
 
@@ -73,10 +67,7 @@ namespace KaderService.Controllers
                 };
             });
 
-            return Ok(new GetGroupsResponse
-            {
-                GroupView = groupViews.ToList()
-            });
+            return Ok(groupsViews);
         }
 
         [HttpGet("{id}")]
