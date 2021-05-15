@@ -114,6 +114,7 @@ namespace KaderService.Services.Services
                 .ThenInclude(g => g.Members)
                 .Include(u => u.ManagerInGroups)
                 .ThenInclude(u => u.Managers)
+                .Include(u => u.Posts)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
