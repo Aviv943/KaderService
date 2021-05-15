@@ -70,7 +70,7 @@ namespace KaderService.Services.Services
 
             if (post == null)
             {
-                throw new Exception("Post can not be found");
+                throw new Exception("UpgradeVersion can not be found");
             }
 
             var relatedPost = new RelatedPost(user.Id, id);
