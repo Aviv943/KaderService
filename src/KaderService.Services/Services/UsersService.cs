@@ -114,7 +114,6 @@ namespace KaderService.Services.Services
                 .ThenInclude(g => g.Members)
                 .Include(u => u.ManagerInGroups)
                 .ThenInclude(u => u.Managers)
-                .Include(u => u.Posts)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -155,29 +154,6 @@ namespace KaderService.Services.Services
                 PostsCount = group.Posts.Count
             }).ToList();
 
-            List<PostView> postViews = user.Posts.Select(post => new PostView
-            {
-                GroupId = post.GroupId,
-                Category = post.Category,
-                CommentsCount = post.Comments.Count,
-                Created = post.Created,
-                Description = post.Description,
-                GroupName = post.Group.Name,
-                Location = post.Location,
-                Creator = new UserView
-                {
-                    FirstName = post.Creator.FirstName,
-                    LastName = post.Creator.LastName,
-                    Rating = post.Creator.Rating,
-                    NumberOfRating = post.Creator.NumberOfRatings,
-                    ImageUri = post.Creator.ImageUri
-                },
-                PostId = post.PostId,
-                Title = post.Title,
-                Type = post.Type,
-                ImagesUri = post.ImagesUri
-            }).ToList();
-
             return new UserView
             {
                 UserName = user.UserName,
@@ -189,7 +165,6 @@ namespace KaderService.Services.Services
                 UserId = userId,
                 ManagerInGroups = managersGroupViews,
                 MemberInGroups = membersGroupViews,
-                Posts = postViews
             };
         }
 

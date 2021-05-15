@@ -25,7 +25,7 @@ namespace KaderService.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<List<Post>> GetPosts(User user)
+        public async Task<List<Post>> GetPostsAsync(User user)
         {
             return await _context.Posts
                 .Where(post => post.Group.Members.Contains(user))

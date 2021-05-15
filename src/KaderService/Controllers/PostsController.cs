@@ -23,12 +23,14 @@ namespace KaderService.Controllers
     public class PostsController : MyControllerBase
     {
         private readonly PostsService _service;
+        private readonly UserManager<User> _userManager;
         private readonly ILoggerManager _logger;
 
         public PostsController(PostsService service, UserManager<User> userManager, ILoggerManager logger) 
             : base(userManager)
         {
             _service = service;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -64,9 +66,20 @@ namespace KaderService.Controllers
 
         // GET: api/posts
         [HttpGet]
-        public async Task<ActionResult<List<PostView>>> GetPosts()
+        public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId)
         {
-            List<Post> posts = await _service.GetPosts(LoggedInUser);
+            User user;
+            
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                user = await _userManager.FindByIdAsync(userId);
+            }
+            else
+            {
+                user = LoggedInUser;
+            }
+
+            List<Post> posts = await _service.GetPostsAsync(user);
             
             return posts.Select(p => new PostView
             {
