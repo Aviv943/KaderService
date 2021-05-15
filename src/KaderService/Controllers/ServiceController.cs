@@ -29,7 +29,7 @@ namespace KaderService.Controllers
         }
 
         // POST api/<ServiceController>
-        [HttpPost]
+        [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeVersionAsync()
         {
             var proc = new Process
