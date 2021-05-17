@@ -54,7 +54,7 @@ namespace KaderService.Services.Services
                 .Include(g => g.Managers)
                 .ThenInclude(u => u.ManagerInGroups)
                 .Include(g => g.Posts)
-                .ThenInclude(post => post.Group)
+                .ThenInclude(post => post.Creator)
                 .FirstOrDefaultAsync(g => g.GroupId == id);
         }
 
