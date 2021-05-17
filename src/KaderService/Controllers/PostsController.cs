@@ -85,7 +85,13 @@ namespace KaderService.Controllers
                 {
                     CommentId = comment.CommentId,
                     Content = comment.Content,
-                    Created = comment.Created
+                    Created = comment.Created,
+                    Creator = new UserView
+                    {
+                        FirstName = comment.Creator.FirstName,
+                        LastName = comment.Creator.LastName,
+                        ImageUri = comment.Creator.ImageUri
+                    }
                 }))
             }).ToList();
         }
