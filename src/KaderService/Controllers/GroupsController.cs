@@ -29,116 +29,18 @@ namespace KaderService.Controllers
         //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<GroupView>> GetGroupAsync(string id)
         {
-            Group group = await _service.GetGroupAsync(id);
+            GroupView group = await _service.GetGroupViewAsync(id);
 
-            if (group == null)
-            {
-                return NotFound();
-            }
-
-            var posts = new List<PostView>();
-
-            foreach (Post post in group.Posts)
-            {
-                List<CommentView> comments = post.Comments.Select(comment => new CommentView
-                {
-                    Creator = new UserView
-                    {
-                        UserId = comment.Creator.Id,
-                        FirstName = comment.Creator.FirstName,
-                        LastName = comment.Creator.LastName,
-                        ImageUri = comment.Creator.ImageUri
-                    },
-                    CommentId = comment.CommentId,
-                    Content = comment.Content, 
-                    Created = comment.Created
-                }).ToList();
-
-                posts.Add(new PostView
-                {
-                    Creator = new UserView
-                    {
-                        UserId = post.Creator.Id,
-                        FirstName = post.Creator.FirstName,
-                        LastName = post.Creator.LastName,
-                        ImageUri = post.Creator.ImageUri
-                    },
-                    PostId = post.PostId,
-                    Category = post.Category,
-                    Comments = comments,
-                    Created = post.Created,
-                    Description = post.Description,
-                    CommentsCount = comments.Count,
-                    ImagesUri = post.ImagesUri,
-                    Location = post.Location,
-                    Title = post.Title,
-                    Type = post.Type
-                });
-            }
-
-            List<UserView> members = group.Members.Select(member => new UserView
-                {
-                    FirstName = member.FirstName,
-                    LastName = member.LastName,
-                    ImageUri = member.ImageUri,
-                    UserId = member.Id,
-                    Rating = member.Rating,
-                    NumberOfRating = member.NumberOfRatings
-                }).ToList();
-
-            List<UserView> managers = group.Managers.Select(manager => new UserView
-                {
-                    FirstName = manager.FirstName,
-                    LastName = manager.LastName,
-                    ImageUri = manager.ImageUri,
-                    UserId = manager.Id,
-                    Rating = manager.Rating,
-                    NumberOfRating = manager.NumberOfRatings
-                }).ToList();
-
-            return Ok(new GroupView
-            {
-                Name = group.Name,
-                Category = group.Category,
-                Created = group.Created,
-                Description = group.Description,
-                GroupId = group.GroupId,
-                GroupPrivacy = group.GroupPrivacy,
-                Address = group.Address,
-                Managers = managers,
-                Members = members,
-                PostsCount = group.Posts.Count,
-                Posts = posts,
-            });
+            return Ok(group);
         }
 
         [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<GroupView>>> GetGroupsAsync([FromQuery] string userId)
         {
             User user = await GetRelevantUserAsync(userId);
+            IEnumerable<GroupView> groups = await _service.GetGroupsAsync(user);
 
-            IEnumerable<Group> groups = await _service.GetGroupsAsync(user);
-            IEnumerable<GroupView> groupsViews = groups.Select(group =>
-            {
-                User userManager = group.Managers.FirstOrDefault(us => us.Id == user.Id);
-
-                return new GroupView
-                {
-                    Name = group.Name,
-                    Category = group.Category,
-                    Created = group.Created,
-                    Description = group.Description,
-                    GroupId = group.GroupId,
-                    GroupPrivacy = group.GroupPrivacy,
-                    Address = group.Address,
-                    ManagersCount = group.Managers.Count,
-                    MembersCount = group.Members.Count,
-                    PostsCount = group.Posts.Count,
-                    IsManager = userManager != null
-                };
-            });
-
-            return Ok(groupsViews);
+            return Ok(groups);
         }
 
         [HttpGet("{id}/posts")]
@@ -156,21 +58,16 @@ namespace KaderService.Controllers
 
         [HttpGet("search")]
         //[Authorize(Policy = "GroupManager")]
-        public async Task<ActionResult<GetGroupResponse>> SearchGroupsAsync(string text, string category, string location)
+        public async Task<ActionResult<IEnumerable<GroupView>>> SearchGroupsAsync([FromQuery] string text, [FromQuery] string category, [FromQuery] double? radius, [FromQuery] string address)
         {
-            Group group = await _service.GetGroupAsync("");
+            IEnumerable<GroupView> group = await _service.SearchGroupsAsync(text, category, radius, address);
 
             if (group == null)
             {
                 return NotFound();
             }
 
-            var response = new GetGroupResponse
-            {
-                Group = group
-            };
-
-            return Ok(response);
+            return Ok(group);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

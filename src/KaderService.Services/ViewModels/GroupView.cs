@@ -31,6 +31,8 @@ namespace KaderService.Services.ViewModels
 
         public bool? IsManager { get; set; }
 
+        public double Distance { get; set; }
+
         public ICollection<PostView> Posts { get; set; }
 
         public ICollection<UserView> Members { get; set; }

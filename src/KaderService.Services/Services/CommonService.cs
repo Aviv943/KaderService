@@ -61,5 +61,14 @@ namespace KaderService.Services.Services
 
             return $"{(int) jToken["X"]},{(int) jToken["Y"]}";
         }
+
+        public async Task<double> CalculateDistanceAsync((int x, int y) userLocation, (int x, int y) requestedLocation)
+        {
+            double x = userLocation.x - requestedLocation.x;
+            double y = userLocation.y - requestedLocation.y;
+            double distance = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+            
+            return distance;
+        }
     }
 }

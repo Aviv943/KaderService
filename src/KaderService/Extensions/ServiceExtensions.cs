@@ -6,6 +6,7 @@ using KaderService.Contracts.Api;
 using KaderService.Logger;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using KaderService.Services.Repositories;
 using KaderService.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@ namespace KaderService.Extensions
             services.AddTransient<GroupsService>();
             services.AddTransient<UsersService>();
             services.AddTransient<CommonService>();
+            services.AddTransient<GroupsRepository>();
             services.AddScoped<ILoggerManager, LoggerManager>();
         }
 
