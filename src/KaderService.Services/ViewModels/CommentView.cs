@@ -14,9 +14,8 @@ namespace KaderService.Services.ViewModels
 
         public DateTime Created { get; set; }
 
-        public UserView UserView { get; set; }
+        public UserView Creator { get; set; }
 
         public string PostId { get; set; }
-
     }
 }

@@ -68,17 +68,7 @@ namespace KaderService.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId)
         {
-            User user;
-            
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                user = await _userManager.FindByIdAsync(userId);
-            }
-            else
-            {
-                user = LoggedInUser;
-            }
-
+            User user = await GetRelevantUserAsync(userId);
             List<Post> posts = await _service.GetPostsAsync(user);
             
             return posts.Select(p => new PostView
@@ -101,7 +91,7 @@ namespace KaderService.Controllers
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
-                Location = p.Location,
+                Location = p.Address,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count,
                 Comments = new List<CommentView>(p.Comments.Select(comment => new CommentView
@@ -142,7 +132,7 @@ namespace KaderService.Controllers
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
-                Location = p.Location,
+                Location = p.Address,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count
             });

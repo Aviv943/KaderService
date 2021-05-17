@@ -17,7 +17,7 @@ namespace KaderService.Services.ViewModels
 
         public string Description { get; set; }
 
-        public string MainLocation { get; set; }
+        public string Address { get; set; }
 
         public DateTime Created { get; set; }
 

@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaderService.Services.Models;
+using KaderService.Services.ViewModels;
 using Refit;
 
 namespace KaderService.Contracts.Api
 {
     public interface IKaderGroupsApi
     {
-        [Get("/api/groups")]
-        Task<IEnumerable<Group>> GetGroupsAsync();
-
-        [Get("/api/groups/users/{userId}")]
-        Task<IEnumerable<Group>> GetGroupsForUserAsync(string userId);
+        [Get("/api/groups/users")]
+        Task<IEnumerable<GroupView>> GetGroupsAsync();
 
         [Get("/api/groups/{id}")]
         Task<Group> GetGroupAsync(string id);

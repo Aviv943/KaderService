@@ -16,12 +16,14 @@ namespace KaderService.Services.Services
     {
         private readonly KaderContext _context;
         private readonly PostsService _postsService;
+        private readonly CommonService _commonService;
         private readonly UserManager<User> _userManager;
 
-        public GroupsService(KaderContext context, PostsService postsService, UserManager<User> userManager)
+        public GroupsService(KaderContext context, PostsService postsService, CommonService commonService, UserManager<User> userManager)
         {
             _context = context;
             _postsService = postsService;
+            _commonService = commonService;
             _userManager = userManager;
         }
 
@@ -93,6 +95,8 @@ namespace KaderService.Services.Services
 
         public async Task CreateGroupAsync(Group group, User user)
         {
+            group.Location = await _commonService.GetLocationAsync(group.Address);
+
             await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
 

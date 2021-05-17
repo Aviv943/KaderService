@@ -35,7 +35,7 @@ namespace KaderService.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterAsync(RegisterModel model)
         {
-            var isRegistered = await _service.RegisterAsync(model);
+            bool isRegistered = await _service.RegisterAsync(model);
 
             if (isRegistered)
             {

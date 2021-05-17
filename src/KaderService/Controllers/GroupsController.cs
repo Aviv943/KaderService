@@ -18,33 +18,17 @@ namespace KaderService.Controllers
     public class GroupsController : MyControllerBase
     {
         private readonly GroupsService _service;
-        private readonly UserManager<User> _userManager;
 
         public GroupsController(GroupsService service, UserManager<User> userManager) 
             : base(userManager)
         {
             _service = service;
-            _userManager = userManager;
         }
 
         [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<GroupView>>> GetGroupsAsync([FromQuery] string userId)
         {
-            User user;
-
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null)
-                {
-                    throw new KeyNotFoundException("User can NOT be found");
-                }
-            }
-            else
-            {
-                user = LoggedInUser;
-            }
+            User user = await GetRelevantUserAsync(userId);
 
             IEnumerable<Group> groups = await _service.GetGroupsAsync(user);
             IEnumerable<GroupView> groupsViews = groups.Select(group =>
@@ -59,7 +43,7 @@ namespace KaderService.Controllers
                     Description = group.Description,
                     GroupId = group.GroupId,
                     GroupPrivacy = group.GroupPrivacy,
-                    MainLocation = group.MainLocation,
+                    Address = group.Address,
                     ManagersCount = group.Managers.Count,
                     MembersCount = group.Members.Count,
                     PostsCount = group.Posts.Count,
@@ -68,6 +52,25 @@ namespace KaderService.Controllers
             });
 
             return Ok(groupsViews);
+        }
+
+        [HttpGet("{id}")]
+        //[Authorize(Policy = "GroupManager")]
+        public async Task<ActionResult<GetGroupResponse>> SearchGroupsAsync(string text, string category, string location)
+        {
+            Group group = await _service.GetGroupAsync("");
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            var response = new GetGroupResponse
+            {
+                Group = group
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -85,7 +88,6 @@ namespace KaderService.Controllers
             {
                 Group = group
             };
-
 
             return Ok(response);
         }

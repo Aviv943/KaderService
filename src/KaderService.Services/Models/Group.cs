@@ -30,7 +30,9 @@ namespace KaderService.Services.Models
         
         public string Description { get; set; }
         
-        public string MainLocation { get; set; }
+        public string Address { get; set; }
+
+        public string Location { get; set; }
 
         public DateTime Created { get; set; } = DateTime.Now;
 

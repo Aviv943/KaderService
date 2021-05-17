@@ -135,7 +135,7 @@ namespace KaderService.Services.Services
             //    Description = group.Description,
             //    GroupId = group.GroupId,
             //    GroupPrivacy = group.GroupPrivacy,
-            //    MainLocation = group.MainLocation,
+            //    Address = group.Address,
             //    ManagersCount = group.Managers.Count,
             //    MembersCount = group.Members.Count,
             //    PostsCount = group.Posts.Count
@@ -149,7 +149,7 @@ namespace KaderService.Services.Services
             //    Description = group.Description,
             //    GroupId = group.GroupId,
             //    GroupPrivacy = group.GroupPrivacy,
-            //    MainLocation = group.MainLocation,
+            //    Address = group.Address,
             //    ManagersCount = group.Managers.Count,
             //    MembersCount = group.Members.Count,
             //    PostsCount = group.Posts.Count

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaderService.Services.Models;
+using KaderService.Services.ViewModels;
 using Refit;
 
 namespace KaderService.Contracts.Api
@@ -8,10 +9,7 @@ namespace KaderService.Contracts.Api
     public interface IKaderPostsApi
     {
         [Get("/api/posts")]
-        Task<IEnumerable<Post>> GetPostsAsync();
-
-        [Get("/api/posts/{userId}")]
-        Task<IEnumerable<Post>> GetPostForUserAsync(string userId);
+        Task<IEnumerable<PostView>> GetPostsAsync();
 
         [Get("/api/posts/{id}")]
         Task<Post> GetPostAsync(string id);

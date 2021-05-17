@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Models;
+using KaderService.Services.ViewModels;
 
 namespace KaderService.Seeder.Seeds
 {
@@ -16,7 +17,7 @@ namespace KaderService.Seeder.Seeds
             foreach (Comment comment in comments)
             {
                 await LoginAsync();
-                Post post = await GetRandomPostAsync();
+                PostView post = await GetRandomPostAsync();
                 await CommentsClient.CreateCommentAsync(comment, post.PostId);
             }
         }

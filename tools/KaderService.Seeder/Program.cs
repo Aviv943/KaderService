@@ -16,10 +16,11 @@ namespace KaderService.Seeder
     {
         private static async Task Main(string[] args)
         {
+            var baseUrl = "http://kader.cs.colman.ac.il:5000";
             Thread.Sleep(TimeSpan.FromSeconds(5));
             var seedTypes = new List<string>();
 
-            foreach (var arg in args)
+            foreach (string arg in args)
             {
                 if (arg.ToLower().StartsWith("-users"))
                 {
@@ -37,13 +38,19 @@ namespace KaderService.Seeder
                 {
                     seedTypes.Add("Comments");
                 }
+                else if (arg.ToLower().StartsWith("-local"))
+                {
+                    baseUrl = "http://localhost:5000";
+                }
             }
 
-            foreach (var seedType in seedTypes)
+            foreach (string seedType in seedTypes)
             {
+                Console.WriteLine($"Seeding '{seedType}'");
                 var type = Type.GetType($"KaderService.Seeder.Seeds.{seedType}");
-                var factory = await Seeds.Seeds.CreateAsync(type);
+                var factory = await Seeds.Seeds.CreateAsync(type, baseUrl);
                 await factory.SeedAsync();
+                Console.WriteLine("Done");
             }
         }
     }

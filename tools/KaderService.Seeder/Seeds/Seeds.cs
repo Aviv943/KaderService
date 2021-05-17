@@ -9,6 +9,8 @@ using KaderService.Contracts.Api;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
+using KaderService.Services.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Refit;
 
 namespace KaderService.Seeder.Seeds
@@ -19,17 +21,17 @@ namespace KaderService.Seeder.Seeds
         public static IKaderGroupsApi GroupsClient;
         public static IKaderPostsApi PostsClient;
         public static IKaderCommentsApi CommentsClient;
+        public static string BaseUrl;
 
-        public static async Task<Seeds> CreateAsync(Type type)
+        public static async Task<Seeds> CreateAsync(Type type, string baseUrl)
         {
+            BaseUrl = baseUrl;
             return (Seeds)Activator.CreateInstance(type);
         }
 
         public static async Task<TokenInfo> LoginAsync()
         {
-            const string baseUrl = "http://kader.cs.colman.ac.il:5000";
-            //const string baseUrl = "http://localhost:5000";
-            var client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+            var client = new HttpClient() { BaseAddress = new Uri(BaseUrl) };
             UsersClient = RestService.For<IKaderUsersApi>(client);
             User user = await GetRandomUserAsync(true);
 
@@ -74,10 +76,10 @@ namespace KaderService.Seeder.Seeds
             return usersList[randomValue];
         }
 
-        public async Task<Group> GetRandomGroupAsync()
+        public async Task<GroupView> GetRandomGroupAsync()
         {
-            IEnumerable<Group> groups = await GroupsClient.GetGroupsAsync();
-            List<Group> groupsList = groups.ToList();
+            IEnumerable<GroupView> groups = await GroupsClient.GetGroupsAsync();
+            List<GroupView> groupsList = groups.ToList();
 
             if (!groupsList.Any())
             {
@@ -85,15 +87,15 @@ namespace KaderService.Seeder.Seeds
             }
 
             var random = new Random();
-            var randomValue = random.Next(groupsList.Count());
+            int randomValue = random.Next(groupsList.Count());
 
             return groupsList[randomValue];
         }
 
-        public async Task<Post> GetRandomPostAsync()
+        public async Task<PostView> GetRandomPostAsync()
         {
-            IEnumerable<Post> posts = await PostsClient.GetPostsAsync();
-            List<Post> postsList = posts.ToList();
+            IEnumerable<PostView> posts = await PostsClient.GetPostsAsync();
+            List<PostView> postsList = posts.ToList();
 
             if (!postsList.Any())
             {
@@ -101,7 +103,7 @@ namespace KaderService.Seeder.Seeds
             }
 
             var random = new Random();
-            var randomValue = random.Next(postsList.Count);
+            int randomValue = random.Next(postsList.Count);
 
             return postsList[randomValue];
         }

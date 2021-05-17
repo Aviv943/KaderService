@@ -31,69 +31,79 @@ namespace KaderService.Seeder.Seeds
                     Category = "Sport",
                     Description = "Area 51 Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
+                    Address = "בית הערבה 8, ראשון לציון"
                 },
                 new()
                 {
                     Name = "Jokes",
                     Category = "Sport",
                     Description = "Jokes Group Description",
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "הרצל 33, תל אביב"
                 },
                 new()
                 {
                     Name = "Students In Colman",
                     Category = "Sport",
                     Description = "Students In Colman Group Description",
-                    GroupPrivacy = GroupPrivacy.Invisible
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Address = "אושה 5, ראשון לציון"
                 },
                 new()
                 {
                     Name = "Cars Pishpeshok",
                     Category = "Sport",
                     Description = "Cars Pishpeshok Group Description",
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "החלמונית 22, ראשון לציון"
                 },
                 new()
                 {
                     Name = "Junior Developers Petah-Tikva",
                     Category = "Sport",
                     Description = "Junior Developers Petah-Tikva Group Description",
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "שדה נחום 11, ראשון לציון"
                 },
                 new()
                 {
                     Name = "Senior Developers Holon",
                     Category = "Sport",
                     Description = "Senior Developers Holon Group Description",
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "חניתה 1, ראשון לציון"
                 },
                 new()
                 {
                     Name = "Budapest for travelers",
                     Category = "Sport",
                     Description = "Budapest for travelers Group Description",
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "ירמיהו 48, תל אביב"
                 },
                 new()
                 {
                     Name = "Prague for travelers",
                     Category = "Sport",
                     Description = "Prague for travelers Group Description",
-                    GroupPrivacy = GroupPrivacy.Invisible
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Address = "העצמאות 12, אשדוד"
                 },
                 new()
                 {
                     Name = "Cheap stuff",
                     Category = "Sport",
                     Description = "Cheap stuff Group Description",
-                    GroupPrivacy = GroupPrivacy.Private
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "הרצל 1, תל אביב"
                 },
                 new()
                 {
                     Name = "Bitcoin mining",
                     Category = "Crypto Coin",
                     Description = "Bitcoin mining Group Description",
-                    GroupPrivacy = GroupPrivacy.Public
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "שונית 2, רמלה"
                 }
             };
 

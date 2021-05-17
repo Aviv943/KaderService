@@ -32,7 +32,7 @@ namespace KaderService.Controllers
         }
 
         // GET: api/Comments/{PostId}
-        [HttpGet("/{postId}")]
+        [HttpGet("{postId}")]
         public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsForPostAsync(string postId)
         {
             if (string.IsNullOrWhiteSpace(postId))
@@ -43,7 +43,7 @@ namespace KaderService.Controllers
             IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsForPostAsync(postId);
             IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
             {
-                UserView = new UserView
+                Creator = new UserView
                 {
                     UserId = c.Creator.Id,
                     UserName = c.Creator.UserName,
@@ -58,6 +58,7 @@ namespace KaderService.Controllers
                 Created = c.Created,
                 
             });
+
             return Ok(new GetCommentsResponse
             {
                 CommentViews = commentViews.ToList()
