@@ -56,8 +56,15 @@ namespace KaderService.Controllers
             return Ok(groupPosts);
         }
 
+        /// <summary>
+        /// If you wanna search by radius, address can't be null
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="category"></param>
+        /// <param name="radius"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
         [HttpGet("search")]
-        //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<IEnumerable<GroupView>>> SearchGroupsAsync([FromQuery] string text, [FromQuery] string category, [FromQuery] double? radius, [FromQuery] string address)
         {
             IEnumerable<GroupView> group = await _service.SearchGroupsAsync(text, category, radius, address);

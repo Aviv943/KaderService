@@ -54,24 +54,24 @@ namespace KaderService.Services.Repositories
             if (!string.IsNullOrWhiteSpace(text))
             {
                 query = _context.Groups
+                    .Where(group => group.Name.ToLower().Contains(text))
                     .Include(g => g.Posts)
                     .ThenInclude(post => post.Creator)
                     .Include(g => g.Members)
-                    .Include(g => g.Managers)
-                    .Where(group => group.Name.ToLower().Contains(text));
+                    .Include(g => g.Managers);
             }
 
             if (!string.IsNullOrWhiteSpace(category))
             {
                 query = _context.Groups
+                    .Where(group => string.Equals(@group.Category, category, StringComparison.CurrentCultureIgnoreCase))
                     .Include(g => g.Posts)
                     .ThenInclude(post => post.Creator)
                     .Include(g => g.Members)
-                    .Include(g => g.Managers)
-                    .Where(group => string.Equals(@group.Category, category, StringComparison.CurrentCultureIgnoreCase));
+                    .Include(g => g.Managers);
             }
 
-            return query == null ? new List<Group>() : await query.ToListAsync();
+            return query == null ? new List<Group>() : await query.Distinct().ToListAsync();
         }
 
         public async Task<List<Group>> GetAllGroupsAsync()

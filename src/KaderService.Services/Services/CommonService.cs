@@ -59,10 +59,10 @@ namespace KaderService.Services.Services
                 _logger.LogInfo($"Extract street address {address} could not be found, new address: '{streetAddress}'");
             }
 
-            return $"{(int) jToken["X"]},{(int) jToken["Y"]}";
+            return $"{(double) jToken["X"]},{(double) jToken["Y"]}";
         }
 
-        public async Task<double> CalculateDistanceAsync((int x, int y) userLocation, (int x, int y) requestedLocation)
+        public async Task<double> CalculateDistanceAsync((double x, double y) userLocation, (double x, double y) requestedLocation)
         {
             double x = userLocation.x - requestedLocation.x;
             double y = userLocation.y - requestedLocation.y;

@@ -72,8 +72,8 @@ namespace KaderService.Services.Services
             {
                 string[] gLocation = group.Location.Split(',');
                 string[] uLocation = addressLocation.Split(',');
-                (int, int) groupLocation = (int.Parse(gLocation[0]), int.Parse(gLocation[1]));
-                (int, int) userLocation = (int.Parse(uLocation[0]), int.Parse(uLocation[1]));
+                (double, double) groupLocation = (double.Parse(gLocation[0]), double.Parse(gLocation[1]));
+                (double, double) userLocation = (double.Parse(uLocation[0]), double.Parse(uLocation[1]));
 
                 double distance = await _commonService.CalculateDistanceAsync(userLocation, groupLocation);
 
