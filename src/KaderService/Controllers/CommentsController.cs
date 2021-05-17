@@ -24,16 +24,8 @@ namespace KaderService.Controllers
             _service = service;
         }
 
-        // GET: api/Comments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsAsync()
-        {
-            return Ok(await _service.GetCommentsAsync());
-        }
-
-        // GET: api/Comments/{PostId}
         [HttpGet("{postId}")]
-        public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsForPostAsync(string postId)
+        public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsAsync(string postId)
         {
             if (string.IsNullOrWhiteSpace(postId))
             {
@@ -66,7 +58,7 @@ namespace KaderService.Controllers
         }
 
         // GET: api/Comments/5
-        [HttpGet("{id}")]
+        [HttpGet("comment/{id}")]
         public async Task<ActionResult<Comment>> GetCommentAsync(string id)
         {
             Comment comment = await _service.GetCommentAsync(id);
