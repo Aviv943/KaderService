@@ -44,10 +44,10 @@ namespace KaderService.Controllers
                 {
                     Creator = new UserView
                     {
-                        UserId = post.Creator.Id,
-                        FirstName = post.Creator.FirstName,
-                        LastName = post.Creator.LastName,
-                        ImageUri = post.Creator.ImageUri
+                        UserId = comment.Creator.Id,
+                        FirstName = comment.Creator.FirstName,
+                        LastName = comment.Creator.LastName,
+                        ImageUri = comment.Creator.ImageUri
                     },
                     CommentId = comment.CommentId,
                     Content = comment.Content, 
