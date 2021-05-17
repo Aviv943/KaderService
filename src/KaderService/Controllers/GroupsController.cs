@@ -76,6 +76,26 @@ namespace KaderService.Controllers
                 });
             }
 
+            List<UserView> members = group.Members.Select(member => new UserView
+                {
+                    FirstName = member.FirstName,
+                    LastName = member.LastName,
+                    ImageUri = member.ImageUri,
+                    UserId = member.Id,
+                    Rating = member.Rating,
+                    NumberOfRating = member.NumberOfRatings
+                }).ToList();
+
+            List<UserView> managers = group.Managers.Select(manager => new UserView
+                {
+                    FirstName = manager.FirstName,
+                    LastName = manager.LastName,
+                    ImageUri = manager.ImageUri,
+                    UserId = manager.Id,
+                    Rating = manager.Rating,
+                    NumberOfRating = manager.NumberOfRatings
+                }).ToList();
+
             return Ok(new GroupView
             {
                 Name = group.Name,
@@ -85,8 +105,8 @@ namespace KaderService.Controllers
                 GroupId = group.GroupId,
                 GroupPrivacy = group.GroupPrivacy,
                 Address = group.Address,
-                ManagersCount = group.Managers.Count,
-                MembersCount = group.Members.Count,
+                Managers = managers,
+                Members = members,
                 PostsCount = group.Posts.Count,
                 Posts = posts,
             });
