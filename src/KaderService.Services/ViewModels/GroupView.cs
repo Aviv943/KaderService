@@ -30,5 +30,7 @@ namespace KaderService.Services.ViewModels
         public int PostsCount { get; set; }
 
         public bool? IsManager { get; set; }
+
+        public ICollection<PostView> Posts { get; set; }
     }
 }

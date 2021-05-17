@@ -27,7 +27,7 @@ namespace KaderService.Controllers
 
         [HttpGet("{id}")]
         //[Authorize(Policy = "GroupManager")]
-        public async Task<ActionResult<GetGroupResponse>> GetGroupAsync(string id)
+        public async Task<ActionResult<GroupView>> GetGroupAsync(string id)
         {
             Group group = await _service.GetGroupAsync(id);
 
@@ -36,12 +36,60 @@ namespace KaderService.Controllers
                 return NotFound();
             }
 
-            var response = new GetGroupResponse
-            {
-                Group = group
-            };
+            var posts = new List<PostView>();
 
-            return Ok(response);
+            foreach (Post post in group.Posts)
+            {
+                List<CommentView> comments = post.Comments.Select(comment => new CommentView
+                {
+                    Creator = new UserView
+                    {
+                        UserId = post.Creator.Id,
+                        FirstName = post.Creator.FirstName,
+                        LastName = post.Creator.LastName,
+                        ImageUri = post.Creator.ImageUri
+                    },
+                    CommentId = comment.CommentId,
+                    Content = comment.Content, 
+                    Created = comment.Created
+                }).ToList();
+
+                posts.Add(new PostView
+                {
+                    Creator = new UserView
+                    {
+                        UserId = post.Creator.Id,
+                        FirstName = post.Creator.FirstName,
+                        LastName = post.Creator.LastName,
+                        ImageUri = post.Creator.ImageUri
+                    },
+                    PostId = post.PostId,
+                    Category = post.Category,
+                    Comments = comments,
+                    Created = post.Created,
+                    Description = post.Description,
+                    CommentsCount = comments.Count,
+                    ImagesUri = post.ImagesUri,
+                    Location = post.Location,
+                    Title = post.Title,
+                    Type = post.Type
+                });
+            }
+
+            return Ok(new GroupView
+            {
+                Name = group.Name,
+                Category = group.Category,
+                Created = group.Created,
+                Description = group.Description,
+                GroupId = group.GroupId,
+                GroupPrivacy = group.GroupPrivacy,
+                Address = group.Address,
+                ManagersCount = group.Managers.Count,
+                MembersCount = group.Members.Count,
+                PostsCount = group.Posts.Count,
+                Posts = posts,
+            });
         }
 
         [HttpGet("users")]
