@@ -25,6 +25,25 @@ namespace KaderService.Controllers
             _service = service;
         }
 
+        [HttpGet("{id}")]
+        //[Authorize(Policy = "GroupManager")]
+        public async Task<ActionResult<GetGroupResponse>> GetGroupAsync(string id)
+        {
+            Group group = await _service.GetGroupAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            var response = new GetGroupResponse
+            {
+                Group = group
+            };
+
+            return Ok(response);
+        }
+
         [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<GroupView>>> GetGroupsAsync([FromQuery] string userId)
         {
@@ -54,7 +73,20 @@ namespace KaderService.Controllers
             return Ok(groupsViews);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/posts")]
+        public async Task<ActionResult<ICollection<Post>>> GetGroupPostsByIdAsync(string id)
+        {
+            ICollection<Post> groupPosts = await _service.GetGroupPostsByIdAsync(id);
+
+            if (groupPosts == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(groupPosts);
+        }
+
+        [HttpGet("search")]
         //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<GetGroupResponse>> SearchGroupsAsync(string text, string category, string location)
         {
@@ -71,39 +103,6 @@ namespace KaderService.Controllers
             };
 
             return Ok(response);
-        }
-
-        [HttpGet("{id}")]
-        //[Authorize(Policy = "GroupManager")]
-        public async Task<ActionResult<GetGroupResponse>> GetGroupAsync(string id)
-        {
-            Group group = await _service.GetGroupAsync(id);
-
-            if (group == null)
-            {
-                return NotFound();
-            }
-
-            var response = new GetGroupResponse
-            {
-                Group = group
-            };
-
-            return Ok(response);
-        }
-
-        [HttpGet("{id}/posts")]
-        public async Task<ActionResult<ICollection<Post>>> GetGroupPostsByIdAsync(string id)
-        {
-            ICollection<Post> groupPosts = await _service.GetGroupPostsByIdAsync(id);
-
-            if (groupPosts == null)
-            {
-                return NotFound();
-            }
-
-
-            return Ok(groupPosts);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

@@ -34,11 +34,10 @@ namespace KaderService.Controllers
             _logger = logger;
         }
 
-        // GET: api/posts/post/{postId}
         [HttpGet("post/{postId}")]
         public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
         {
-            var post = await _service.GetPostAsync(postId, LoggedInUser);
+            Post post = await _service.GetPostAsync(postId, LoggedInUser);
 
             if (post == null)
             {
@@ -52,25 +51,13 @@ namespace KaderService.Controllers
 
             return Ok(response);
         }
-
-        [HttpPost("post/{postId}/image")]
-        [Consumes("multipart/form-data")]
-        public async Task<ActionResult<GetPostResponse>> CreatePostImageAsync(string postId)
-        {
-            _logger.LogDebug($"[{LoggedInUser.UserName}] Request to create post image for postId {postId}");
-            IFormFile file = Request.Form.Files.First();
-            string serverImageUrl = await _service.CreatePostImageAsync(postId, LoggedInUser, file);
-            
-            return Ok(serverImageUrl);
-        }
-
-        // GET: api/posts
+        
         [HttpGet]
         public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId)
         {
             User user = await GetRelevantUserAsync(userId);
             List<Post> posts = await _service.GetPostsAsync(user);
-            
+
             return posts.Select(p => new PostView
             {
                 Creator = new UserView
@@ -103,7 +90,6 @@ namespace KaderService.Controllers
             }).ToList();
         }
 
-        // GET: api/posts/{userId}
         [HttpGet("{userId}/recommended")]
         public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetRecommendedPostsAsync(string userId)
         {
@@ -155,6 +141,17 @@ namespace KaderService.Controllers
         {
             await _service.CreatePostAsync(post, LoggedInUser, groupId);
             return CreatedAtAction("GetPostAsync", new { postId = post.PostId }, post);
+        }
+
+        [HttpPost("post/{postId}/image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<GetPostResponse>> CreatePostImageAsync(string postId)
+        {
+            _logger.LogDebug($"[{LoggedInUser.UserName}] Request to create post image for postId {postId}");
+            IFormFile file = Request.Form.Files.First();
+            string serverImageUrl = await _service.CreatePostImageAsync(postId, LoggedInUser, file);
+
+            return Ok(serverImageUrl);
         }
 
         [HttpDelete("{id}")]

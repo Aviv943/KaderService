@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using KaderService.Services.Models.AuthModels;
 using KaderService.Contracts;
+using KaderService.Services.Constants;
 
 namespace KaderService.Controllers
 {
@@ -27,7 +28,7 @@ namespace KaderService.Controllers
         [Route("login")]
         public async Task<IActionResult> LoginAsync(LoginModel model)
         {
-            var tokenInfo = await _service.LoginAsync(model);
+            TokenInfo tokenInfo = await _service.LoginAsync(model);
             return Ok(tokenInfo);
         }
 
