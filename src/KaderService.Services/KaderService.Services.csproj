@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KaderService.Logger\KaderService.Logger.csproj" />
     <ProjectReference Include="..\KaderService.ML\KaderService.ML.csproj" />
   </ItemGroup>
 
