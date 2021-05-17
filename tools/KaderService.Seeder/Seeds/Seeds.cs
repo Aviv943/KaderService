@@ -47,6 +47,8 @@ namespace KaderService.Seeder.Seeds
             PostsClient = RestService.For<IKaderPostsApi>(client);
             CommentsClient = RestService.For<IKaderCommentsApi>(client);
 
+            Console.WriteLine($"Logged in to userId '{tokenInfo.UserId}'");
+
             return tokenInfo;
         }
 
@@ -71,9 +73,12 @@ namespace KaderService.Seeder.Seeds
             }
 
             var random = new Random();
-            var randomValue = random.Next(usersList.Count());
+            int randomValue = random.Next(usersList.Count());
 
-            return usersList[randomValue];
+            User user = usersList[randomValue];
+            Console.WriteLine($"Got user '{user.UserName}'");
+
+            return user;
         }
 
         public async Task<GroupView> GetRandomGroupAsync()
@@ -89,7 +94,10 @@ namespace KaderService.Seeder.Seeds
             var random = new Random();
             int randomValue = random.Next(groupsList.Count());
 
-            return groupsList[randomValue];
+            GroupView groupView = groupsList[randomValue];
+            Console.WriteLine($"Got group '{groupView.Name}'");
+
+            return groupView;
         }
 
         public async Task<PostView> GetRandomPostAsync()
@@ -105,7 +113,10 @@ namespace KaderService.Seeder.Seeds
             var random = new Random();
             int randomValue = random.Next(postsList.Count);
 
-            return postsList[randomValue];
+            PostView postView = postsList[randomValue];
+            Console.WriteLine($"Got post '{postView.Title}'");
+
+            return postView;
         }
 
         public abstract Task SeedAsync();

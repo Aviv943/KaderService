@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
@@ -17,7 +15,16 @@ namespace KaderService.Seeder.Seeds
             foreach (Group group in groups)
             {
                 await LoginAsync();
-                await GroupsClient.CreateGroupAsync(group);
+
+                try
+                {
+                    await GroupsClient.CreateGroupAsync(group);
+                    Console.WriteLine($"Group created '{group.Name}'");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Group could not be created, ex: '{e.Message}'");
+                }
             }
         }
 

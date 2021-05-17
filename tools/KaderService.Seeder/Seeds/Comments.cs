@@ -18,7 +18,17 @@ namespace KaderService.Seeder.Seeds
             {
                 await LoginAsync();
                 PostView post = await GetRandomPostAsync();
-                await CommentsClient.CreateCommentAsync(comment, post.PostId);
+                
+                try
+                {
+                    await CommentsClient.CreateCommentAsync(comment, post.PostId);
+                    Console.WriteLine($"Comment created '{comment.Content}'");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Comment could not be created, ex: '{e.Message}'");
+                }
+
             }
         }
 

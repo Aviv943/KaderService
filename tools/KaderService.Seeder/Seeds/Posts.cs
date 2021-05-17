@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
@@ -19,13 +17,15 @@ namespace KaderService.Seeder.Seeds
             {
                 await LoginAsync();
                 GroupView group = await GetRandomGroupAsync();
+                
                 try
                 {
                     await PostsClient.CreatePostAsync(post, group.GroupId);
+                    Console.WriteLine($"Post created '{post.Title}'");
                 }
                 catch (Exception e)
                 {
-                    
+                    Console.WriteLine($"Post could not be created, ex: '{e.Message}'");
                 }
             }
         }
