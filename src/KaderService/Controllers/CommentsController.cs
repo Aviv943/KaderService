@@ -18,7 +18,7 @@ namespace KaderService.Controllers
     {
         private readonly CommentsService _service;
 
-        public CommentsController(CommentsService service, UserManager<User> userManager) 
+        public CommentsController(CommentsService service, UserManager<User> userManager)
             : base(userManager)
         {
             _service = service;
@@ -48,7 +48,7 @@ namespace KaderService.Controllers
                 CommentId = c.CommentId,
                 Content = c.Content,
                 Created = c.Created,
-                
+
             });
 
             return Ok(new GetCommentsResponse
@@ -86,7 +86,7 @@ namespace KaderService.Controllers
         public async Task<ActionResult<Comment>> CreateCommentAsync(Comment comment, string postId)
         {
             await _service.CreateCommentAsync(comment, LoggedInUser, postId);
-            return CreatedAtAction("GetCommentsAsync", new { id = comment.CommentId }, comment);
+            return CreatedAtAction("GetCommentsAsync", new { postId }, comment);
         }
 
         // DELETE: api/Comments/5

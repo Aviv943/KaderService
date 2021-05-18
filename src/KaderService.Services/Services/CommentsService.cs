@@ -80,7 +80,7 @@ namespace KaderService.Services.Services
             }
 
             comment.Post = post;
-            comment.Creator = await _userManager.FindByIdAsync(user.Id);
+            comment.Creator = user;
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
