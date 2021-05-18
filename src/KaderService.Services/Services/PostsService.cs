@@ -161,7 +161,7 @@ namespace KaderService.Services.Services
         public async Task<string> CreatePostImageAsync(string postId, User loggedInUser, IFormFile file)
         {
             const string fileName = "main.jpg";
-            var serverFilePath = $"/{loggedInUser.Id}/{postId}";
+            var serverFilePath = $"{loggedInUser.Id}/{postId}";
             DirectoryInfo baseUserDirectory = Directory.CreateDirectory($"c:/inetpub/wwwroot/{loggedInUser.Id}/{postId}");
             string filePath = Path.Combine(baseUserDirectory.FullName, fileName);
 
@@ -170,7 +170,7 @@ namespace KaderService.Services.Services
             fileStream.Close();
 
             Post post = await _context.Posts.FindAsync(postId);
-            post.ImagesUri = new List<string>() { $"{serverFilePath}/{fileName}" };
+            post.ImagesUri = new List<string>() { $"/{serverFilePath}/{fileName}" };
             _context.Update(post);
             await _context.SaveChangesAsync();
 
