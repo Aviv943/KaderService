@@ -170,11 +170,11 @@ namespace KaderService.Services.Services
             fileStream.Close();
 
             Post post = await _context.Posts.FindAsync(postId);
-            post.ImagesUri = new List<string>() { serverFilePath };
+            post.ImagesUri = new List<string>() { $"{serverFilePath}/{fileName}" };
             _context.Update(post);
             await _context.SaveChangesAsync();
 
-            return $"{serverFilePath}/{fileName}";
+            return $"http://kader.cs.colman.ac.il/{serverFilePath}/{fileName}";
         }
     }
 }
