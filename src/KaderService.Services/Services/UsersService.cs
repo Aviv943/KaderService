@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -10,6 +11,7 @@ using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
 using KaderService.Services.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -203,6 +205,24 @@ namespace KaderService.Services.Services
             {
                 Console.WriteLine($"The {roleName} failed to delete, error: {e}");
             }
+        }
+
+        public async Task<string> UpdateUserImageAsync(User user, IFormFile file)
+        {
+            const string fileName = "profile.jpg";
+            var serverFilePath = $"users/{user.Id}";
+            DirectoryInfo baseUserDirectory = Directory.CreateDirectory($"c:/inetpub/wwwroot/{serverFilePath}");
+            string filePath = Path.Combine(baseUserDirectory.FullName, fileName);
+
+            await using var fileStream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(fileStream);
+            fileStream.Close();
+
+            user.ImageUri = $"/{serverFilePath}/{fileName}";
+            await _userManager.UpdateAsync(user);
+            _context.Entry(user).State = EntityState.Modified;
+
+            return $"http://kader.cs.colman.ac.il/{serverFilePath}/{fileName}";
         }
 
         public async Task UpdateUserAsync(User user)

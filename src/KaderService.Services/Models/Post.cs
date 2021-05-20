@@ -21,11 +21,6 @@ namespace KaderService.Services.Models
         //Type: Request help/ Offer help/ Handover an item
         public PostType Type { get; set; }
 
-        /// <summary>
-        /// Sport/ School/ Cooking etc
-        /// </summary>
-        public string Category { get; set; }
-        
         public string Title { get; set; }
         
         public string Description { get; set; }

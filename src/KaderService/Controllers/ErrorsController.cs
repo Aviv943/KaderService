@@ -36,6 +36,7 @@ namespace KaderService.Controllers
             {
                 404 => NotFound(errorResponse),
                 401 => Unauthorized(errorResponse),
+                409 => Conflict(errorResponse),
                 _ => BadRequest(errorResponse)
             };
         }

@@ -29,6 +29,7 @@ namespace KaderService.Extensions
             services.AddTransient<GroupsService>();
             services.AddTransient<UsersService>();
             services.AddTransient<CommonService>();
+            services.AddTransient<CategoriesService>();
             services.AddTransient<GroupsRepository>();
             services.AddScoped<ILoggerManager, LoggerManager>();
         }

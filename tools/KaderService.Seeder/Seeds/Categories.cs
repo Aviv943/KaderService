@@ -36,28 +36,62 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Sport",
-                    ImageUri = ""
+                    ImageUri = "/categories/Sport.jpg"
                 },
                 new()
                 {
-                    Name = "Crypto",
-                    ImageUri = ""
-                    
+                    Name = "Beauty",
+                    ImageUri = "/categories/Beauty.jpg"
                 },
                 new()
                 {
-                    Name = "Technology",
-                    ImageUri = ""
+                    Name = "Books",
+                    ImageUri = "/categories/Books.jpg"
+                },
+                new()
+                {
+                    Name = "Cars",
+                    ImageUri = "/categories/Cars.jpg"
+                },
+                new()
+                {
+                    Name = "Cooking",
+                    ImageUri = "/categories/Cooking.jpg"
                 },
                 new()
                 {
                     Name = "Food",
-                    ImageUri = ""
+                    ImageUri = "/categories/Food.jpg"
                 },
                 new()
                 {
-                    Name = "Music",
-                    ImageUri = ""
+                    Name = "Garden",
+                    ImageUri = "/categories/Garden.jpg"
+                },
+                new()
+                {
+                    Name = "Home",
+                    ImageUri = "/categories/Home.jpg"
+                },
+                new()
+                {
+                    Name = "Pets",
+                    ImageUri = "/categories/Pets.jpg"
+                },
+                new()
+                {
+                    Name = "Technology",
+                    ImageUri = "/categories/Technology.jpg"
+                },
+                new()
+                {
+                    Name = "Tools",
+                    ImageUri = "/categories/Tools.jpg"
+                },
+                new()
+                {
+                    Name = "Toys",
+                    ImageUri = "/categories/Toys.jpg"
                 }
             };
 

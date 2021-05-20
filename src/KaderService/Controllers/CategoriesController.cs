@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using KaderService.Services.Services;
 
 namespace KaderService.Controllers
 {
@@ -15,10 +17,18 @@ namespace KaderService.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly KaderContext _context;
+        private readonly CategoriesService _service;
 
-        public CategoriesController(KaderContext context)
+        public CategoriesController(KaderContext context, CategoriesService service)
         {
             _context = context;
+            _service = service;
+        }
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Category>> GetCategoryAsync(string name)
+        {
+            return await _service.GetCategoryAsync(name);
         }
 
         // GET: api/Categories
@@ -56,27 +66,23 @@ namespace KaderService.Controllers
             return NoContent();
         }
 
-        // POST: api/Categories
-        [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        // POST: api/categories
+        [HttpPost("{name}/image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<Category>> PostCategoryImageAsync(string name)
         {
-            await _context.Categories.AddAsync(category);
+            IFormFile file = Request.Form.Files.First();
+            var categoryImageUri = await _service.PostCategoryImageAsync(name, file);
             
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CategoryExists(category.Name))
-                {
-                    return Conflict();
-                }
+            return Created(string.Empty, string.Empty);
+        }
 
-                throw;
-            }
-
-            return Created(string.Empty, category);
+        // POST: api/categories
+        [HttpPost("{name}")]
+        public async Task<ActionResult<Category>> PostCategoryAsync(Category category)
+        {
+            await _service.PostCategoryAsync(category);
+            return CreatedAtAction("GetCategoryAsync", new {category.Name}, category);
         }
 
         // DELETE: api/Categories/5

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using KaderService.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using KaderService.Services.Models.AuthModels;
 using KaderService.Contracts;
 using KaderService.Services.Constants;
+using Microsoft.AspNetCore.Http;
 
 namespace KaderService.Controllers
 {
@@ -96,6 +96,17 @@ namespace KaderService.Controllers
         {
             await _service.DeleteRoleAsync(roleName);
             return Ok();
+        }
+
+        [HttpPost("image")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserImageAsync([FromQuery] string id)
+        {
+            User user = await GetRelevantUserAsync(id);
+            IFormFile file = Request.Form.Files.First();
+            string userImage = await _service.UpdateUserImageAsync(user, file);
+
+            return Ok(userImage);
         }
     }
 }

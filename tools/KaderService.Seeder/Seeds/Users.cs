@@ -55,7 +55,7 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Email = "Yoram@gmail.com",
-                    Username = "Yossi",
+                    Username = "Yoram",
                     Password = "Bolila1!"
                 },
                 new()

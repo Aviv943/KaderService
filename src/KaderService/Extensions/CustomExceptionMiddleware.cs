@@ -7,6 +7,7 @@ using KaderService.Logger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -39,6 +40,7 @@ namespace KaderService.Extensions
             {
                 KeyNotFoundException => 404,
                 UnauthorizedAccessException => 401,
+                DbUpdateException => 409,
                 _ => 400
             };
 

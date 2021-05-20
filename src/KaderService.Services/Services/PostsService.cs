@@ -160,16 +160,22 @@ namespace KaderService.Services.Services
 
         public async Task<string> CreatePostImageAsync(string postId, User loggedInUser, IFormFile file)
         {
+            Post post = await _context.Posts.FindAsync(postId);
+
+            if (post == null)
+            {
+                throw new KeyNotFoundException("Post could not be found");
+            }
+
             const string fileName = "main.jpg";
-            var serverFilePath = $"{loggedInUser.Id}/{postId}";
-            DirectoryInfo baseUserDirectory = Directory.CreateDirectory($"c:/inetpub/wwwroot/{loggedInUser.Id}/{postId}");
+            var serverFilePath = $"posts/{loggedInUser.Id}/{postId}";
+            DirectoryInfo baseUserDirectory = Directory.CreateDirectory($"c:/inetpub/wwwroot/{serverFilePath}");
             string filePath = Path.Combine(baseUserDirectory.FullName, fileName);
 
             await using var fileStream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(fileStream);
             fileStream.Close();
 
-            Post post = await _context.Posts.FindAsync(postId);
             post.ImagesUri = new List<string>() { $"/{serverFilePath}/{fileName}" };
             _context.Update(post);
             await _context.SaveChangesAsync();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
+using KaderService.Services.Models;
 
 namespace KaderService.Services.ViewModels
 {
@@ -13,11 +14,11 @@ namespace KaderService.Services.ViewModels
 
         public PostType Type { get; set; }
 
-        public string Category { get; set; }
-
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public string Address { get; set; }
 
         public string Location { get; set; }
 
@@ -34,5 +35,6 @@ namespace KaderService.Services.ViewModels
         public ICollection<string> ImagesUri { get; set; }
 
         public UserView Creator { get; set; }
+        public Category Category { get; set; }
     }
 }

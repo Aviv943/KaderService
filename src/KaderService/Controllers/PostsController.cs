@@ -23,14 +23,12 @@ namespace KaderService.Controllers
     public class PostsController : MyControllerBase
     {
         private readonly PostsService _service;
-        private readonly UserManager<User> _userManager;
         private readonly ILoggerManager _logger;
 
         public PostsController(PostsService service, UserManager<User> userManager, ILoggerManager logger) 
             : base(userManager)
         {
             _service = service;
-            _userManager = userManager;
             _logger = logger;
         }
 
@@ -70,11 +68,12 @@ namespace KaderService.Controllers
                     NumberOfRating = p.Creator.NumberOfRatings,
                     ImageUri = p.Creator.ImageUri
                 },
+                Address = p.Address,
                 Created = p.Created,
                 GroupId = p.GroupId,
                 GroupName = p.Group.Name,
+                Category = p.Group.Category,
                 Type = p.Type,
-                Category = p.Category,
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
@@ -116,11 +115,12 @@ namespace KaderService.Controllers
                     Rating = p.Creator.Rating,
                     NumberOfRating = p.Creator.NumberOfRatings
                 },
+                Address = p.Address,
                 Created = p.Created,
                 GroupId = p.GroupId,
+                Category = p.Group.Category,
                 GroupName = p.Group.Name,
                 Type = p.Type,
-                Category = p.Category,
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,

@@ -139,7 +139,6 @@ namespace KaderService.Services.Services
                         ImageUri = post.Creator.ImageUri
                     },
                     PostId = post.PostId,
-                    Category = post.Category,
                     Comments = comments,
                     Created = post.Created,
                     Description = post.Description,
