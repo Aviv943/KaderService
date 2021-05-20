@@ -35,23 +35,29 @@ namespace KaderService.Seeder.Seeds
             {
                 new()
                 {
-                    Name = "Sport"
+                    Name = "Sport",
+                    ImageUri = ""
                 },
                 new()
                 {
-                    Name = "Crypto"
+                    Name = "Crypto",
+                    ImageUri = ""
+                    
                 },
                 new()
                 {
-                    Name = "Technology"
+                    Name = "Technology",
+                    ImageUri = ""
                 },
                 new()
                 {
-                    Name = "Food"
+                    Name = "Food",
+                    ImageUri = ""
                 },
                 new()
                 {
-                    Name = "Music"
+                    Name = "Music",
+                    ImageUri = ""
                 }
             };
 

@@ -64,7 +64,7 @@ namespace KaderService.Services.Repositories
             if (!string.IsNullOrWhiteSpace(category))
             {
                 query = _context.Groups
-                    .Where(group => string.Equals(@group.Category, category, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(group => string.Equals(@group.Category.Name, category, StringComparison.CurrentCultureIgnoreCase))
                     .Include(g => g.Posts)
                     .ThenInclude(post => post.Creator)
                     .Include(g => g.Members)

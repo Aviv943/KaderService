@@ -16,7 +16,7 @@ namespace KaderService.Seeder.Seeds
             {
                 await LoginAsync();
                 Category category = await GetRandomCategoryAsync();
-                group.Category = category.Name;
+                group.Category = category;
 
                 try
                 {
@@ -51,7 +51,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Students In Colman",
-                    Category = "Sport",
                     Description = "Students In Colman Group Description",
                     GroupPrivacy = GroupPrivacy.Invisible,
                     Address = "אושה 5, ראשון לציון"

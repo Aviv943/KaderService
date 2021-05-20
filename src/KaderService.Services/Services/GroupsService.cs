@@ -40,7 +40,7 @@ namespace KaderService.Services.Services
                 return new GroupView
                 {
                     Name = group.Name,
-                    Category = group.Category,
+                    Category = group.Category.Name,
                     Created = group.Created,
                     Description = group.Description,
                     GroupId = group.GroupId,
@@ -174,7 +174,7 @@ namespace KaderService.Services.Services
             return new GroupView
             {
                 Name = group.Name,
-                Category = group.Category,
+                Category = group.Category.Name,
                 Created = group.Created,
                 Description = group.Description,
                 GroupId = group.GroupId,

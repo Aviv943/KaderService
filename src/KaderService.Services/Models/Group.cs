@@ -26,7 +26,7 @@ namespace KaderService.Services.Models
         /// <summary>
         /// Sport/ School/ Cooking etc
         /// </summary>
-        public string Category { get; set; }
+        public Category Category { get; set; }
         
         public string Description { get; set; }
         

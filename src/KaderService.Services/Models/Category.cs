@@ -12,5 +12,7 @@ namespace KaderService.Services.Models
     {
         [Key]
         public string Name { get; set; }
+
+        public string ImageUri { get; set; }
     }
 }
