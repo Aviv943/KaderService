@@ -31,6 +31,7 @@ namespace KaderService.Services.Services
                 .Where(c => c.PostId == postId)
                 .Include(c => c.Creator)
                 .Include(c => c.Post)
+                .OrderByDescending(comment => comment.Created)
                 .ToListAsync();
         }
 
