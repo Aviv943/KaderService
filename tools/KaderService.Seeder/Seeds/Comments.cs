@@ -17,10 +17,10 @@ namespace KaderService.Seeder.Seeds
             foreach (Comment comment in comments)
             {
                 await LoginAsync();
-                PostView post = await GetRandomPostAsync();
-                
+
                 try
                 {
+                    PostView post = await GetRandomPostAsync();
                     await CommentsClient.CreateCommentAsync(comment, post.PostId);
                     Console.WriteLine($"Comment created '{comment.Content}'");
                 }

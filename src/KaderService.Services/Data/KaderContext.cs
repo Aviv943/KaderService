@@ -66,6 +66,8 @@ namespace KaderService.Services.Data
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Group> Groups { get; set; }
+        
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<RelatedPost> RelatedPosts { get; set; }
     }

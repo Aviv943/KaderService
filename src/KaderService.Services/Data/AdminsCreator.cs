@@ -27,7 +27,7 @@ namespace KaderService.Services.Data
         {
             const string admin = "Admin";
             var role = new IdentityRole {Name = admin};
-            var roleExists = await _roleManager.RoleExistsAsync(admin);
+            bool roleExists = await _roleManager.RoleExistsAsync(admin);
 
             if (!roleExists)
             {
@@ -79,9 +79,9 @@ namespace KaderService.Services.Data
                 }
             };
 
-            foreach (var user in _admins)
+            foreach (User user in _admins)
             {
-                var result = await userManager.CreateAsync(user, adminPassword);
+                IdentityResult result = await userManager.CreateAsync(user, adminPassword);
 
                 if (result.Succeeded)
                 {

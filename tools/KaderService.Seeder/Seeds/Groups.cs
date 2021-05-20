@@ -15,6 +15,8 @@ namespace KaderService.Seeder.Seeds
             foreach (Group group in groups)
             {
                 await LoginAsync();
+                Category category = await GetRandomCategoryAsync();
+                group.Category = category.Name;
 
                 try
                 {
@@ -35,7 +37,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Area 51",
-                    Category = "Sport",
                     Description = "Area 51 Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
                     Address = "בית הערבה 8, ראשון לציון"
@@ -43,7 +44,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Jokes",
-                    Category = "Sport",
                     Description = "Jokes Group Description",
                     GroupPrivacy = GroupPrivacy.Private,
                     Address = "הרצל 33, תל אביב"
@@ -59,7 +59,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Cars Pishpeshok",
-                    Category = "Sport",
                     Description = "Cars Pishpeshok Group Description",
                     GroupPrivacy = GroupPrivacy.Private,
                     Address = "החלמונית 22, ראשון לציון"
@@ -67,7 +66,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Junior Developers Petah-Tikva",
-                    Category = "Sport",
                     Description = "Junior Developers Petah-Tikva Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
                     Address = "שדה נחום 11, ראשון לציון"
@@ -75,7 +73,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Senior Developers Holon",
-                    Category = "Sport",
                     Description = "Senior Developers Holon Group Description",
                     GroupPrivacy = GroupPrivacy.Private,
                     Address = "חניתה 1, ראשון לציון"
@@ -83,7 +80,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Budapest for travelers",
-                    Category = "Sport",
                     Description = "Budapest for travelers Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
                     Address = "ירמיהו 48, תל אביב"
@@ -91,7 +87,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Prague for travelers",
-                    Category = "Sport",
                     Description = "Prague for travelers Group Description",
                     GroupPrivacy = GroupPrivacy.Invisible,
                     Address = "העצמאות 12, אשדוד"
@@ -99,7 +94,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Cheap stuff",
-                    Category = "Sport",
                     Description = "Cheap stuff Group Description",
                     GroupPrivacy = GroupPrivacy.Private,
                     Address = "הרצל 1, תל אביב"
@@ -107,7 +101,6 @@ namespace KaderService.Seeder.Seeds
                 new()
                 {
                     Name = "Bitcoin mining",
-                    Category = "Crypto Coin",
                     Description = "Bitcoin mining Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
                     Address = "שונית 2, רמלה"

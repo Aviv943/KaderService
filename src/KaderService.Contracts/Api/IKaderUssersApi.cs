@@ -13,7 +13,7 @@ namespace KaderService.Contracts.Api
         Task<TokenInfo> LoginAsync(LoginModel loginModel);
 
         [Post("/api/users/register")]
-        Task<bool> RegisterAsync(RegisterModel registerModel);
+        Task RegisterAsync(RegisterModel registerModel);
 
         [Get("/api/users")]
         Task<IEnumerable<User>> GetUsersAsync();

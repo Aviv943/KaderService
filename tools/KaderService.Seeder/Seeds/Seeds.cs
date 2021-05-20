@@ -21,6 +21,7 @@ namespace KaderService.Seeder.Seeds
         public static IKaderGroupsApi GroupsClient;
         public static IKaderPostsApi PostsClient;
         public static IKaderCommentsApi CommentsClient;
+        public static IKaderCategoriesApi CategoriesClient;
         public static string BaseUrl;
 
         public static async Task<Seeds> CreateAsync(Type type, string baseUrl)
@@ -31,8 +32,7 @@ namespace KaderService.Seeder.Seeds
 
         public static async Task<TokenInfo> LoginAsync()
         {
-            var client = new HttpClient() { BaseAddress = new Uri(BaseUrl) };
-            UsersClient = RestService.For<IKaderUsersApi>(client);
+            HttpClient client = CreateClient();
             User user = await GetRandomUserAsync(true);
 
             TokenInfo tokenInfo = await UsersClient.LoginAsync(new LoginModel
@@ -46,10 +46,19 @@ namespace KaderService.Seeder.Seeds
             GroupsClient = RestService.For<IKaderGroupsApi>(client);
             PostsClient = RestService.For<IKaderPostsApi>(client);
             CommentsClient = RestService.For<IKaderCommentsApi>(client);
+            CategoriesClient = RestService.For<IKaderCategoriesApi>(client);
 
             Console.WriteLine($"Logged in to userId '{tokenInfo.UserId}'");
 
             return tokenInfo;
+        }
+
+        public static HttpClient CreateClient()
+        {
+            var client = new HttpClient() {BaseAddress = new Uri(BaseUrl)};
+            UsersClient = RestService.For<IKaderUsersApi>(client);
+            
+            return client;
         }
 
         public static async Task<User> GetRandomUserAsync(bool adminsOnly)
@@ -117,6 +126,25 @@ namespace KaderService.Seeder.Seeds
             Console.WriteLine($"Got post '{postView.Title}'");
 
             return postView;
+        }
+
+        public async Task<Category> GetRandomCategoryAsync()
+        {
+            IEnumerable<Category> categories = await CategoriesClient.GetCategories();
+            List<Category> categoriesList = categories.ToList();
+
+            if (!categoriesList.Any())
+            {
+                throw new NullReferenceException("Categories is null");
+            }
+
+            var random = new Random();
+            int randomValue = random.Next(categoriesList.Count);
+
+            Category category = categoriesList[randomValue];
+            Console.WriteLine($"Got category '{category.Name}'");
+
+            return category;
         }
 
         public abstract Task SeedAsync();

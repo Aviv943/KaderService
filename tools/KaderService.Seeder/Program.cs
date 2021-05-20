@@ -26,6 +26,10 @@ namespace KaderService.Seeder
                 {
                     seedTypes.Add("Users");
                 }
+                else if (arg.ToLower().StartsWith("-categories"))
+                {
+                    seedTypes.Add("Categories");
+                }
                 else if (arg.ToLower().StartsWith("-groups"))
                 {
                     seedTypes.Add("Groups");
