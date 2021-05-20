@@ -77,7 +77,7 @@ namespace KaderService.Controllers
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
-                Location = p.Address,
+                Location = p.Location,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count,
                 Comments = new List<CommentView>(p.Comments.Select(comment => new CommentView
@@ -124,7 +124,7 @@ namespace KaderService.Controllers
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
-                Location = p.Address,
+                Location = p.Location,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count
             });
