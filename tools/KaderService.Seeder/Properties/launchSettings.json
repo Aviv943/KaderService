@@ -2,7 +2,7 @@
   "profiles": {
     "KaderService.Seeder": {
       "commandName": "Project",
-      "commandLineArgs": "-comments -local"
+      "commandLineArgs": "-categories -users -groups -posts -comments -local"
     }
   }
 }

@@ -17,7 +17,5 @@ namespace KaderService.Services.Models
         public string Name { get; set; }
 
         public string ImageUri { get; set; }
-
-        public ICollection<Group> Groups { get; set; }
     }
 }

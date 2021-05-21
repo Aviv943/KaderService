@@ -62,11 +62,11 @@ namespace KaderService.Services.Data
             //    .WithMany(category => category.Groups)
 
 
-            modelBuilder
-                .Entity<Category>()
-                .HasMany(category => category.Groups)
-                .WithOne(@group => @group.Category)
-                .HasForeignKey(g => g.CategoryId);
+            //modelBuilder
+            //    .Entity<Category>()
+            //    .HasMany(category => category.Groups)
+            //    .WithOne(@group => @group.Category)
+            //    .HasForeignKey(g => g.CategoryId);
 
             modelBuilder
                 .Entity<RelatedPost>()

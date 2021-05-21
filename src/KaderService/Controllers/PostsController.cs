@@ -56,7 +56,7 @@ namespace KaderService.Controllers
             User user = await GetRelevantUserAsync(userId);
             List<Post> posts = await _service.GetPostsAsync(user);
 
-            return posts.Select(p => new PostView
+            List<PostView> postsAsync = posts.Select(p => new PostView
             {
                 Creator = new UserView
                 {
@@ -93,6 +93,8 @@ namespace KaderService.Controllers
                     }
                 }))
             }).ToList();
+
+            return postsAsync;
         }
 
         [HttpGet("{userId}/recommended")]
