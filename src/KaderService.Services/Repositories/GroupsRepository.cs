@@ -44,6 +44,7 @@ namespace KaderService.Services.Repositories
                 .Include(g => g.Posts)
                 .ThenInclude(post => post.Comments)
                 .ThenInclude(comment => comment.Creator)
+                .Include(g => g.Category)
                 .FirstOrDefaultAsync(g => g.GroupId == groupId);
         }
 
