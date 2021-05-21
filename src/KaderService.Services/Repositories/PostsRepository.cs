@@ -37,6 +37,7 @@ namespace KaderService.Services.Repositories
                 .ThenInclude(c => c.Creator)
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
+                .ThenInclude(g => g.Category)
                 .FirstOrDefaultAsync(p => p.PostId == id);
         }
 

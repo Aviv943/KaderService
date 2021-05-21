@@ -28,7 +28,6 @@ namespace KaderService.Seeder.Seeds
                 {
                     Console.WriteLine($"Comment could not be created, ex: '{e.Message}'");
                 }
-
             }
         }
 
