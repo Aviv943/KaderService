@@ -55,7 +55,19 @@ namespace KaderService.Services.Data
                 .Entity<Comment>()
                 .HasOne(post => post.Creator)
                 .WithMany(user => user.Comments);
-            
+
+            //modelBuilder
+            //    .Entity<Group>()
+            //    .HasOne(@group => group.Category)
+            //    .WithMany(category => category.Groups)
+
+
+            modelBuilder
+                .Entity<Category>()
+                .HasMany(category => category.Groups)
+                .WithOne(@group => @group.Category)
+                .HasForeignKey(g => g.CategoryId);
+
             modelBuilder
                 .Entity<RelatedPost>()
                 .HasKey(table => new { CustomerId = table.UserId, ItemId = table.PostId });

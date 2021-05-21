@@ -16,7 +16,7 @@ namespace KaderService.Seeder.Seeds
             {
                 await LoginAsync();
                 Category category = await GetRandomCategoryAsync();
-                group.Category = category;
+                group.CategoryId = category.Id;
 
                 try
                 {

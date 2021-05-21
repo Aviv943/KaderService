@@ -11,8 +11,13 @@ namespace KaderService.Services.Models
     public class Category
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public string ImageUri { get; set; }
+
+        public ICollection<Group> Groups { get; set; }
     }
 }

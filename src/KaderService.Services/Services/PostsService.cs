@@ -33,8 +33,8 @@ namespace KaderService.Services.Services
                 .Where(post => post.Group.Members.Contains(user))
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
+                .ThenInclude(g => g.Category)
                 .Include(p => p.Comments)
-                .Include(p => p.Group.Category)
                 .ToListAsync();
         }
 

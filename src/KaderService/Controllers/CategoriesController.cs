@@ -72,13 +72,13 @@ namespace KaderService.Controllers
         public async Task<ActionResult<Category>> PostCategoryImageAsync(string name)
         {
             IFormFile file = Request.Form.Files.First();
-            var categoryImageUri = await _service.PostCategoryImageAsync(name, file);
+            string categoryImageUri = await _service.PostCategoryImageAsync(name, file);
             
-            return Created(string.Empty, string.Empty);
+            return Created(string.Empty, categoryImageUri);
         }
 
         // POST: api/categories
-        [HttpPost("{name}")]
+        [HttpPost]
         public async Task<ActionResult<Category>> PostCategoryAsync(Category category)
         {
             await _service.PostCategoryAsync(category);

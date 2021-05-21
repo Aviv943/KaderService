@@ -26,8 +26,11 @@ namespace KaderService.Services.Models
         /// <summary>
         /// Sport/ School/ Cooking etc
         /// </summary>
+        [ForeignKey("CategoryId")]
         public Category Category { get; set; }
-        
+
+        public string CategoryId { get; set; }
+
         public string Description { get; set; }
         
         public string Address { get; set; }

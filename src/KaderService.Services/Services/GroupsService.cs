@@ -224,9 +224,17 @@ namespace KaderService.Services.Services
         public async Task CreateGroupAsync(Group group, User user)
         {
             group.Location = await _commonService.GetLocationAsync(group.Address);
-
             await _context.Groups.AddAsync(group);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             await AddUserRoleToGroupMemberAsync(group.GroupId, user, "Manager");
         }

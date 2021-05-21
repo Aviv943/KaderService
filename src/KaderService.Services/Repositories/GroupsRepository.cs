@@ -29,6 +29,7 @@ namespace KaderService.Services.Repositories
                 .Include(g => g.Posts)
                 .Include(g => g.Members)
                 .Include(g => g.Managers)
+                .Include(g => g.Category)
                 .ToListAsync();
         }
 
@@ -59,7 +60,8 @@ namespace KaderService.Services.Repositories
                     .Include(g => g.Posts)
                     .ThenInclude(post => post.Creator)
                     .Include(g => g.Members)
-                    .Include(g => g.Managers);
+                    .Include(g => g.Managers)
+                    .Include(g => g.Category);
             }
 
             if (!string.IsNullOrWhiteSpace(category))
@@ -69,7 +71,8 @@ namespace KaderService.Services.Repositories
                     .Include(g => g.Posts)
                     .ThenInclude(post => post.Creator)
                     .Include(g => g.Members)
-                    .Include(g => g.Managers);
+                    .Include(g => g.Managers)
+                    .Include(g => g.Category);
             }
 
             return query == null ? new List<Group>() : await query.Distinct().ToListAsync();
@@ -82,6 +85,7 @@ namespace KaderService.Services.Repositories
                 .Include(g => g.Managers)
                 .Include(g => g.Posts)
                 .ThenInclude(post => post.Creator)
+                .Include(g => g.Category)
                 .ToListAsync();
         }
     }

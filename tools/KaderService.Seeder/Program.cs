@@ -16,7 +16,8 @@ namespace KaderService.Seeder
     {
         private static async Task Main(string[] args)
         {
-            var baseUrl = "http://kader.cs.colman.ac.il:5000";
+            //var baseUrl = "http://kader.cs.colman.ac.il:5000";
+            var baseUrl = "http://localhost:5000";
             Thread.Sleep(TimeSpan.FromSeconds(5));
             var seedTypes = new List<string>();
 
