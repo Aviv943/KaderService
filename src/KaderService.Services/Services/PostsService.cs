@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using KaderService.ML.DTO;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using KaderService.Services.Repositories;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -17,30 +17,25 @@ namespace KaderService.Services.Services
         private readonly KaderContext _context;
         private readonly CommentsService _commentsService;
         private readonly CommonService _commonService;
-        private readonly UserManager<User> _userManager;
+        private readonly PostsRepository _repository;
 
-        public PostsService(KaderContext context, CommentsService commentsService, CommonService commonService, UserManager<User> userManager)
+        public PostsService(KaderContext context, CommentsService commentsService, CommonService commonService, PostsRepository repository)
         {
             _context = context;
             _commentsService = commentsService;
             _commonService = commonService;
-            _userManager = userManager;
+            _repository = repository;
         }
 
         public async Task<List<Post>> GetPostsAsync(User user)
         {
-            return await _context.Posts
-                .Where(post => post.Group.Members.Contains(user))
-                .Include(p => p.Creator)
-                .Include(p => p.Group)
-                .ThenInclude(g => g.Category)
-                .Include(p => p.Comments)
-                .ToListAsync();
+            return await _repository.GetPostsAsync(user);
         }
 
         public async Task<IEnumerable<Post>> GetRecommendedPostsAsync(User user)
         {
-            List<ItemsCustomers> relatedPostsList = _context.RelatedPosts.Select(post => new ItemsCustomers() { UserId = user.Id, PostId = post.PostId }).ToList();
+            List<ItemsCustomers> itemsCustomersList = _repository.GetItemsCustomersList(user);
+            List<ItemsCustomers> relatedPostsList = itemsCustomersList;
 
             var mlRequest = new Request
             {
@@ -64,12 +59,7 @@ namespace KaderService.Services.Services
 
         public async Task<Post> GetPostAsync(string id, User user)
         {
-            Post post = await _context.Posts
-                .Include(p => p.Comments)
-                .ThenInclude(c => c.Creator)
-                .Include(p => p.Creator)
-                .Include(p => p.Group)
-                .FirstOrDefaultAsync(p => p.PostId == id);
+            Post post = await _repository.GetPostAsync(id);
 
             if (post == null)
             {
@@ -77,13 +67,7 @@ namespace KaderService.Services.Services
             }
 
             var relatedPost = new RelatedPost(user.Id, id);
-            bool relatedItems = _context.RelatedPosts.Any(rp => rp.PostId == post.PostId && rp.UserId == user.Id);
-
-            if (!relatedItems)
-            {
-                await _context.RelatedPosts.AddAsync(relatedPost);
-                await _context.SaveChangesAsync();
-            }
+            await _repository.AddRelatedPostAsync(user, post, relatedPost);
 
             return post;
         }
@@ -103,18 +87,13 @@ namespace KaderService.Services.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PostExists(id))
+                if (!_repository.PostExists(id))
                 {
                     throw new KeyNotFoundException();
                 }
 
                 throw;
             }
-        }
-
-        private bool PostExists(string id)
-        {
-            return _context.Posts.Any(e => e.PostId.Equals(id));
         }
 
         public async Task CreatePostAsync(Post post, User user, string groupId)
@@ -144,7 +123,7 @@ namespace KaderService.Services.Services
 
         public async Task DeletePostsAsync(ICollection<Post> posts)
         {
-            foreach (var post in posts)
+            foreach (Post post in posts)
             {
                 await DeletePostAsync(post.PostId);
             }
