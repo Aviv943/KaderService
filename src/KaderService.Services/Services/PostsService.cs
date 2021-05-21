@@ -98,6 +98,7 @@ namespace KaderService.Services.Services
 
         public async Task CreatePostAsync(Post post, User user, string groupId)
         {
+            post.IsActive = true;
             post.Creator = user;
             post.Group = await _context.Groups.FindAsync(groupId);
             post.Location = await _commonService.GetLocationAsync(post.Address);
