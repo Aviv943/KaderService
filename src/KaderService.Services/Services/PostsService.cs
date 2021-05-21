@@ -34,6 +34,7 @@ namespace KaderService.Services.Services
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .Include(p => p.Comments)
+                .Include(p => p.Group.Category)
                 .ToListAsync();
         }
 
