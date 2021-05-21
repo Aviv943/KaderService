@@ -29,6 +29,8 @@ namespace KaderService.Services.Models
 
         public string Location { get; set; }
 
+        public bool IsActive { get; set; }
+
         public User Creator { get; set; }
         
         [ForeignKey(nameof(GroupId))]

@@ -22,6 +22,8 @@ namespace KaderService.Services.ViewModels
 
         public string Location { get; set; }
 
+        public bool IsActive { get; set; }
+
         public DateTime Created { get; set; }
 
         public string GroupId { get; set; }

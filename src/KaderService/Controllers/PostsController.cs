@@ -76,8 +76,8 @@ namespace KaderService.Controllers
                 Type = p.Type,
                 PostId = p.PostId,
                 Title = p.Title,
+                IsActive = p.IsActive,
                 Description = p.Description,
-                Location = p.Location,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count,
                 Comments = new List<CommentView>(p.Comments.Select(comment => new CommentView
@@ -122,11 +122,11 @@ namespace KaderService.Controllers
                 GroupId = p.GroupId,
                 Category = p.Group.Category,
                 GroupName = p.Group.Name,
+                IsActive = p.IsActive,
                 Type = p.Type,
                 PostId = p.PostId,
                 Title = p.Title,
                 Description = p.Description,
-                Location = p.Location,
                 ImagesUri = p.ImagesUri,
                 CommentsCount = p.Comments.Count
             });

@@ -34,7 +34,7 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<Post>> GetRecommendedPostsAsync(User user)
         {
-            List<ItemsCustomers> itemsCustomersList = _repository.GetItemsCustomersList(user);
+            List<ItemsCustomers> itemsCustomersList = await _repository.GetItemsCustomersList(user);
             List<ItemsCustomers> relatedPostsList = itemsCustomersList;
 
             var mlRequest = new Request
@@ -89,7 +89,7 @@ namespace KaderService.Services.Services
             {
                 if (!_repository.PostExists(id))
                 {
-                    throw new KeyNotFoundException();
+                    throw new KeyNotFoundException($"PostId '{post.PostId}' could not be found");
                 }
 
                 throw;

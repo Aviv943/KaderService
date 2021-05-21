@@ -57,9 +57,14 @@ namespace KaderService.Services.Repositories
             return _context.Posts.Any(e => e.PostId.Equals(id));
         }
 
-        public List<ItemsCustomers> GetItemsCustomersList(User user)
+        public async Task<List<ItemsCustomers>> GetItemsCustomersList(User user)
         {
-            return _context.RelatedPosts.Select(post => new ItemsCustomers() { UserId = user.Id, PostId = post.PostId }).ToList();
+            return await _context.RelatedPosts
+                .Select(post => new ItemsCustomers
+                {
+                    UserId = user.Id,
+                    PostId = post.PostId
+                }).ToListAsync();
         }
     }
 }
