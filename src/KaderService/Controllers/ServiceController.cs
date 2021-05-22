@@ -61,7 +61,7 @@ namespace KaderService.Controllers
             {
                 StartInfo =
                 {
-                    FileName = @"C:\Users\cs127\Desktop\drop.bat",
+                    FileName = "drop.bat",
                     CreateNoWindow = false
                 }
             };
