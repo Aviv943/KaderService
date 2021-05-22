@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using KaderService.Services.Models.AuthModels;
 using KaderService.Contracts;
+using KaderService.Contracts.Requests;
 using KaderService.Services.Constants;
 using Microsoft.AspNetCore.Http;
 
@@ -87,6 +88,14 @@ namespace KaderService.Controllers
         public async Task<IActionResult> PostRoleAsync(string roleName)
         {
             await _service.PostRoleAsync(roleName);
+            return Ok();
+        }
+
+        [HttpPost("{userId}/rating")]
+        [Authorize]
+        public async Task<IActionResult> AddRatingAsync(string userId, AddNewRatingRequest request)
+        {
+            await _service.AddRatingAsync(userId, request.NewRating);
             return Ok();
         }
 

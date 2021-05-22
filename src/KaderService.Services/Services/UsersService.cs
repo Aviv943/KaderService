@@ -87,10 +87,11 @@ namespace KaderService.Services.Services
             {
                 Email = registerModel.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerModel.Username
+                UserName = registerModel.Username,
+                Created = DateTime.Now,
             };
 
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
 
             return result.Succeeded;
         }
@@ -230,6 +231,12 @@ namespace KaderService.Services.Services
             await _userManager.UpdateAsync(user);
             //_context.Entry(user).State = EntityState.Modified;
         }
+
+        public async Task AddRatingAsync(string userId, double newRating)
+        {
+            User user = await _userManager.FindByIdAsync(userId);
+            user.Rating = (user.NumberOfRatings * user.Rating + newRating) / ++user.NumberOfRatings;
+            await _userManager.UpdateAsync(user);
+        }
     }
 }
-

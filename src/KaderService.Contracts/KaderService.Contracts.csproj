@@ -5,11 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Requests - Copy\**" />
+    <EmbeddedResource Remove="Requests - Copy\**" />
+    <None Remove="Requests - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KaderService.Services\KaderService.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Refit" Version="6.0.38" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>
