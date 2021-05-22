@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
@@ -60,7 +61,7 @@ namespace KaderService.Controllers
             {
                 StartInfo =
                 {
-                    FileName = "drop.bat",
+                    FileName = @"C:\Users\cs127\Desktop\drop.bat",
                     CreateNoWindow = false
                 }
             };
