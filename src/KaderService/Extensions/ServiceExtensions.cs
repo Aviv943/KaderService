@@ -126,7 +126,9 @@ namespace KaderService.Extensions
         public static void AddMyDb(this IServiceCollection services, IConfiguration config)
         {
             services.AddDbContext<KaderContext>(options =>
-                options.UseSqlServer(config.GetConnectionString("KaderContext")));
+                options.UseSqlServer(
+                    config.GetConnectionString("KaderContext"), 
+                    builder => builder.MigrationsAssembly("KaderService")));
         }
 
         public static void AddMyIdentity(this IServiceCollection services)

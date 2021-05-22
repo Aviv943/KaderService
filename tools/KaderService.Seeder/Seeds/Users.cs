@@ -18,6 +18,8 @@ namespace KaderService.Seeder.Seeds
 
             foreach (RegisterModel user in users)
             {
+                user.Password = "Bolila1!";
+
                 try
                 {
                     await UsersClient.RegisterAsync(user);
@@ -34,72 +36,32 @@ namespace KaderService.Seeder.Seeds
         {
             var users = new List<RegisterModel>
             {
-                new()
-                {
-                    Email = "Yossi@gmail.com",
-                    Username = "Yossi",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Ami@gmail.com",
-                    Username = "Ami",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Boris@gmail.com",
-                    Username = "Boris",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Yoram@gmail.com",
-                    Username = "Yoram",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Benda@gmail.com",
-                    Username = "Benda",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Moshe@gmail.com",
-                    Username = "Moshe",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "David@gmail.com",
-                    Username = "David",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Beni@gmail.com",
-                    Username = "Beni",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Jeff@gmail.com",
-                    Username = "Jeff",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Jacob@gmail.com",
-                    Username = "Jacob",
-                    Password = "Bolila1!"
-                },
-                new()
-                {
-                    Email = "Boten@gmail.com",
-                    Username = "Boten",
-                    Password = "Bolila1!"
-                }
+                new() { Email = "Yossi@gmail.com", Username = "Yossi" },
+                new() { Email = "Ami@gmail.com", Username = "Ami" },
+                new() { Email = "Boris@gmail.com", Username = "Boris" },
+                new() { Email = "Yoram@gmail.com", Username = "Yoram" },
+                new() { Email = "Benda@gmail.com", Username = "Benda" },
+                new() { Email = "Moshe@gmail.com", Username = "Moshe" },
+                new() { Email = "David@gmail.com", Username = "David" },
+                new() { Email = "Beni@gmail.com", Username = "Beni" },
+                new() { Email = "Jeff@gmail.com", Username = "Jeff" },
+                new() { Email = "Jacob@gmail.com", Username = "Jacob" },
+                new() { Email = "Noam@gmail.com", Username = "Noam" },
+                new() { Email = "Mathe@gmail.com", Username = "Mathe" },
+                new() { Email = "Ryan@gmail.com", Username = "Ryan" },
+                new() { Email = "Jerry@gmail.com", Username = "Jerry" },
+                new() { Email = "Linda@gmail.com", Username = "Linda" },
+                new() { Email = "Martha@gmail.com", Username = "Martha" },
+                new() { Email = "GaryMAndersen@jourrapide.com", Username = "Thichatherne" },
+                new() { Email = "JoseDWashington@teleworm.us", Username = "Comeng" },
+                new() { Email = "IreneJSimmons@rhyta.com", Username = "Thowintal" },
+                new() { Email = "JeffreyCCorn@rhyta.com", Username = "Mareceing" },
+                new() { Email = "MichaelSFackler@armyspy.com", Username = "Whamonothen" },
+                new() { Email = "JoeLRodriguez@armyspy.com", Username = "Thatence" },
+                new() { Email = "AndyATerry@rhyta.com", Username = "Frapter" },
+                new() { Email = "WendyKSager@armyspy.com", Username = "Gireal1940" },
+                new() { Email = "JoseSAdams@dayrep.com", Username = "Doesire1971" },
+                new() { Email = "VenusSPeterson@rhyta.com", Username = "Tomer1988" }
             };
 
             return (List<T>)Convert.ChangeType(users, typeof(List<RegisterModel>));

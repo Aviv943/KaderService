@@ -73,7 +73,7 @@ namespace KaderService.Services.Services
 
         public async Task CreateCommentAsync(Comment comment, User user, string postId)
         {
-            var post = await _context.Posts.FindAsync(postId);
+            Post post = await _context.Posts.FindAsync(postId);
 
             if (post == null)
             {
@@ -82,6 +82,8 @@ namespace KaderService.Services.Services
 
             comment.Post = post;
             comment.Creator = user;
+            comment.Created = DateTime.Now;
+
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }

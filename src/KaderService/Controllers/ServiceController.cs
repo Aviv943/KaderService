@@ -28,6 +28,9 @@ namespace KaderService.Controllers
             });
         }
 
+        /// <summary>
+        /// git pull > build solution > start service
+        /// </summary>
         // POST api/<ServiceController>
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeVersionAsync()
@@ -37,6 +40,27 @@ namespace KaderService.Controllers
                 StartInfo =
                 {
                     FileName = "start.bat",
+                    CreateNoWindow = false
+                }
+            };
+
+            proc.Start();
+            Process.GetCurrentProcess().Kill();
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// git pull > build solution > drop database > add migration > update database > start service
+        /// </summary>
+        [HttpPost("aio")]
+        public async Task<IActionResult> DropAddUpdateAsync()
+        {
+            var proc = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "drop.bat",
                     CreateNoWindow = false
                 }
             };

@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder\**" />
     <Compile Remove="Requests - Copy\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="Requests - Copy\**" />
+    <None Remove="NewFolder\**" />
     <None Remove="Requests - Copy\**" />
   </ItemGroup>
 
@@ -16,10 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="Refit" Version="6.0.38" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

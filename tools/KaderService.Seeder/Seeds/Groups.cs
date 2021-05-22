@@ -103,6 +103,76 @@ namespace KaderService.Seeder.Seeds
                     Description = "Bitcoin mining Group Description",
                     GroupPrivacy = GroupPrivacy.Public,
                     Address = "שונית 2, רמלה"
+                },
+                new()
+                {
+                    Name = "Street Group",
+                    Description = "Build your own fake Facebook Status",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "בית הערבה 8, ראשון לציון"
+                },
+                new()
+                {
+                    Name = "Bodybuilders",
+                    Description = "The bodybuilders",
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "הרצל 33, תל אביב"
+                },
+                new()
+                {
+                    Name = "Inverters",
+                    Description = "For ppl who like to invest",
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Address = "אושה 5, ראשון לציון"
+                },
+                new()
+                {
+                    Name = "Coffe liker",
+                    Description = "Do you like coffe? join us!",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "החלמונית 22, ראשון לציון"
+                },
+                new()
+                {
+                    Name = "FSD rules",
+                    Description = "Are you FSD Dev?",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "שדה נחום 11, ראשון לציון"
+                },
+                new()
+                {
+                    Name = "Israel vs Gaza",
+                    Description = "A WAR",
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "חניתה 1, ראשון לציון"
+                },
+                new()
+                {
+                    Name = "Credit cards",
+                    Description = "Credit cards club",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "ירמיהו 48, תל אביב"
+                },
+                new()
+                {
+                    Name = "Travelers",
+                    Description = "Travelers Group",
+                    GroupPrivacy = GroupPrivacy.Invisible,
+                    Address = "העצמאות 12, אשדוד"
+                },
+                new()
+                {
+                    Name = "Tech club",
+                    Description = "For ppl who like tech",
+                    GroupPrivacy = GroupPrivacy.Private,
+                    Address = "הרצל 1, תל אביב"
+                },
+                new()
+                {
+                    Name = "Apple fanboys",
+                    Description = "Mac, iPhone and more",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "שונית 2, רמלה"
                 }
             };
 
