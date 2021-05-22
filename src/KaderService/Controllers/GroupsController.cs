@@ -67,7 +67,7 @@ namespace KaderService.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<GroupView>>> SearchGroupsAsync([FromQuery] string text, [FromQuery] string category, [FromQuery] double? radius, [FromQuery] string address)
         {
-            IEnumerable<GroupView> group = await _service.SearchGroupsAsync(text, category, radius, address);
+            IEnumerable<GroupView> group = await _service.SearchGroupsAsync(LoggedInUser, text, category, radius, address);
 
             if (group == null)
             {

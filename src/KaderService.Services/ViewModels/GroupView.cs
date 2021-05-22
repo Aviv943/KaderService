@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
+using KaderService.Services.Models;
 
 namespace KaderService.Services.ViewModels
 {
@@ -13,7 +14,7 @@ namespace KaderService.Services.ViewModels
 
         public string Name { get; set; }
 
-        public string Category { get; set; }
+        public Category Category { get; set; }
 
         public string Description { get; set; }
 

@@ -40,7 +40,7 @@ namespace KaderService.Services.Services
                 return new GroupView
                 {
                     Name = group.Name,
-                    Category = group.Category.Name,
+                    Category = group.Category,
                     Created = group.Created,
                     Description = group.Description,
                     GroupId = group.GroupId,
@@ -56,10 +56,21 @@ namespace KaderService.Services.Services
             return groupsViews;
         }
 
-        public async Task<IEnumerable<GroupView>> SearchGroupsAsync(string text, string category, double? radius, string address)
+        public async Task<IEnumerable<GroupView>> SearchGroupsAsync(User user, string text, string category, double? radius, string address)
         {
             List<Group> groups = await _repository.GetGroupsBySearchAsync(text, category);
-            List<GroupView> groupViews = groups.Select(ConvertToGroupView).ToList();
+            
+            var groupViews = new List<GroupView>();
+            
+            foreach (Group group in groups)
+            {
+                if (group.GroupPrivacy == GroupPrivacy.Invisible && !group.Members.Contains(user))
+                {
+                    continue;
+                }
+
+                groupViews.Add(ConvertToGroupView(group));
+            }
 
             if (!radius.HasValue || string.IsNullOrWhiteSpace(address))
             {
@@ -173,7 +184,7 @@ namespace KaderService.Services.Services
             return new GroupView
             {
                 Name = group.Name,
-                Category = group.Category.Name,
+                Category = group.Category,
                 Created = group.Created,
                 Description = group.Description,
                 GroupId = group.GroupId,
