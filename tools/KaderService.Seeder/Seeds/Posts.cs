@@ -15,8 +15,8 @@ namespace KaderService.Seeder.Seeds
 
             foreach (Post post in posts)
             {
-                await LoginAsync();
-                GroupView group = await GetRandomGroupAsync();
+                TokenInfo token = await LoginAsync();
+                GroupView group = await GetRandomGroupAsync(token.UserId);
 
                 try
                 {

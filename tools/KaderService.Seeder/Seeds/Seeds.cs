@@ -90,9 +90,9 @@ namespace KaderService.Seeder.Seeds
             return user;
         }
 
-        public async Task<GroupView> GetRandomGroupAsync()
+        public async Task<GroupView> GetRandomGroupAsync(string userId)
         {
-            IEnumerable<GroupView> groups = await GroupsClient.GetGroupsAsync();
+            IEnumerable<GroupView> groups = await GroupsClient.GetGroupsAsync(userId);
             List<GroupView> groupsList = groups.ToList();
 
             if (!groupsList.Any())

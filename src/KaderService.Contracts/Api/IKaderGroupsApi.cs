@@ -9,7 +9,7 @@ namespace KaderService.Contracts.Api
     public interface IKaderGroupsApi
     {
         [Get("/api/groups/users")]
-        Task<IEnumerable<GroupView>> GetGroupsAsync();
+        Task<IEnumerable<GroupView>> GetGroupsAsync(string userId);
 
         [Get("/api/groups/{id}")]
         Task<Group> GetGroupAsync(string id);
