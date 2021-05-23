@@ -32,7 +32,7 @@ namespace KaderService.Controllers
                 return BadRequest("PostId cannot be null");
             }
 
-            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsForPostAsync(postId);
+            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsAsync(postId);
             IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
             {
                 Creator = new UserView

@@ -27,6 +27,7 @@ namespace KaderService.Services.Repositories
                 .Include(p => p.Group)
                 .ThenInclude(g => g.Category)
                 .Include(p => p.Comments)
+                .OrderByDescending(p => p.Creator)
                 .ToListAsync();
         }
 

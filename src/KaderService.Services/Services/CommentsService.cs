@@ -25,13 +25,13 @@ namespace KaderService.Services.Services
             return await _context.Comments.ToListAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsForPostAsync(string postId)
+        public async Task<IEnumerable<Comment>> GetCommentsAsync(string postId)
         {
             return await _context.Comments
                 .Where(c => c.PostId == postId)
                 .Include(c => c.Creator)
                 .Include(c => c.Post)
-                .OrderByDescending(comment => comment.Created)
+                .OrderBy(comment => comment.Created)
                 .ToListAsync();
         }
 
