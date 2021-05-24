@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.ML.DTO;
+using KaderService.Services.Constants;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace KaderService.Services.Repositories
             _context = context;
         }
 
-        public async Task<List<Post>> GetPostsAsync(User user)
+        public async Task<List<Post>> GetPostsAsync(User user, PagingParameters pagingParameters)
         {
             return await _context.Posts
                 .Where(post => post.Group.Members.Contains(user))
@@ -27,7 +28,9 @@ namespace KaderService.Services.Repositories
                 .Include(p => p.Group)
                 .ThenInclude(g => g.Category)
                 .Include(p => p.Comments)
-                .OrderByDescending(p => p.Creator)
+                .OrderByDescending(p => p.Created)
+                .Skip((pagingParameters.PageNumber -1) * pagingParameters.PageSize)
+                .Take(pagingParameters.PageSize)
                 .ToListAsync();
         }
 

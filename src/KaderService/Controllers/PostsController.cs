@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
 using KaderService.Logger;
 using KaderService.ML.DTO;
+using KaderService.Services.Constants;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
@@ -51,10 +52,10 @@ namespace KaderService.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId)
+        public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId, [FromQuery] PagingParameters paging)
         {
             User user = await GetRelevantUserAsync(userId);
-            List<Post> posts = await _service.GetPostsAsync(user);
+            List<Post> posts = await _service.GetPostsAsync(user, paging);
 
             List<PostView> postsAsync = posts.Select(p => new PostView
             {

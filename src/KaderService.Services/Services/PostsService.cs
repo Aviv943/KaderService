@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.ML.DTO;
+using KaderService.Services.Constants;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -27,9 +29,9 @@ namespace KaderService.Services.Services
             _repository = repository;
         }
 
-        public async Task<List<Post>> GetPostsAsync(User user)
+        public async Task<List<Post>> GetPostsAsync(User user, PagingParameters paging)
         {
-            return await _repository.GetPostsAsync(user);
+            return await _repository.GetPostsAsync(user, paging);
         }
 
         public async Task<IEnumerable<Post>> GetRecommendedPostsAsync(User user)
