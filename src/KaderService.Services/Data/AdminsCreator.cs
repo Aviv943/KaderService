@@ -14,11 +14,11 @@ namespace KaderService.Services.Data
         private static UserManager<User> _userManager;
         private static RoleManager<IdentityRole> _roleManager;
 
-        public static async Task Initialize(IServiceProvider serviceProvider, string adminPassword)
+        public static async Task Initialize(IServiceProvider serviceProvider, string adminPassword, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             await using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
-            _userManager = serviceProvider.GetService<UserManager<User>>();
-            _roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+            _userManager = userManager;
+            _roleManager = roleManager;
 
             await CreateRolesAndUsersAsync(context, adminPassword);
         }

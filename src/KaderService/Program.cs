@@ -1,6 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using KaderService.Services.Data;
+using KaderService.Services.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +14,7 @@ namespace KaderService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             IHost host = CreateHostBuilder(args).Build();
             using IServiceScope scope = host.Services.CreateScope();
@@ -20,10 +23,24 @@ namespace KaderService
             try
             {
                 var context = services.GetRequiredService<KaderContext>();
-                context.Database.Migrate();
+                await context.Database.MigrateAsync();
 
                 var config = host.Services.GetRequiredService<IConfiguration>();
-                AdminsCreator.Initialize(services, config["AdminKey"]).Wait();
+
+                var userManager = services.GetService<UserManager<User>>();
+                var roleManager = services.GetService<RoleManager<IdentityRole>>();
+                bool roleExists = await roleManager.RoleExistsAsync("Admin");
+
+                if (!roleExists)
+                {
+                    await AdminsCreator.Initialize(services, config["AdminKey"], userManager, roleManager);
+                    await CategoriesCreator.Initialize(services);
+                    await UsersCreator.Initialize(services);
+                    await GroupsCreator.Initialize(services);
+                    await PostsCreator.Initialize(services);
+                    await CommentsCreator.Initialize(services);
+                }
+
             }
             catch (Exception e)
             {
@@ -32,7 +49,7 @@ namespace KaderService
             }
 
             
-            host.Run();
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

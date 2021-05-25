@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Repositories
 {
@@ -20,6 +21,11 @@ namespace KaderService.Services.Repositories
         public async Task<Category> GetCategory(string name)
         {
             return await _context.Categories.FindAsync(name);
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await _context.Categories.ToListAsync();
         }
     }
 }

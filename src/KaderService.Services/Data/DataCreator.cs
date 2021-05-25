@@ -5,73 +5,67 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using KaderService.Contracts.Api;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
+using KaderService.Services.Services;
 using KaderService.Services.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Refit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace KaderService.Seeder.Seeds
+namespace KaderService.Services.Data
 {
-    public abstract class Seeds
+    public class DataCreator
     {
-        public static IKaderUsersApi UsersClient;
-        public static IKaderGroupsApi GroupsClient;
-        public static IKaderPostsApi PostsClient;
-        public static IKaderCommentsApi CommentsClient;
-        public static IKaderCategoriesApi CategoriesClient;
-        public static string BaseUrl;
+        public CategoriesService CategoriesService { get; }
+        
+        public CommentsService CommentsService { get; }
+        
+        public CommonService CommonService { get; }
+        
+        public GroupsService GroupsService { get; }
+        
+        public PostsService PostsService { get; }
+        
+        public UsersService UsersService { get; }
 
-        public static async Task<Seeds> CreateAsync(Type type, string baseUrl)
+        public DataCreator(IServiceProvider serviceProvider)
         {
-            BaseUrl = baseUrl;
-            return (Seeds)Activator.CreateInstance(type);
+            using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
+            CategoriesService = serviceProvider.GetService<CategoriesService>();
+            CommentsService = serviceProvider.GetService<CommentsService>();
+            CommonService = serviceProvider.GetService<CommonService>();
+            GroupsService = serviceProvider.GetService<GroupsService>();
+            PostsService = serviceProvider.GetService<PostsService>();
+            UsersService = serviceProvider.GetService<UsersService>();
         }
 
-        public static async Task<TokenInfo> LoginAsync()
+        public async Task<User> LoginRandomUserAsync()
         {
-            HttpClient client = CreateClient();
             User user = await GetRandomUserAsync(false);
-
-            TokenInfo tokenInfo = await UsersClient.LoginAsync(new LoginModel
+            TokenInfo tokenInfo = await UsersService.LoginAsync(new LoginModel
             {
                 Username = user.UserName,
                 Password = "Bolila1!"
             });
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
-
-            GroupsClient = RestService.For<IKaderGroupsApi>(client);
-            PostsClient = RestService.For<IKaderPostsApi>(client);
-            CommentsClient = RestService.For<IKaderCommentsApi>(client);
-            CategoriesClient = RestService.For<IKaderCategoriesApi>(client);
-
             Console.WriteLine($"Logged in to userId '{tokenInfo.UserId}'");
 
-            return tokenInfo;
+            return user;
         }
 
-        public static HttpClient CreateClient()
-        {
-            var client = new HttpClient() {BaseAddress = new Uri(BaseUrl)};
-            UsersClient = RestService.For<IKaderUsersApi>(client);
-            
-            return client;
-        }
-
-        public static async Task<User> GetRandomUserAsync(bool adminsOnly)
+        public async Task<User> GetRandomUserAsync(bool adminsOnly)
         {
             IEnumerable<User> users;
 
             if (adminsOnly)
             {
-                users = await UsersClient.GetAdminsAsync();
+                users = await UsersService.GetAdminsAsync();
             }
             else
             {
-                users = await UsersClient.GetUsersAsync();
+                users = await UsersService.GetUsersAsync();
             }
 
             List<User> usersList = users.ToList();
@@ -90,9 +84,9 @@ namespace KaderService.Seeder.Seeds
             return user;
         }
 
-        public async Task<GroupView> GetRandomGroupAsync(string userId)
+        public async Task<GroupView> GetRandomGroupAsync(User user)
         {
-            IEnumerable<GroupView> groups = await GroupsClient.GetGroupsAsync(userId);
+            IEnumerable<GroupView> groups = await GroupsService.GetGroupsAsync(user);
             List<GroupView> groupsList = groups.ToList();
 
             if (!groupsList.Any())
@@ -109,9 +103,9 @@ namespace KaderService.Seeder.Seeds
             return groupView;
         }
 
-        public async Task<PostView> GetRandomPostAsync()
+        public async Task<PostView> GetRandomPostAsync(User user)
         {
-            IEnumerable<PostView> posts = await PostsClient.GetPostsAsync();
+            List<PostView> posts = await PostsService.GetPostsAsync(null, null);
             List<PostView> postsList = posts.ToList();
 
             if (!postsList.Any())
@@ -123,7 +117,7 @@ namespace KaderService.Seeder.Seeds
             int randomValue = random.Next(postsList.Count);
 
             PostView postView = postsList[randomValue];
-            await PostsClient.GetPostAsync(postView.PostId);
+            await PostsService.GetPostAsync(postView.PostId, user);
             Console.WriteLine($"Got post '{postView.Title}'");
 
             return postView;
@@ -131,7 +125,7 @@ namespace KaderService.Seeder.Seeds
 
         public async Task<Category> GetRandomCategoryAsync()
         {
-            IEnumerable<Category> categories = await CategoriesClient.GetCategories();
+            IEnumerable<Category> categories = await CategoriesService.GetCategoriesAsync();
             List<Category> categoriesList = categories.ToList();
 
             if (!categoriesList.Any())
@@ -147,7 +141,5 @@ namespace KaderService.Seeder.Seeds
 
             return category;
         }
-
-        public abstract Task SeedAsync();
     }
 }

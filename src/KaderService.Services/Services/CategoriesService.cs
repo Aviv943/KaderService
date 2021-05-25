@@ -23,6 +23,11 @@ namespace KaderService.Services.Services
             _repository = repository;
         }
 
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await _repository.GetCategoriesAsync();
+        }
+
         public async Task<string> PostCategoryImageAsync(string name, IFormFile file)
         {
             Category category = await _context.Categories.FindAsync(name);

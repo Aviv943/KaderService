@@ -55,47 +55,9 @@ namespace KaderService.Controllers
         public async Task<ActionResult<List<PostView>>> GetPostsAsync([FromQuery] string userId, [FromQuery] PagingParameters paging)
         {
             User user = await GetRelevantUserAsync(userId);
-            List<Post> posts = await _service.GetPostsAsync(user, paging);
+            List<PostView> posts = await _service.GetPostsAsync(user, paging);
 
-            List<PostView> postsAsync = posts.Select(p => new PostView
-            {
-                Creator = new UserView
-                {
-                    UserId = p.Creator.Id,
-                    UserName = p.Creator.UserName,
-                    FirstName = p.Creator.FirstName,
-                    LastName = p.Creator.LastName,
-                    Rating = p.Creator.Rating,
-                    NumberOfRating = p.Creator.NumberOfRatings,
-                    ImageUri = p.Creator.ImageUri
-                },
-                Address = p.Address,
-                Created = p.Created,
-                GroupId = p.GroupId,
-                GroupName = p.Group.Name,
-                Category = p.Group.Category,
-                Type = p.Type,
-                PostId = p.PostId,
-                Title = p.Title,
-                IsActive = p.IsActive,
-                Description = p.Description,
-                ImagesUri = p.ImagesUri,
-                CommentsCount = p.Comments.Count,
-                Comments = new List<CommentView>(p.Comments.Select(comment => new CommentView
-                {
-                    CommentId = comment.CommentId,
-                    Content = comment.Content,
-                    Created = comment.Created,
-                    Creator = new UserView
-                    {
-                        FirstName = comment.Creator.FirstName,
-                        LastName = comment.Creator.LastName,
-                        ImageUri = comment.Creator.ImageUri
-                    }
-                }))
-            }).ToList();
-
-            return postsAsync;
+            return posts;
         }
 
         [HttpGet("{userId}/recommended")]

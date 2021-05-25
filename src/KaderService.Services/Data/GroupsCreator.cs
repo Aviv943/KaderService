@@ -1,28 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
+using KaderService.Services.Models.AuthModels;
+using KaderService.Services.Services;
 using KaderService.Services.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace KaderService.Seeder.Seeds
+namespace KaderService.Services.Data
 {
-    public class Groups : Seeds
+    public class GroupsCreator
     {
-        public override async Task SeedAsync()
+        private static DataCreator _dataCreator;
+
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
+            await using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
+            _dataCreator = new DataCreator(serviceProvider);
+
+            await Create(context);
+        }
+
+        private static async Task Create(DbContext context)
+        {
+            #region Create Groups
             List<Group> groups = GetData<Group>();
 
-            #region Create Groups
             foreach (Group group in groups)
             {
-                await LoginAsync();
-                Category category = await GetRandomCategoryAsync();
+                User user = await _dataCreator.LoginRandomUserAsync();
+                Category category = await _dataCreator.GetRandomCategoryAsync();
                 group.CategoryId = category.Id;
 
                 try
                 {
-                    await GroupsClient.CreateGroupAsync(group);
+                    await _dataCreator.GroupsService.CreateGroupAsync(group, user);
                     Console.WriteLine($"Group created '{group.Name}'");
                 }
                 catch (Exception e)
@@ -35,27 +53,21 @@ namespace KaderService.Seeder.Seeds
             #region Join To Groups
             for (var i = 0; i < 10; i++)
             {
-                TokenInfo tokenInfo = await LoginAsync();
+                User user = await _dataCreator.LoginRandomUserAsync();
 
-                for (var j = 0; j <= 5; j++)
+                for (var j = 0; j <= 10; j++)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    GroupView group = await GetRandomGroupAsync(tokenInfo.UserId);
-                    
-                    try
-                    {
-                        await GroupsClient.JoinGroupAsync(group.GroupId);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Could not join group id '{group.GroupId}', ex: {e.Message}");
-                    }
+                    GroupView groupView = await _dataCreator.GetRandomGroupAsync(user);
+                    Group group = await _dataCreator.GroupsService.GetGroupAsync(groupView.GroupId);
+
+                    group.Members.Add(user);
+                    await _dataCreator.GroupsService.AddUserRoleToGroupMemberAsync(group.GroupId, user, "Member");
                 }
             }
             #endregion
         }
 
-        public virtual List<T> GetData<T>()
+        public static List<T> GetData<T>()
         {
             var groups = new List<Group>
             {

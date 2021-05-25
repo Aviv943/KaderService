@@ -25,6 +25,7 @@ namespace KaderService.Controllers
             _service = service;
         }
 
+        [Produces("application/json")]
         [HttpGet("{id}")]
         //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<GroupView>> GetGroupAsync(string id)
@@ -93,6 +94,7 @@ namespace KaderService.Controllers
             return NoContent();
         }
 
+        [Produces("application/json")]
         [HttpPut("join/{id}")]
         public async Task<IActionResult> JoinGroupAsync(string id)
         {
@@ -113,7 +115,8 @@ namespace KaderService.Controllers
         public async Task<ActionResult<Group>> CreateGroupAsync(Group group)
         {
             await _service.CreateGroupAsync(group, LoggedInUser);
-            return CreatedAtAction("GetGroupsAsync", new { id = group.GroupId }, group);
+            //return Created(string.Empty, group.GroupId);
+            return CreatedAtAction("GetGroupAsync", new { id = group.GroupId }, group);
         }
 
         // DELETE: api/MemberInGroups/5

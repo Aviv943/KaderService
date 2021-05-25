@@ -1,36 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using KaderService.Services.Constants;
 using KaderService.Services.Models;
 using KaderService.Services.ViewModels;
 
-namespace KaderService.Seeder.Seeds
+namespace KaderService.Services.Data
 {
-    public class Comments : Seeds
+    public class CommentsCreator
     {
-        public override async Task SeedAsync()
+        private static DataCreator _dataCreator;
+
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
+            _dataCreator = new DataCreator(serviceProvider);
+
+            await Create();
+        }
+
+        private static async Task Create()
+        {
+            #region Create Groups
             List<Comment> comments = GetData<Comment>();
 
             for (var i = 0; i < 40; i++)
             {
-                TokenInfo tokenInfo = await LoginAsync();
+                User user = await _dataCreator.LoginRandomUserAsync();
 
                 foreach (Comment comment in comments)
                 {
                     try
                     {
-                        PostView post = await GetRandomPostAsync();
+                        PostView post = await _dataCreator.GetRandomPostAsync(user);
 
-                        if (post.Creator.UserId == tokenInfo.UserId)
+                        if (post.Creator.UserId == user.Id)
                         {
                             continue;
                         }
 
-                        await CommentsClient.CreateCommentAsync(comment, post.PostId);
+                        await _dataCreator.CommentsService.CreateCommentAsync(comment, user, post.PostId);
                         Console.WriteLine($"Comment created '{comment.Content}'");
                     }
                     catch (Exception e)
@@ -39,9 +46,10 @@ namespace KaderService.Seeder.Seeds
                     }
                 }
             }
+            #endregion
         }
 
-        public virtual List<T> GetData<T>()
+        public static List<T> GetData<T>()
         {
             var comments = new List<Comment>
             {

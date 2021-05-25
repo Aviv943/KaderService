@@ -36,6 +36,7 @@ namespace KaderService.Services.Repositories
         public async Task<Group> GetGroupByGroupIdAsync(string groupId)
         {
             return await _context.Groups
+                //.AsNoTrackingWithIdentityResolution()
                 .Include(g => g.Members)
                 .ThenInclude(u => u.MemberInGroups)
                 .Include(g => g.Managers)

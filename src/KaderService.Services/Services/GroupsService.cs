@@ -49,7 +49,7 @@ namespace KaderService.Services.Services
                     ManagersCount = group.Managers.Count,
                     MembersCount = group.Members.Count,
                     PostsCount = group.Posts.Count,
-                    IsManager = userManager != null
+                    IsManager = userManager != null,
                 };
             });
 
@@ -106,7 +106,7 @@ namespace KaderService.Services.Services
             return await _repository.GetGroupByGroupIdAsync(groupId);
         }
 
-        public async Task<GroupView> GetGroupViewAsync(string groupId)
+        public async Task<GroupView>GetGroupViewAsync(string groupId)
         {
             Group group = await _repository.GetGroupByGroupIdAsync(groupId);
 
@@ -194,6 +194,8 @@ namespace KaderService.Services.Services
                 Members = members,
                 PostsCount = group.Posts.Count,
                 Posts = posts,
+                ManagersCount = group.Members.Count,
+                MembersCount = group.Managers.Count
             };
         }
 
@@ -299,7 +301,7 @@ namespace KaderService.Services.Services
 
         public async Task AddUserRoleToGroupMemberAsync(string id, User user, string role)
         {
-            var group = await GetGroupAsync(id);
+            Group group = await GetGroupAsync(id);
 
             switch (role)
             {

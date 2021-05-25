@@ -51,8 +51,6 @@ namespace KaderService.Services.Services
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new ("userid", user.Id),
                 new ("email", user.Email),
-                new ("firstname", user.FirstName),
-                new ("lastname", user.LastName)
             };
 
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));

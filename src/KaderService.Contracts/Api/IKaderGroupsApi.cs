@@ -20,6 +20,9 @@ namespace KaderService.Contracts.Api
         [Put("/api/groups/{id}")]
         Task UpdateGroupAsync(string id, Group group);
 
+        [Put("/api/groups/join/{id}")]
+        Task JoinGroupAsync(string id);
+
         [Post("/api/groups")]
         Task CreateGroupAsync(Group group);
 
