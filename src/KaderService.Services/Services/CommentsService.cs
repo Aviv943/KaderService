@@ -3,47 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
-using KaderService.Services.Data;
 using KaderService.Services.Models;
-using Microsoft.AspNetCore.Identity;
+using KaderService.Services.Repositories;
+using KaderService.Services.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
 {
     public class CommentsService
     {
-        private readonly KaderContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly CommentsRepository _repository;
+        private readonly PostsRepository _postsRepository;
 
-        public CommentsService(KaderContext context, UserManager<User> userManager)
+        public CommentsService(CommentsRepository repository, PostsRepository postsRepository)
         {
-            _context = context;
-            _userManager = userManager;
+            _repository = repository;
+            _postsRepository = postsRepository;
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsAsync()
+        public async Task<IEnumerable<CommentView>> GetCommentsAsync(string postId, PagingParameters pagingParameters)
         {
-            return await _context.Comments.ToListAsync();
-        }
+            IEnumerable<Comment> commentsForPostAsync = await _repository.GetCommentsAsync(postId, pagingParameters);
+            IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
+            {
+                Creator = new UserView
+                {
+                    UserId = c.Creator.Id,
+                    UserName = c.Creator.UserName,
+                    FirstName = c.Creator.FirstName,
+                    LastName = c.Creator.LastName,
+                    Rating = c.Creator.Rating,
+                    NumberOfRating = c.Creator.NumberOfRatings
+                },
+                PostId = c.PostId,
+                CommentId = c.CommentId,
+                Content = c.Content,
+                Created = c.Created,
+            });
 
-        public async Task<IEnumerable<Comment>> GetCommentsAsync(string postId, PagingParameters pagingParameters)
-        {
-            return await _context.Comments
-                .Where(c => c.PostId == postId)
-                .Include(c => c.Creator)
-                .Include(c => c.Post)
-                .OrderBy(comment => comment.Created)
-                .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
-                .Take(pagingParameters.PageSize)
-                .ToListAsync();
+            return commentViews;
         }
 
         public async Task<Comment> GetCommentAsync(string id)
         {
-            return await _context.Comments
-                .Include(c => c.Creator)
-                .Include(c => c.Post)
-                .FirstOrDefaultAsync(c => c.CommentId == id);
+            return await _repository.GetCommentAsync(id);
         }
 
         public async Task UpdateCommentAsync(string id, Comment comment)
@@ -53,30 +56,12 @@ namespace KaderService.Services.Services
                 throw new Exception("PostId is not equal to comment.PostId");
             }
 
-            _context.Entry(comment).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CommentExists(id))
-                {
-                    throw new KeyNotFoundException();
-                }
-
-                throw;
-            }
-        }
-        private bool CommentExists(string id)
-        {
-            return _context.Comments.Any(e => e.CommentId.Equals(id));
+            await _repository.UpdateCommentAsync(comment);
         }
 
         public async Task CreateCommentAsync(Comment comment, User user, string postId)
         {
-            Post post = await _context.Posts.FindAsync(postId);
+            Post post = await _postsRepository.GetPostAsync(postId);
 
             if (post == null)
             {
@@ -87,21 +72,19 @@ namespace KaderService.Services.Services
             comment.Creator = user;
             comment.Created = DateTime.Now;
 
-            await _context.Comments.AddAsync(comment);
-            await _context.SaveChangesAsync();
+            await _repository.CreateCommentAsync(comment);
         }
 
         public async Task DeleteCommentAsync(string id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            Comment comment = await _repository.GetCommentAsync(id);
 
             if (comment == null)
             {
                 throw new KeyNotFoundException();
             }
 
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
+            await _repository.DeleteCommentAsync(comment);
         }
 
         public async Task DeleteCommentsAsync(ICollection<Comment> comments)

@@ -71,25 +71,5 @@ namespace KaderService.Controllers
 
             return NoContent();
         }
-
-        /// <summary>
-        /// git pull > build solution > drop database > add migration > update database > start service
-        /// </summary>
-        [HttpPost("seed")]
-        public async Task<IActionResult> SeedAsync()
-        {
-            var proc = new Process
-            {
-                StartInfo =
-                {
-                    FileName = "seed.bat",
-                    CreateNoWindow = false
-                }
-            };
-
-            proc.Start();
-
-            return NoContent();
-        }
     }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
 
@@ -16,12 +15,10 @@ namespace KaderService.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly KaderContext _context;
         private readonly CategoriesService _service;
 
-        public CategoriesController(KaderContext context, CategoriesService service)
+        public CategoriesController(CategoriesService service)
         {
-            _context = context;
             _service = service;
         }
 
@@ -35,33 +32,19 @@ namespace KaderService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return Ok(await _service.GetCategoriesAsync());
         }
 
         // PUT: api/Categories/Sports
         [HttpPut("{name}")]
-        public async Task<IActionResult> PutCategory(string name, Category category)
+        public async Task<IActionResult> UpdateCategory(string name, Category category)
         {
             if (name != category.Name)
             {
                 return BadRequest();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(name))
-                {
-                    return NotFound();
-                }
-
-                throw;
-            }
+            await _service.UpdateCategoryAsync(category);
 
             return NoContent();
         }
@@ -89,22 +72,16 @@ namespace KaderService.Controllers
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCategory(string name)
         {
-            Category category = await _context.Categories.FindAsync(name);
+            Category category = await _service.GetCategoryAsync(name);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            await _service.DeleteCategoryAsync(category);
 
             return NoContent();
-        }
-
-        private bool CategoryExists(string name)
-        {
-            return _context.Categories.Any(e => e.Name == name);
         }
     }
 }

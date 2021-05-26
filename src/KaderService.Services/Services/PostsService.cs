@@ -75,7 +75,7 @@ namespace KaderService.Services.Services
             return postsAsync;
         }
 
-        public async Task<IEnumerable<Post>> GetRecommendedPostsAsync(User user)
+        public async Task<IEnumerable<PostView>> GetRecommendedPostsAsync(User user)
         {
             List<ItemsCustomers> itemsCustomersList = await _repository.GetItemsCustomersList(user);
             List<ItemsCustomers> relatedPostsList = itemsCustomersList;
@@ -84,20 +84,40 @@ namespace KaderService.Services.Services
             {
                 RelatedPostsList = relatedPostsList,
                 UserId = user.Id,
-                PostsIds = _context.Posts.Select(post => post.PostId).Distinct().ToList(),
+                PostsIds = _context.Posts.Select(post => post.PostId).ToList(),
             };
 
-            try
+            Dictionary<string, double> postsScore = await ML.Core.Run(mlRequest);
+            IEnumerable<KeyValuePair<string, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
+            IQueryable<Post> posts = _context.Posts.Take(int.MaxValue);
+            List<Post> recommendedPostsAsync = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostId select post).ToList();
+
+            IEnumerable<PostView> postViews = recommendedPostsAsync.Select(p => new PostView
             {
-                Dictionary<string, double> postsScore = await ML.Core.Run(mlRequest);
-                IEnumerable<KeyValuePair<string, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
-                IQueryable<Post> posts = _context.Posts.Take(int.MaxValue);
-                return (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostId select post).ToList();
-            }
-            catch (Exception exception)
-            {
-                return null;
-            }
+                Creator = new UserView
+                {
+                    UserId = p.Creator.Id,
+                    UserName = p.Creator.UserName,
+                    FirstName = p.Creator.FirstName,
+                    LastName = p.Creator.LastName,
+                    Rating = p.Creator.Rating,
+                    NumberOfRating = p.Creator.NumberOfRatings
+                },
+                Address = p.Address,
+                Created = p.Created,
+                GroupId = p.GroupId,
+                Category = p.Group.Category,
+                GroupName = p.Group.Name,
+                IsActive = p.IsActive,
+                Type = p.Type,
+                PostId = p.PostId,
+                Title = p.Title,
+                Description = p.Description,
+                ImagesUri = p.ImagesUri,
+                CommentsCount = p.Comments.Count
+            });
+
+            return postViews;
         }
 
         public async Task<Post> GetPostAsync(string id, User user)

@@ -27,5 +27,23 @@ namespace KaderService.Services.Repositories
         {
             return await _context.Categories.ToListAsync();
         }
+
+        public async Task PostCategoryAsync(Category category)
+        {
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCategoryAsync(Category category)
+        {
+            _context.Entry(category).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCategoryAsync(Category category)
+        {
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+        }
     }
 }

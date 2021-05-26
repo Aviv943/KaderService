@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +13,10 @@ namespace KaderService.Services.Services
 {
     public class CategoriesService
     {
-        private readonly KaderContext _context;
         private readonly CategoriesRepository _repository;
 
-        public CategoriesService(KaderContext context, CategoriesRepository repository)
+        public CategoriesService(CategoriesRepository repository)
         {
-            _context = context;
             _repository = repository;
         }
 
@@ -30,7 +27,7 @@ namespace KaderService.Services.Services
 
         public async Task<string> PostCategoryImageAsync(string name, IFormFile file)
         {
-            Category category = await _context.Categories.FindAsync(name);
+            Category category = await _repository.GetCategory(name);
 
             if (category == null)
             {
@@ -47,21 +44,29 @@ namespace KaderService.Services.Services
 
             category.ImageUri = $"/categories/{fileName}";
 
-            _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
+            await _repository.UpdateCategoryAsync(category);
 
             return $"http://kader.cs.colman.ac.il{category.ImageUri}";
         }
 
         public async Task PostCategoryAsync(Category category)
         {
-            await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
+            await _repository.PostCategoryAsync(category);
         }
 
-        public async Task<ActionResult<Category>> GetCategoryAsync(string name)
+        public async Task<Category> GetCategoryAsync(string name)
         {
             return await _repository.GetCategory(name);
+        }
+
+        public async Task UpdateCategoryAsync(Category category)
+        {
+            await _repository.UpdateCategoryAsync(category);
+        }
+
+        public async Task DeleteCategoryAsync(Category category)
+        {
+            await _repository.DeleteCategoryAsync(category);
         }
     }
 }

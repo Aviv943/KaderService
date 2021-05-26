@@ -33,23 +33,7 @@ namespace KaderService.Controllers
                 return BadRequest("PostId cannot be null");
             }
 
-            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsAsync(postId, paging);
-            IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
-            {
-                Creator = new UserView
-                {
-                    UserId = c.Creator.Id,
-                    UserName = c.Creator.UserName,
-                    FirstName = c.Creator.FirstName,
-                    LastName = c.Creator.LastName,
-                    Rating = c.Creator.Rating,
-                    NumberOfRating = c.Creator.NumberOfRatings
-                },
-                PostId = c.PostId,
-                CommentId = c.CommentId,
-                Content = c.Content,
-                Created = c.Created,
-            });
+            IEnumerable<CommentView> commentViews = await _service.GetCommentsAsync(postId, paging);
 
             return Ok(new GetCommentsResponse
             {
@@ -94,7 +78,6 @@ namespace KaderService.Controllers
         public async Task<IActionResult> DeleteCommentAsync(string id)
         {
             await _service.DeleteCommentAsync(id);
-
             return NoContent();
         }
     }

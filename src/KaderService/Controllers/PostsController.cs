@@ -68,35 +68,11 @@ namespace KaderService.Controllers
                 return BadRequest("UserId cannot be null");
             }
 
-            IEnumerable<Post> postsForUserAsync = await _service.GetRecommendedPostsAsync(LoggedInUser);
-            IEnumerable<PostView> postViews = postsForUserAsync.Select(p => new PostView
-            {
-                Creator = new UserView
-                {
-                    UserId = p.Creator.Id,
-                    UserName = p.Creator.UserName,
-                    FirstName = p.Creator.FirstName,
-                    LastName = p.Creator.LastName,
-                    Rating = p.Creator.Rating,
-                    NumberOfRating = p.Creator.NumberOfRatings
-                },
-                Address = p.Address,
-                Created = p.Created,
-                GroupId = p.GroupId,
-                Category = p.Group.Category,
-                GroupName = p.Group.Name,
-                IsActive = p.IsActive,
-                Type = p.Type,
-                PostId = p.PostId,
-                Title = p.Title,
-                Description = p.Description,
-                ImagesUri = p.ImagesUri,
-                CommentsCount = p.Comments.Count
-            });
+            IEnumerable<PostView> postsAsync = await _service.GetRecommendedPostsAsync(LoggedInUser);
 
             return Ok(new GetPostsResponse
             {
-                PostViews = postViews.ToList()
+                PostViews = postsAsync.ToList()
             });
         }
 

@@ -7,9 +7,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
-using KaderService.Services.Data;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
+using KaderService.Services.Repositories;
 using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -23,14 +23,14 @@ namespace KaderService.Services.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly KaderContext _context;
+        private readonly UsersRepository _repository;
         private readonly IConfiguration _configuration;
 
-        public UsersService(IConfiguration configuration, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, KaderContext context)
+        public UsersService(IConfiguration configuration, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, UsersRepository repository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _context = context;
+            _repository = repository;
             _configuration = configuration;
         }
 
@@ -99,11 +99,7 @@ namespace KaderService.Services.Services
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return await _context.Users
-                .Include(u => u.MemberInGroups)
-                .ThenInclude(g => g.Members)
-                .Include(u => u.ManagerInGroups)
-                .ThenInclude(u => u.Managers).ToListAsync();
+            return await _repository.GetUsersAsync();
         }
 
         public async Task<IList<User>> GetAdminsAsync()
@@ -113,13 +109,7 @@ namespace KaderService.Services.Services
 
         private async Task<User> GetUserAsync(string id)
         {
-            return await _context.Users
-                .Include(u => u.MemberInGroups)
-                //.ThenInclude(g => g.Members)
-                .Include(u => u.ManagerInGroups)
-                //.ThenInclude(u => u.Managers)
-                .Include(u => u.Posts)
-                .FirstOrDefaultAsync(u => u.Id == id);
+            return await _repository.GetUserAsync(id);
         }
 
         public async Task<UserView> GetUserViewAsync(string userId)
@@ -223,15 +213,9 @@ namespace KaderService.Services.Services
 
             user.ImageUri = $"/{serverFilePath}/{fileName}";
             await _userManager.UpdateAsync(user);
-            _context.Entry(user).State = EntityState.Modified;
+            await _repository.UpdateUserAsync(user);
 
             return $"http://kader.cs.colman.ac.il/{serverFilePath}/{fileName}";
-        }
-
-        public async Task UpdateUserAsync(User user)
-        {
-            await _userManager.UpdateAsync(user);
-            //_context.Entry(user).State = EntityState.Modified;
         }
 
         public async Task AddRatingAsync(string userId, double newRating)

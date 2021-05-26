@@ -24,15 +24,17 @@ namespace KaderService.Extensions
     {
         public static void AddMyServices(this IServiceCollection services)
         {
+            services.AddTransient<CategoriesService>();
+            services.AddTransient<UsersService>();
+            services.AddTransient<GroupsService>();
             services.AddTransient<PostsService>();
             services.AddTransient<CommentsService>();
-            services.AddTransient<GroupsService>();
-            services.AddTransient<UsersService>();
             services.AddTransient<CommonService>();
-            services.AddTransient<CategoriesService>();
             services.AddTransient<CategoriesRepository>();
             services.AddTransient<GroupsRepository>();
             services.AddTransient<PostsRepository>();
+            services.AddTransient<CommentsRepository>();
+            services.AddTransient<UsersRepository>();
             services.AddScoped<ILoggerManager, LoggerManager>();
         }
 
