@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaderService.Services.Constants;
 using KaderService.Services.Data;
 using KaderService.Services.Models;
 using Microsoft.AspNetCore.Identity;
@@ -25,13 +26,15 @@ namespace KaderService.Services.Services
             return await _context.Comments.ToListAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsAsync(string postId)
+        public async Task<IEnumerable<Comment>> GetCommentsAsync(string postId, PagingParameters pagingParameters)
         {
             return await _context.Comments
                 .Where(c => c.PostId == postId)
                 .Include(c => c.Creator)
                 .Include(c => c.Post)
                 .OrderBy(comment => comment.Created)
+                .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
+                .Take(pagingParameters.PageSize)
                 .ToListAsync();
         }
 

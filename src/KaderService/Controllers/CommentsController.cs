@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using KaderService.Contracts.Responses;
+using KaderService.Services.Constants;
 using Microsoft.AspNetCore.Mvc;
 using KaderService.Services.Models;
 using KaderService.Services.Services;
@@ -25,14 +26,14 @@ namespace KaderService.Controllers
         }
 
         [HttpGet("{postId}")]
-        public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsAsync(string postId)
+        public async Task<ActionResult<IEnumerable<CommentView>>> GetCommentsAsync(string postId, [FromQuery] PagingParameters paging)
         {
             if (string.IsNullOrWhiteSpace(postId))
             {
                 return BadRequest("PostId cannot be null");
             }
 
-            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsAsync(postId);
+            IEnumerable<Comment> commentsForPostAsync = await _service.GetCommentsAsync(postId, paging);
             IEnumerable<CommentView> commentViews = commentsForPostAsync.Select(c => new CommentView
             {
                 Creator = new UserView
