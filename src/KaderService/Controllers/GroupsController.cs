@@ -25,7 +25,6 @@ namespace KaderService.Controllers
             _service = service;
         }
 
-        [Produces("application/json")]
         [HttpGet("{id}")]
         //[Authorize(Policy = "GroupManager")]
         public async Task<ActionResult<GroupView>> GetGroupAsync(string id)

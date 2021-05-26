@@ -87,6 +87,8 @@ namespace KaderService.Services.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerModel.Username,
                 Created = DateTime.Now,
+                FirstName = registerModel.FirstName,
+                LastName = registerModel.LastName
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
@@ -112,10 +114,11 @@ namespace KaderService.Services.Services
         private async Task<User> GetUserAsync(string id)
         {
             return await _context.Users
-                //.Include(u => u.MemberInGroups)
+                .Include(u => u.MemberInGroups)
                 //.ThenInclude(g => g.Members)
-                //.Include(u => u.ManagerInGroups)
+                .Include(u => u.ManagerInGroups)
                 //.ThenInclude(u => u.Managers)
+                .Include(u => u.Posts)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -165,8 +168,9 @@ namespace KaderService.Services.Services
                 NumberOfRating = user.NumberOfRatings,
                 Rating = user.Rating,
                 UserId = userId,
-                //ManagerInGroups = managersGroupViews,
-                //MemberInGroups = membersGroupViews,
+                MemberInGroupsCount = user.MemberInGroups.Count,
+                ManagerInGroupsCount = user.ManagerInGroups.Count,
+                PostsCount = user.Posts.Count
             };
         }
 

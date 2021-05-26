@@ -49,7 +49,6 @@ namespace KaderService.Controllers
                 CommentId = c.CommentId,
                 Content = c.Content,
                 Created = c.Created,
-
             });
 
             return Ok(new GetCommentsResponse

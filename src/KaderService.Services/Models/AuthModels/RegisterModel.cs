@@ -13,5 +13,11 @@ namespace KaderService.Services.Models.AuthModels
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+        
+        [Required(ErrorMessage = "First Name is required")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last Name is required")]
+        public string LastName { get; set; }
     }
 }

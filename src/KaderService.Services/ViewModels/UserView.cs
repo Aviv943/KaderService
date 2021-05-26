@@ -24,8 +24,12 @@ namespace KaderService.Services.ViewModels
 
         public ICollection<PostView> Posts { get; set; }
 
-        public ICollection<GroupView> MemberInGroups { get; set; }
+        //public ICollection<GroupView> MemberInGroups { get; set; }
+        public int MemberInGroupsCount { get; set; }
 
-        public ICollection<GroupView> ManagerInGroups { get; set; }
+        //public ICollection<GroupView> ManagerInGroups { get; set; }
+        public int ManagerInGroupsCount { get; set; }
+        
+        public int PostsCount { get; set; }
     }
 }
