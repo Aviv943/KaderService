@@ -1,48 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using KaderService.Services.Constants;
 using KaderService.Services.Models;
+using KaderService.Services.Models.AuthModels;
+using KaderService.Services.Services;
 using KaderService.Services.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KaderService.Services.Data
 {
-    public class CommentsCreator
+    public class PostsCreator
     {
         private static DataCreator _dataCreator;
+        private static KaderContext _context;
 
-        public static async Task Initialize(IServiceProvider serviceProvider)
+        public static async Task Initialize(IServiceProvider serviceProvider, KaderContext context)
         {
             _dataCreator = new DataCreator(serviceProvider);
-
+            _context = context;
             await Create();
         }
 
         private static async Task Create()
         {
             #region Create Groups
-            List<Comment> comments = GetData<Comment>();
 
-            for (var i = 0; i < 40; i++)
+            for (var i = 0; i < 5; i++)
             {
-                User user = await _dataCreator.LoginRandomUserAsync();
+                List<Post> posts = GetData<Post>();
 
-                foreach (Comment comment in comments)
+                foreach (Post post in posts)
                 {
+                    User user = await _dataCreator.LoginRandomUserAsync();
+                    GroupView group = await _dataCreator.GetRandomGroupAsync(user);
+
                     try
                     {
-                        PostView post = await _dataCreator.GetRandomPostAsync(user);
-
-                        if (post.Creator.UserId == user.Id)
-                        {
-                            continue;
-                        }
-
-                        await _dataCreator.CommentsService.CreateCommentAsync(comment, user, post.PostId);
-                        Console.WriteLine($"Comment created '{comment.Content}'");
+                        await _dataCreator.PostsService.CreatePostAsync(post, user, group.GroupId);
+                        Console.WriteLine($"Post created '{post.Title}'");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"Comment could not be created, ex: '{e.Message}'");
+                        Console.WriteLine($"Post could not be created, ex: '{e.Message}'");
                     }
                 }
             }
@@ -51,37 +56,307 @@ namespace KaderService.Services.Data
 
         public static List<T> GetData<T>()
         {
-            var comments = new List<Comment>
-            {
-                new() { Content = "Fancy a rice cake?" },
-                new() { Content = "Oh, yeah. Cheers, pal." },
-                new() { Content = "Hey. Here’s your pen back." },
-                new() { Content = "Ta, mate." },
-                new() { Content = "Wow! You fixed my bike! Thanks a bunch!" },
-                new() { Content = "You’ll go get me a coffee? Thanks a million! Really. I just don’t have the time!" },
-                new() { Content = "A £75 fine for a bill that’s one day late? Great. Thanks a million." },
-                new() { Content = "Oh, and Laurie? Really, thanks so much for covering my shift at work" },
-                new() { Content = "Hey, Freya! Thank you so much for Alex’s birthday present. I’m sure he’ll love it!" },
-                new() { Content = "Hey! Excuse me. You dropped your phone!, Oh! Thanks a lot!" },
-                new() { Content = "You rule!" },
-                new() { Content = "Flowers? For me? How thoughtful!" },
-                new() { Content = "Don’t mention it." },
-                new() { Content = "Not at all!" },
-                new() { Content = "It’s nothing." },
-                new() { Content = "That’s all right." },
-                new() { Content = "It’s my pleasure." },
-                new() { Content = "Thanks so much for the positive feedback." },
-                new() { Content = "Hey this is really a great lesson for me thanks a lot." },
-                new() { Content = "Thanks so much for your huge efforts it helped me a lot" },
-                new() { Content = "Thanks for the positive feedback. It’s great to hear that learners like you are benefiting from it." },
-                new() { Content = "thanks!" },
-                new() { Content = "No. Thank YOU!" },
-                new() { Content = "Thanks so much" },
-                new() { Content = "Thank you. This is very, very useful. " },
-                new() { Content = "No worries!" },
-           };
+            var posts = new List<Post> {
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Technology",
+                    Description = "Looking for Technology Please",
+                    Address = "נירים 3, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Apples",
+                    Description = "Looking for apples Please",
+                    Address = "הרצל 14, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Melons",
+                    Description = "Looking for melons Please",
+                    Address = "דיזינגוף 14, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Garlic",
+                    Description = "Looking for garlic Please",
+                    Address = "אלי כהן 1, חולון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Ketchup",
+                    Description = "Looking for ketchup Please",
+                    Address = "הרצל 14, בת ים",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Fish",
+                    Description = "Looking for Fish Please",
+                    Address = "דיזינגוף 5, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Milk",
+                    Description = "Looking for Milk Please",
+                    Address = "בית הערבה 6, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Cheese",
+                    Description = "Looking for Cheese Please",
+                    Address = "אושה 5, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Eggs",
+                    Description = "Looking for Eggs Please",
+                    Address = "הרצל 14, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "BasketBall",
+                    Description = "Looking for BasketBall Please",
+                    Address = "שונית 6, רמלה",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Jump Ropes",
+                    Description = "Looking for Jump Ropes Please",
+                    Address = "הרצל 14, ירושלים",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "SoftBalls",
+                    Description = "Looking for SoftBalls Please",
+                    Address = "אלי כהן 14, חולון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Bats",
+                    Description = "Looking for Bats Please",
+                    Address = "הרצל 2, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "FootBalls",
+                    Description = "Looking for FootBalls Please",
+                    Address = "שדה נחום 2, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Hockey Sticks",
+                    Description = "Looking for Hockey Sticks Please",
+                    Address = "העצמאות 2, אשדוד",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Hula Hoops",
+                    Description = "Looking for Hula Hoops Please",
+                    Address = "העצמאות 4, אשדוד",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Gloves",
+                    Description = "Looking for Gloves Please",
+                    Address = "הרצל 10, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Harp",
+                    Description = "Looking for Harp Please",
+                    Address = "הרצל 8, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Piano",
+                    Description = "Looking for Piano Please",
+                    Address = "העצמאות 4, אשדוד",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Cello",
+                    Description = "Looking for Cello Please",
+                    Address = "דיזינגוף 8, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Bass drum",
+                    Description = "Looking for Bass drum Please",
+                    Address = "נגבה 20, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Bass Guitar",
+                    Description = "Looking for Bass Guitar Please",
+                    Address = "נגבה 18, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Guitar",
+                    Description = "Looking for Guitar Please",
+                    Address = "נגבה 10, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "Harmonica",
+                    Description = "Looking for Harmonica Please",
+                    Address = "שדה ורבורג 16, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Bell",
+                    Description = "Looking for Bell Please",
+                    Address = "עמיר 7, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Tuba",
+                    Description = "Looking for Tuba Please",
+                    Address = "עמיר 5, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Microphone",
+                    Description = "Looking for Microphone Please",
+                    Address = "העצמאות 22, אשדוד",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Mouse",
+                    Description = "Looking for Mouse Please",
+                    Address = "הרצל 9, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "HeadPhones",
+                    Description = "Looking for HeadPhones Please",
+                    Address = "הרצל 8, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Request,
+                    Title = "USB Stick",
+                    Description = "Looking for USB Stick Please",
+                    Address = "שדה נחום 10, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Router",
+                    Description = "Looking for Router Please",
+                    Address = "כפר חרוב 6, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Handover,
+                    Title = "Laptop",
+                    Description = "Looking for Laptop Please",
+                    Address = "כפר חרוב 6, ראשון לציון",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                },
+                new()
+                {
+                    Type = PostType.Offer,
+                    Title = "Web cam",
+                    Description = "Looking for Web cam Please",
+                    Address = "הרצל 4, תל אביב",
+                    Created = DateTime.Now,
+                    ImagesUri = new List<string>()
+                }
+            };
 
-            return (List<T>)Convert.ChangeType(comments, typeof(List<Comment>));
+            return (List<T>)Convert.ChangeType(posts, typeof(List<Post>));
         }
     }
 }

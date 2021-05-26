@@ -19,7 +19,7 @@ namespace KaderService
             IHost host = CreateHostBuilder(args).Build();
             using IServiceScope scope = host.Services.CreateScope();
             IServiceProvider services = scope.ServiceProvider;
-            
+
             try
             {
                 var context = services.GetRequiredService<KaderContext>();
@@ -34,12 +34,33 @@ namespace KaderService
                 if (!roleExists)
                 {
                     await AdminsCreator.Initialize(services, config["AdminKey"], userManager, roleManager);
+                }
+
+                if (await context.Categories.CountAsync() == 0)
+                {
                     await CategoriesCreator.Initialize(services);
+                }
+
+                if (await context.Users.CountAsync() == 4)
+                {
                     await UsersCreator.Initialize(services);
+                }
+
+                if (await context.Groups.CountAsync() == 0)
+                {
                     await GroupsCreator.Initialize(services);
-                    await PostsCreator.Initialize(services);
+                }
+
+                if (await context.Posts.CountAsync() == 0)
+                {
+                    await PostsCreator.Initialize(services, context);
+                }
+
+                if (await context.Comments.CountAsync() == 0)
+                {
                     await CommentsCreator.Initialize(services);
                 }
+
 
             }
             catch (Exception e)
@@ -48,7 +69,7 @@ namespace KaderService
                 logger.LogError(e, "An error occurred seeding the DB.");
             }
 
-            
+
             await host.RunAsync();
         }
 

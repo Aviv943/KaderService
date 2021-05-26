@@ -105,7 +105,7 @@ namespace KaderService.Services.Data
 
         public async Task<PostView> GetRandomPostAsync(User user)
         {
-            List<PostView> posts = await PostsService.GetPostsAsync(null, null);
+            List<PostView> posts = await PostsService.GetPostsAsync(user, new PagingParameters());
             List<PostView> postsList = posts.ToList();
 
             if (!postsList.Any())
