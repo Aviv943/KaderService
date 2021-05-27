@@ -65,6 +65,7 @@ namespace KaderService.Services.Services
                     Created = comment.Created,
                     Creator = new UserView
                     {
+                        UserId = comment.Creator.Id,
                         FirstName = comment.Creator.FirstName,
                         LastName = comment.Creator.LastName,
                         ImageUri = comment.Creator.ImageUri
