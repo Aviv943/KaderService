@@ -13,7 +13,7 @@ namespace KaderService.ML
     public class Core
     {
         private const string TrainingDataLocation = @"D:\Compare.txt";
-        public static async Task<Dictionary<string, double>> Run(Request request)
+        public static async Task<Dictionary<int, double>> Run(Request request)
         {
             CreateFile(request.RelatedPostsList);
             var mlContext = new MLContext();
@@ -39,13 +39,13 @@ namespace KaderService.ML
             MatrixFactorizationTrainer est = mlContext.Recommendation().Trainers.MatrixFactorization(options);
             ITransformer model = est.Fit(dataView);
             PredictionEngine<ProductEntry, PredictionScore> predictionEngine = mlContext.Model.CreatePredictionEngine<ProductEntry, PredictionScore>(model);
-            var scores = new Dictionary<string, double>();
+            var scores = new Dictionary<int, double>();
 
-            foreach (string itemId in request.PostsIds)
+            foreach (int itemId in request.PostsNumbers)
             {
                 var entry = new ProductEntry
                 {
-                    UserNumber = (uint)request.UserId.GetHashCode(),
+                    UserNumber = (uint)request.UserNumbers.GetHashCode(),
                     RelatedPostId = (uint)itemId.GetHashCode()
                 };
 
@@ -66,7 +66,7 @@ namespace KaderService.ML
 
             foreach (ItemsCustomers customerItem in customersItems)
             {
-                File.AppendAllText(@"D:\Compare.txt", $"{customerItem.UserId.GetHashCode()}	{customerItem.PostId.GetHashCode()}{Environment.NewLine}");
+                File.AppendAllText(@"D:\Compare.txt", $"{customerItem.UserNumber.GetHashCode()}	{customerItem.PostNumber.GetHashCode()}{Environment.NewLine}");
             }
         }
     }

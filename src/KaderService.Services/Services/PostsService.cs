@@ -10,7 +10,6 @@ using KaderService.Services.Models;
 using KaderService.Services.Repositories;
 using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KaderService.Services.Services
@@ -33,7 +32,13 @@ namespace KaderService.Services.Services
         public async Task<List<PostView>> GetPostsAsync(User user, PagingParameters paging)
         {
             List<Post> posts = await _repository.GetPostsAsync(user, paging);
+            List<PostView> postsAsync = ConvertToPostViews(posts);
 
+            return postsAsync;
+        }
+
+        private static List<PostView> ConvertToPostViews(List<Post> posts)
+        {
             List<PostView> postsAsync = posts.Select(p => new PostView
             {
                 Creator = new UserView
@@ -72,53 +77,27 @@ namespace KaderService.Services.Services
                     }
                 }))
             }).ToList();
-
             return postsAsync;
         }
 
         public async Task<IEnumerable<PostView>> GetRecommendedPostsAsync(User user)
         {
             List<ItemsCustomers> itemsCustomersList = await _repository.GetItemsCustomersList(user);
-            List<ItemsCustomers> relatedPostsList = itemsCustomersList;
 
             var mlRequest = new Request
             {
-                RelatedPostsList = relatedPostsList,
-                UserId = user.Id,
-                PostsIds = _context.Posts.Select(post => post.PostId).ToList(),
+                RelatedPostsList = itemsCustomersList,
+                UserNumbers = user.UserNumber,
+                PostsNumbers = _context.Posts.Select(post => post.PostNumber).ToList(),
             };
 
-            Dictionary<string, double> postsScore = await ML.Core.Run(mlRequest);
-            IEnumerable<KeyValuePair<string, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
-            IQueryable<Post> posts = _context.Posts.Take(int.MaxValue);
-            List<Post> recommendedPostsAsync = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostId select post).ToList();
+            Dictionary<int, double> postsScore = await ML.Core.Run(mlRequest);
+            IEnumerable<KeyValuePair<int, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
+            IQueryable<Post> posts = _repository.GetAllPosts();
+            List<Post> recommendedPost = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostNumber select post).ToList();
+            List<PostView> postsViews = ConvertToPostViews(recommendedPost);
 
-            IEnumerable<PostView> postViews = recommendedPostsAsync.Select(p => new PostView
-            {
-                Creator = new UserView
-                {
-                    UserId = p.Creator.Id,
-                    UserName = p.Creator.UserName,
-                    FirstName = p.Creator.FirstName,
-                    LastName = p.Creator.LastName,
-                    Rating = p.Creator.Rating,
-                    NumberOfRating = p.Creator.NumberOfRatings
-                },
-                Address = p.Address,
-                Created = p.Created,
-                GroupId = p.GroupId,
-                Category = p.Group.Category,
-                GroupName = p.Group.Name,
-                IsActive = p.IsActive,
-                Type = p.Type,
-                PostId = p.PostId,
-                Title = p.Title,
-                Description = p.Description,
-                ImagesUri = p.ImagesUri,
-                CommentsCount = p.Comments.Count
-            });
-
-            return postViews;
+            return postsViews;
         }
 
         public async Task<Post> GetPostAsync(string id, User user)
@@ -130,7 +109,7 @@ namespace KaderService.Services.Services
                 throw new Exception($"PostID '{id}' can not be found");
             }
 
-            var relatedPost = new RelatedPost(user.Id, id);
+            var relatedPost = new RelatedPost(user.UserNumber, post.PostNumber);
             await _repository.AddRelatedPostAsync(user, post, relatedPost);
 
             return post;
@@ -140,7 +119,7 @@ namespace KaderService.Services.Services
         {
             if (!id.Equals(post.PostId))
             {
-                throw new Exception("PostId is not equal to post.PostId");
+                throw new Exception("PostNumber is not equal to post.PostNumber");
             }
 
             _context.Entry(post).State = EntityState.Modified;
@@ -153,7 +132,7 @@ namespace KaderService.Services.Services
             {
                 if (!_repository.PostExists(id))
                 {
-                    throw new KeyNotFoundException($"PostId '{post.PostId}' could not be found");
+                    throw new KeyNotFoundException($"PostNumber '{post.PostId}' could not be found");
                 }
 
                 throw;

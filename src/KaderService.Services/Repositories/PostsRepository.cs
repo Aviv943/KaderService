@@ -48,7 +48,7 @@ namespace KaderService.Services.Repositories
 
         public async Task AddRelatedPostAsync(User user, Post post, RelatedPost relatedPost)
         {
-            bool relatedItems = _context.RelatedPosts.Any(rp => rp.PostId == post.PostId && rp.UserId == user.Id);
+            bool relatedItems = _context.RelatedPosts.Any(rp => rp.PostNumber == post.PostNumber && rp.UserNumber == user.UserNumber);
 
             if (!relatedItems)
             {
@@ -67,9 +67,20 @@ namespace KaderService.Services.Repositories
             return await _context.RelatedPosts
                 .Select(post => new ItemsCustomers
                 {
-                    UserId = user.Id,
-                    PostId = post.PostId
+                    UserNumber = user.UserNumber,
+                    PostNumber = post.PostNumber
                 }).ToListAsync();
+        }
+
+        public IQueryable<Post> GetAllPosts()
+        {
+            return _context.Posts
+                .Include(p => p.Creator)
+                .Include(p => p.Group)
+                .ThenInclude(g => g.Category)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Creator)
+                .OrderByDescending(p => p.Created);
         }
     }
 }

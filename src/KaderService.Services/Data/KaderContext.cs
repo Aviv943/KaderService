@@ -2,6 +2,7 @@
 using KaderService.Services.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace KaderService.Services.Data
 {
@@ -56,6 +57,14 @@ namespace KaderService.Services.Data
                 .HasOne(post => post.Creator)
                 .WithMany(user => user.Comments);
 
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserNumber).Metadata
+                .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
+            modelBuilder.Entity<Post>()
+                .Property(u => u.PostNumber).Metadata
+                .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
             //modelBuilder
             //    .Entity<Group>()
             //    .HasOne(@group => group.Category)
@@ -70,7 +79,7 @@ namespace KaderService.Services.Data
 
             modelBuilder
                 .Entity<RelatedPost>()
-                .HasKey(table => new { CustomerId = table.UserId, ItemId = table.PostId });
+                .HasKey(table => new { CustomerId = table.UserNumber, ItemId = table.PostNumber });
         }
 
         public DbSet<Post> Posts { get; set; }

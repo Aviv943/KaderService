@@ -9,18 +9,18 @@ namespace KaderService.Services.Models
 {
     public class RelatedPost
     {
-        public RelatedPost(string userId, string postId)
+        public RelatedPost(int userNumber, int postNumber)
         {
-            UserId = userId;
-            PostId = postId;
+            UserNumber = userNumber;
+            PostNumber = postNumber;
         }
 
         [Required]
         [DataType(DataType.Custom)]
-        public string UserId { get; set; }
+        public int UserNumber { get; set; }
 
         [Required]
         [DataType(DataType.Custom)]
-        public string PostId { get; set; }
+        public int PostNumber { get; set; }
     }
 }

@@ -18,6 +18,10 @@ namespace KaderService.Services.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string PostId { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column(Order = 1)]
+        public int PostNumber { get; set; }
+
         //Type: Request help/ Offer help/ Handover an item
         public PostType Type { get; set; }
 

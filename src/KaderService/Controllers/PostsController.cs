@@ -60,20 +60,13 @@ namespace KaderService.Controllers
             return posts;
         }
 
-        [HttpGet("{userId}/recommended")]
-        public async Task<ActionResult<IEnumerable<GetPostsResponse>>> GetRecommendedPostsAsync(string userId)
+        [HttpGet("recommended")]
+        public async Task<ActionResult<IEnumerable<PostView>>> GetRecommendedPostsAsync([FromQuery] string userId)
         {
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return BadRequest("UserId cannot be null");
-            }
+            User user = await GetRelevantUserAsync(userId);
+            IEnumerable<PostView> postsAsync = await _service.GetRecommendedPostsAsync(user);
 
-            IEnumerable<PostView> postsAsync = await _service.GetRecommendedPostsAsync(LoggedInUser);
-
-            return Ok(new GetPostsResponse
-            {
-                PostViews = postsAsync.ToList()
-            });
+            return Ok(postsAsync);
         }
 
         [HttpPut("{id}")]

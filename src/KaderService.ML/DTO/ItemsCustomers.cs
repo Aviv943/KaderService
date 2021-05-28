@@ -2,8 +2,8 @@
 {
     public class ItemsCustomers
     {
-        public string UserId { get; set; }
+        public int UserNumber { get; set; }
 
-        public string PostId { get; set; }
+        public int PostNumber { get; set; }
     }
 }

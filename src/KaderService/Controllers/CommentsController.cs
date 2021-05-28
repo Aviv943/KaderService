@@ -30,7 +30,7 @@ namespace KaderService.Controllers
         {
             if (string.IsNullOrWhiteSpace(postId))
             {
-                return BadRequest("PostId cannot be null");
+                return BadRequest("PostNumber cannot be null");
             }
 
             IEnumerable<CommentView> commentViews = await _service.GetCommentsAsync(postId, paging);

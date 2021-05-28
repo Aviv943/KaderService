@@ -209,7 +209,7 @@ namespace KaderService.Services.Services
         {
             if (!id.Equals(group.GroupId))
             {
-                throw new Exception("PostId is not equal to group.PostId");
+                throw new Exception("PostNumber is not equal to group.PostNumber");
             }
 
             _context.Entry(group).State = EntityState.Modified;

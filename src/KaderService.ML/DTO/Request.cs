@@ -6,8 +6,8 @@ namespace KaderService.ML.DTO
     {
         public List<ItemsCustomers> RelatedPostsList { get; set; }
 
-        public List<string> PostsIds { get; set; }
+        public List<int> PostsNumbers { get; set; }
 
-        public string UserId { get; set; }
+        public int UserNumbers { get; set; }
     }
 }

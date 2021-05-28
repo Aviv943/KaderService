@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace KaderService.Services.Models
@@ -13,6 +15,10 @@ namespace KaderService.Services.Models
             Comments = new List<Comment>();
             ManagerInGroups = new List<Group>();
         }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column(Order = 1)]
+        public int UserNumber { get; set; }
 
         public string FirstName { get; set; }
 

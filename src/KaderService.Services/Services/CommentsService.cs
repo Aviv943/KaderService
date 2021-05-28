@@ -53,7 +53,7 @@ namespace KaderService.Services.Services
         {
             if (!id.Equals(comment.CommentId))
             {
-                throw new Exception("PostId is not equal to comment.PostId");
+                throw new Exception("PostNumber is not equal to comment.PostNumber");
             }
 
             await _repository.UpdateCommentAsync(comment);
