@@ -12,7 +12,7 @@ namespace KaderService.ML
 {
     public class Core
     {
-        private const string TrainingDataLocation = @"D:\Compare.txt";
+        private const string TrainingDataLocation = @"C:\Compare.txt";
         public static async Task<Dictionary<int, double>> Run(Request request)
         {
             CreateFile(request.RelatedPostsList);
