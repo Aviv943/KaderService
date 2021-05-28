@@ -53,7 +53,7 @@ namespace KaderService
 
                 if (await context.Posts.CountAsync() == 0)
                 {
-                    await PostsCreator.Initialize(services, context);
+                    await PostsCreator.Initialize(services);
                 }
 
                 if (await context.Comments.CountAsync() == 0)

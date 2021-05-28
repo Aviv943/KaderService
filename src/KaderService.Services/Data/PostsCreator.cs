@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using KaderService.Services.Constants;
 using KaderService.Services.Models;
-using KaderService.Services.Models.AuthModels;
-using KaderService.Services.Services;
 using KaderService.Services.ViewModels;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace KaderService.Services.Data
 {
@@ -19,7 +11,7 @@ namespace KaderService.Services.Data
     {
         private static DataCreator _dataCreator;
 
-        public static async Task Initialize(IServiceProvider serviceProvider, KaderContext context)
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
             _dataCreator = new DataCreator(serviceProvider);
             await Create();
