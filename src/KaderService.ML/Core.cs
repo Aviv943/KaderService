@@ -61,12 +61,12 @@ namespace KaderService.ML
 
         private static void CreateFile(IEnumerable<ItemsCustomers> customersItems)
         {
-            File.Delete(@"D:\Compare.txt");
-            File.AppendAllText(@"D:\Compare.txt", $"ProductID	ProductID_Copurchased{Environment.NewLine}");
+            File.Delete(TrainingDataLocation);
+            File.AppendAllText(TrainingDataLocation, $"ProductID	ProductID_Copurchased{Environment.NewLine}");
 
             foreach (ItemsCustomers customerItem in customersItems)
             {
-                File.AppendAllText(@"D:\Compare.txt", $"{customerItem.UserNumber.GetHashCode()}	{customerItem.PostNumber.GetHashCode()}{Environment.NewLine}");
+                File.AppendAllText(TrainingDataLocation, $"{customerItem.UserNumber.GetHashCode()}	{customerItem.PostNumber.GetHashCode()}{Environment.NewLine}");
             }
         }
     }
