@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using KaderService.Services.Constants;
 using KaderService.Services.Models;
 using KaderService.Services.Models.AuthModels;
 using KaderService.Services.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,29 +26,48 @@ namespace KaderService.Services.Data
             await using var context = new KaderContext(serviceProvider.GetRequiredService<DbContextOptions<KaderContext>>());
             _dataCreator = new DataCreator(serviceProvider);
 
-            await Create(context);
+            await Create();
         }
 
-        private static async Task Create(DbContext context)
+        private static async Task Create()
         {
-            #region Create Groups
+            Directory.Delete("c:/inetpub/wwwroot/users", true);
             List<RegisterModel> users = GetData<RegisterModel>();
 
-            foreach (RegisterModel user in users)
+            foreach (RegisterModel registerUser in users)
             {
-                user.Password = "Bolila1!";
+                registerUser.Password = "Bolila1!";
+
+                User user;
 
                 try
                 {
-                    await _dataCreator.UsersService.RegisterAsync(user);
-                    Console.WriteLine($"User created '{user.Username}'");
+                    user = await _dataCreator.UsersService.RegisterAsync(registerUser);
+                    Console.WriteLine($"User created '{registerUser.Username}'");
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine($"User could not be created, ex: '{e.Message}'");
+                    continue;
+                }
+
+                try
+                {
+                    using var client = new WebClient();
+                    byte[] a = client.DownloadData(new Uri("https://thispersondoesnotexist.com/image"));
+                    await using Stream stream1 = new MemoryStream(a);
+                    var file = new FormFile(stream1, 0, stream1.Length, null!, "Image.jpg")
+                    {
+                        Headers = new HeaderDictionary(),
+                    };
+
+                    await _dataCreator.UsersService.UpdateUserImageAsync(user, file);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Could not upload image to user {user.Id}, ex: '{e.Message}'");
                 }
             }
-            #endregion
         }
 
         public static List<T> GetData<T>()

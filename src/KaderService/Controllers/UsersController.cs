@@ -37,9 +37,9 @@ namespace KaderService.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterAsync(RegisterModel model)
         {
-            bool isRegistered = await _service.RegisterAsync(model);
+            User registeredUser = await _service.RegisterAsync(model);
 
-            if (isRegistered)
+            if (registeredUser != null)
             {
                 return Ok(new Response
                 {
@@ -67,7 +67,7 @@ namespace KaderService.Controllers
             return Ok(await _service.GetAdminsAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
         [Authorize]
         public async Task<IActionResult> GetUserAsync(string id)
         {
@@ -109,9 +109,9 @@ namespace KaderService.Controllers
 
         [HttpPost("image")]
         [Authorize]
-        public async Task<IActionResult> UpdateUserImageAsync([FromQuery] string id)
+        public async Task<IActionResult> UpdateUserImageAsync([FromQuery] string userId)
         {
-            User user = await GetRelevantUserAsync(id);
+            User user = await GetRelevantUserAsync(userId);
             IFormFile file = Request.Form.Files.First();
             string userImage = await _service.UpdateUserImageAsync(user, file);
 

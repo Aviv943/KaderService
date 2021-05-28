@@ -72,9 +72,9 @@ namespace KaderService.Services.Services
             };
         }
 
-        public async Task<bool> RegisterAsync(RegisterModel registerModel)
+        public async Task<User> RegisterAsync(RegisterModel registerModel)
         {
-            var userExists = await _userManager.FindByNameAsync(registerModel.Username);
+            User userExists = await _userManager.FindByNameAsync(registerModel.Username);
 
             if (userExists != null)
             {
@@ -93,7 +93,12 @@ namespace KaderService.Services.Services
 
             IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
 
-            return result.Succeeded;
+            if (result.Succeeded)
+            {
+                return await _userManager.FindByEmailAsync(user.Email);
+            }
+
+            throw new Exception($"User could not be created, Error: {result.Errors.ToList()[0].Description}");
         }
 
 
