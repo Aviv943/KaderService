@@ -27,14 +27,14 @@ namespace KaderService.Services.Data
 
         private static async Task Create()
         {
-            #region Create Groups
-
             for (var i = 0; i < 5; i++)
             {
                 List<Post> posts = GetData<Post>();
 
                 foreach (Post post in posts)
                 {
+                    post.ImagesUri = new List<string>();
+                    post.Created = DateTime.Now;;
                     User user = await _dataCreator.LoginRandomUserAsync();
                     GroupView group = await _dataCreator.GetRandomGroupAsync(user);
 
@@ -49,7 +49,6 @@ namespace KaderService.Services.Data
                     }
                 }
             }
-            #endregion
         }
 
         public static List<T> GetData<T>()
@@ -61,8 +60,6 @@ namespace KaderService.Services.Data
                     Title = "Technology",
                     Description = "Looking for Technology Please",
                     Address = "נירים 3, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -70,8 +67,6 @@ namespace KaderService.Services.Data
                     Title = "Apples",
                     Description = "Looking for apples Please",
                     Address = "הרצל 14, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -79,8 +74,6 @@ namespace KaderService.Services.Data
                     Title = "Melons",
                     Description = "Looking for melons Please",
                     Address = "דיזינגוף 14, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -88,8 +81,6 @@ namespace KaderService.Services.Data
                     Title = "Garlic",
                     Description = "Looking for garlic Please",
                     Address = "אלי כהן 1, חולון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -97,8 +88,6 @@ namespace KaderService.Services.Data
                     Title = "Ketchup",
                     Description = "Looking for ketchup Please",
                     Address = "הרצל 14, בת ים",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -106,8 +95,6 @@ namespace KaderService.Services.Data
                     Title = "Fish",
                     Description = "Looking for Fish Please",
                     Address = "דיזינגוף 5, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -115,8 +102,6 @@ namespace KaderService.Services.Data
                     Title = "Milk",
                     Description = "Looking for Milk Please",
                     Address = "בית הערבה 6, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -124,8 +109,6 @@ namespace KaderService.Services.Data
                     Title = "Cheese",
                     Description = "Looking for Cheese Please",
                     Address = "אושה 5, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -133,8 +116,6 @@ namespace KaderService.Services.Data
                     Title = "Eggs",
                     Description = "Looking for Eggs Please",
                     Address = "הרצל 14, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -142,8 +123,6 @@ namespace KaderService.Services.Data
                     Title = "BasketBall",
                     Description = "Looking for BasketBall Please",
                     Address = "שונית 6, רמלה",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -151,8 +130,6 @@ namespace KaderService.Services.Data
                     Title = "Jump Ropes",
                     Description = "Looking for Jump Ropes Please",
                     Address = "הרצל 14, ירושלים",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -160,8 +137,6 @@ namespace KaderService.Services.Data
                     Title = "SoftBalls",
                     Description = "Looking for SoftBalls Please",
                     Address = "אלי כהן 14, חולון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -169,8 +144,6 @@ namespace KaderService.Services.Data
                     Title = "Bats",
                     Description = "Looking for Bats Please",
                     Address = "הרצל 2, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -178,8 +151,6 @@ namespace KaderService.Services.Data
                     Title = "FootBalls",
                     Description = "Looking for FootBalls Please",
                     Address = "שדה נחום 2, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -187,8 +158,6 @@ namespace KaderService.Services.Data
                     Title = "Hockey Sticks",
                     Description = "Looking for Hockey Sticks Please",
                     Address = "העצמאות 2, אשדוד",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -196,8 +165,6 @@ namespace KaderService.Services.Data
                     Title = "Hula Hoops",
                     Description = "Looking for Hula Hoops Please",
                     Address = "העצמאות 4, אשדוד",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -205,8 +172,6 @@ namespace KaderService.Services.Data
                     Title = "Gloves",
                     Description = "Looking for Gloves Please",
                     Address = "הרצל 10, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -214,8 +179,6 @@ namespace KaderService.Services.Data
                     Title = "Harp",
                     Description = "Looking for Harp Please",
                     Address = "הרצל 8, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -223,8 +186,6 @@ namespace KaderService.Services.Data
                     Title = "Piano",
                     Description = "Looking for Piano Please",
                     Address = "העצמאות 4, אשדוד",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -232,8 +193,6 @@ namespace KaderService.Services.Data
                     Title = "Cello",
                     Description = "Looking for Cello Please",
                     Address = "דיזינגוף 8, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -241,8 +200,6 @@ namespace KaderService.Services.Data
                     Title = "Bass drum",
                     Description = "Looking for Bass drum Please",
                     Address = "נגבה 20, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -250,8 +207,6 @@ namespace KaderService.Services.Data
                     Title = "Bass Guitar",
                     Description = "Looking for Bass Guitar Please",
                     Address = "נגבה 18, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -259,8 +214,6 @@ namespace KaderService.Services.Data
                     Title = "Guitar",
                     Description = "Looking for Guitar Please",
                     Address = "נגבה 10, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -268,8 +221,6 @@ namespace KaderService.Services.Data
                     Title = "Harmonica",
                     Description = "Looking for Harmonica Please",
                     Address = "שדה ורבורג 16, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -277,8 +228,6 @@ namespace KaderService.Services.Data
                     Title = "Bell",
                     Description = "Looking for Bell Please",
                     Address = "עמיר 7, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -286,8 +235,6 @@ namespace KaderService.Services.Data
                     Title = "Tuba",
                     Description = "Looking for Tuba Please",
                     Address = "עמיר 5, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -295,8 +242,6 @@ namespace KaderService.Services.Data
                     Title = "Microphone",
                     Description = "Looking for Microphone Please",
                     Address = "העצמאות 22, אשדוד",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -304,8 +249,6 @@ namespace KaderService.Services.Data
                     Title = "Mouse",
                     Description = "Looking for Mouse Please",
                     Address = "הרצל 9, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -313,8 +256,6 @@ namespace KaderService.Services.Data
                     Title = "HeadPhones",
                     Description = "Looking for HeadPhones Please",
                     Address = "הרצל 8, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -322,8 +263,6 @@ namespace KaderService.Services.Data
                     Title = "USB Stick",
                     Description = "Looking for USB Stick Please",
                     Address = "שדה נחום 10, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -331,8 +270,6 @@ namespace KaderService.Services.Data
                     Title = "Router",
                     Description = "Looking for Router Please",
                     Address = "כפר חרוב 6, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -340,8 +277,6 @@ namespace KaderService.Services.Data
                     Title = "Laptop",
                     Description = "Looking for Laptop Please",
                     Address = "כפר חרוב 6, ראשון לציון",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 },
                 new()
                 {
@@ -349,8 +284,6 @@ namespace KaderService.Services.Data
                     Title = "Web cam",
                     Description = "Looking for Web cam Please",
                     Address = "הרצל 4, תל אביב",
-                    Created = DateTime.Now,
-                    ImagesUri = new List<string>()
                 }
             };
 
