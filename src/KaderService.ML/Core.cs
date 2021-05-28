@@ -12,7 +12,8 @@ namespace KaderService.ML
 {
     public class Core
     {
-        private const string TrainingDataLocation = @"C:\Compare.txt";
+        private static readonly string TrainingDataLocation = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Compare.txt";
+
         public static async Task<Dictionary<int, double>> Run(Request request)
         {
             CreateFile(request.RelatedPostsList);
