@@ -31,7 +31,15 @@ namespace KaderService.Services.Data
 
         private static async Task Create()
         {
-            Directory.Delete("c:/inetpub/wwwroot/users", true);
+            try
+            {
+                Directory.Delete("c:/inetpub/wwwroot/users", true);
+            }
+            catch (Exception)
+            {
+                Directory.CreateDirectory("c:/inetpub/wwwroot/users");
+            }
+
             List<RegisterModel> users = GetData<RegisterModel>();
 
             foreach (RegisterModel registerUser in users)

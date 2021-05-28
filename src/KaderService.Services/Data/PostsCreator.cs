@@ -18,12 +18,10 @@ namespace KaderService.Services.Data
     public class PostsCreator
     {
         private static DataCreator _dataCreator;
-        private static KaderContext _context;
 
         public static async Task Initialize(IServiceProvider serviceProvider, KaderContext context)
         {
             _dataCreator = new DataCreator(serviceProvider);
-            _context = context;
             await Create();
         }
 

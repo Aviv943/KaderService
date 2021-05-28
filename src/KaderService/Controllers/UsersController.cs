@@ -69,9 +69,9 @@ namespace KaderService.Controllers
 
         [HttpGet("{userId}")]
         [Authorize]
-        public async Task<IActionResult> GetUserAsync(string id)
+        public async Task<IActionResult> GetUserAsync(string userId)
         {
-            return Ok(await _service.GetUserViewAsync(id));
+            return Ok(await _service.GetUserViewAsync(userId));
         }
 
         [HttpPut("role/{userId}")]

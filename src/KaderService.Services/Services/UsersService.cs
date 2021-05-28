@@ -126,34 +126,6 @@ namespace KaderService.Services.Services
                 throw new Exception($"User is not exist by id '{userId}'");
             }
 
-            //List<GroupView> managersGroupViews = user.ManagerInGroups.Select(group => new GroupView
-            //{
-            //    Name = group.Name,
-            //    Category = group.Category,
-            //    Created = group.Created,
-            //    Description = group.Description,
-            //    GroupId = group.GroupId,
-            //    GroupPrivacy = group.GroupPrivacy,
-            //    Address = group.Address,
-            //    ManagersCount = group.Managers.Count,
-            //    MembersCount = group.Members.Count,
-            //    PostsCount = group.Posts.Count
-            //}).ToList();
-
-            //List<GroupView> membersGroupViews = user.MemberInGroups.Select(group => new GroupView
-            //{
-            //    Name = group.Name,
-            //    Category = group.Category,
-            //    Created = group.Created,
-            //    Description = group.Description,
-            //    GroupId = group.GroupId,
-            //    GroupPrivacy = group.GroupPrivacy,
-            //    Address = group.Address,
-            //    ManagersCount = group.Managers.Count,
-            //    MembersCount = group.Members.Count,
-            //    PostsCount = group.Posts.Count
-            //}).ToList();
-
             return new UserView
             {
                 UserName = user.UserName,
