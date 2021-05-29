@@ -36,6 +36,7 @@ namespace KaderService.Services.Repositories
             return await _context.Comments
                 .Include(c => c.Creator)
                 .Include(c => c.Post)
+                .OrderBy(c => c.Created)
                 .FirstOrDefaultAsync(c => c.CommentId == id);
         }
 
