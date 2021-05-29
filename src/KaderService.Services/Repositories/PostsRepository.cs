@@ -38,7 +38,7 @@ namespace KaderService.Services.Repositories
         public async Task<Post> GetPostAsync(string id)
         {
             return await _context.Posts
-                .Include(p => p.Comments)
+                .Include(p => p.Comments.OrderBy(c => c.Created))
                 .ThenInclude(c => c.Creator)
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
