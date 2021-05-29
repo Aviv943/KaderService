@@ -27,7 +27,7 @@ namespace KaderService.Services.Services
 
         public async Task<string> PostCategoryImageAsync(string name, IFormFile file)
         {
-            Category category = await _repository.GetCategory(name);
+            Category category = await _repository.GetCategoryAsync(name);
 
             if (category == null)
             {
@@ -56,7 +56,7 @@ namespace KaderService.Services.Services
 
         public async Task<Category> GetCategoryAsync(string name)
         {
-            return await _repository.GetCategory(name);
+            return await _repository.GetCategoryAsync(name);
         }
 
         public async Task UpdateCategoryAsync(Category category)

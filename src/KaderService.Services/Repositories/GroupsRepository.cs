@@ -22,10 +22,7 @@ namespace KaderService.Services.Repositories
         public async Task<IEnumerable<Group>> GetGroupsByUserAsync(User user)
         {
             return await _context.Groups
-                .Where(g =>
-                    g.Members.Contains(user) ||
-                    g.GroupPrivacy == GroupPrivacy.Public ||
-                    g.GroupPrivacy == GroupPrivacy.Private)
+                .Where(g => g.Members.Contains(user))
                 .Include(g => g.Posts)
                 .Include(g => g.Members)
                 .Include(g => g.Managers)

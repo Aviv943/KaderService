@@ -110,7 +110,7 @@ namespace KaderService.Services.Data
 
             if (!postsList.Any())
             {
-                throw new NullReferenceException("Posts is null");
+                throw new NullReferenceException("Post is null");
             }
 
             var random = new Random();

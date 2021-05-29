@@ -18,9 +18,9 @@ namespace KaderService.Services.Repositories
             _context = context;
         }
 
-        public async Task<Category> GetCategory(string name)
+        public async Task<Category> GetCategoryAsync(string name)
         {
-            return await _context.Categories.FindAsync(name);
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()

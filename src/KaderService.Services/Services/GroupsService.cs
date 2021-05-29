@@ -10,6 +10,7 @@ using KaderService.Services.Constants;
 using KaderService.Services.Repositories;
 using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace KaderService.Services.Services
 {
@@ -234,11 +235,11 @@ namespace KaderService.Services.Services
             return _context.Groups.Any(e => e.GroupId.Equals(id));
         }
 
-        public async Task CreateGroupAsync(Group group, User user)
+        public async Task<string> CreateGroupAsync(Group group, User user)
         {
             group.Location = await _commonService.GetLocationAsync(group.Address);
-            await _context.Groups.AddAsync(group);
-
+            EntityEntry<Group> entry = await _context.Groups.AddAsync(group);
+            
             try
             {
                 await _context.SaveChangesAsync();
@@ -250,6 +251,8 @@ namespace KaderService.Services.Services
             }
 
             await AddUserRoleToGroupMemberAsync(group.GroupId, user, "Manager");
+            
+            return entry.Entity.GroupId;
         }
 
         public async Task DeleteGroupAsync(string id)
@@ -307,7 +310,11 @@ namespace KaderService.Services.Services
             {
                 case "Member":
                     {
-                        group.Members.Add(user);
+                        if (!group.Members.Contains(user))
+                        {
+                            group.Members.Add(user);
+                        }
+
                         break;
                     }
                 case "Manager":

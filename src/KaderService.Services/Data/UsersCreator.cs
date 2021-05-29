@@ -62,8 +62,8 @@ namespace KaderService.Services.Data
                 try
                 {
                     using var client = new WebClient();
-                    byte[] a = client.DownloadData(new Uri("https://thispersondoesnotexist.com/image"));
-                    await using Stream stream1 = new MemoryStream(a);
+                    byte[] image = client.DownloadData(new Uri("https://thispersondoesnotexist.com/image"));
+                    await using Stream stream1 = new MemoryStream(image);
                     var file = new FormFile(stream1, 0, stream1.Length, null!, "Image.jpg")
                     {
                         Headers = new HeaderDictionary(),

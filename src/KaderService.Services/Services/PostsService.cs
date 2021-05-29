@@ -11,6 +11,7 @@ using KaderService.Services.Repositories;
 using KaderService.Services.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace KaderService.Services.Services
 {
@@ -139,15 +140,17 @@ namespace KaderService.Services.Services
             }
         }
 
-        public async Task CreatePostAsync(Post post, User user, string groupId)
+        public async Task<string> CreatePostAsync(Post post, User user, string groupId)
         {
             post.IsActive = true;
             post.Creator = user;
             post.Group = await _context.Groups.FindAsync(groupId);
             post.Location = await _commonService.GetLocationAsync(post.Address);
 
-            await _context.Posts.AddAsync(post);
+            EntityEntry<Post> entry =await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
+
+            return entry.Entity.PostId;
         }
 
         public async Task DeletePostAsync(string postId)
