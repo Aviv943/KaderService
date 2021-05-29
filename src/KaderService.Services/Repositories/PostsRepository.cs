@@ -27,7 +27,7 @@ namespace KaderService.Services.Repositories
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .ThenInclude(g => g.Category)
-                .Include(p => p.Comments)
+                .Include(p => p.Comments.OrderBy(c => c.Created))
                 .ThenInclude(c => c.Creator)
                 .OrderByDescending(p => p.Created)
                 .Skip((pagingParameters.PageNumber -1) * pagingParameters.PageSize)
