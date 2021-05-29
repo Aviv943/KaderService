@@ -64,9 +64,9 @@ namespace KaderService.Controllers
         public async Task<ActionResult<IEnumerable<PostView>>> GetRecommendedPostsAsync([FromQuery] string userId)
         {
             User user = await GetRelevantUserAsync(userId);
-            IEnumerable<PostView> postsAsync = await _service.GetRecommendedPostsAsync(user);
+            IEnumerable<PostView> postViews = await _service.GetRecommendedPostsAsync(user);
 
-            return Ok(postsAsync);
+            return Ok(postViews);
         }
 
         [HttpPut("{id}")]

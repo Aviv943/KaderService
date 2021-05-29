@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KaderService.ML;
 using KaderService.ML.DTO;
 using KaderService.Services.Constants;
 using KaderService.Services.Data;
@@ -92,13 +93,19 @@ namespace KaderService.Services.Services
                 PostsNumbers = _context.Posts.Select(post => post.PostNumber).ToList(),
             };
 
-            Dictionary<int, double> postsScore = await ML.Core.Run(mlRequest);
-            IEnumerable<KeyValuePair<int, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
-            IQueryable<Post> posts = _repository.GetAllPosts();
-            List<Post> recommendedPost = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostNumber select post).ToList();
-            List<PostView> postsViews = ConvertToPostViews(recommendedPost);
-
-            return postsViews;
+            try
+            {
+                Dictionary<int, double> postsScore = await Core.Run(mlRequest);
+                IEnumerable<KeyValuePair<int, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
+                IQueryable<Post> posts = _repository.GetAllPosts();
+                List<Post> recommendedPost = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostNumber select post).ToList();
+                
+                return ConvertToPostViews(recommendedPost);
+            }
+            catch
+            {
+                return new List<PostView>();
+            }
         }
 
         public async Task<Post> GetPostAsync(string id, User user)

@@ -46,14 +46,12 @@ namespace KaderService
                     await UsersCreator.Initialize(services);
                 }
 
-                var dataCreator = new DataCreator(services);
-                var dataSeeder = new DataSeeder(dataCreator);
-                await dataSeeder.CreateData();
-
-                //if (await context.Groups.CountAsync() == 0)
-                //{
-                //    await GroupsCreator.Initialize(services);
-                //}
+                if (await context.Groups.CountAsync() == 0)
+                {
+                    var dataCreator = new DataCreator(services);
+                    var dataSeeder = new DataSeeder(dataCreator);
+                    await dataSeeder.CreateData();
+                }
 
                 //if (await context.Posts.CountAsync() == 0)
                 //{
