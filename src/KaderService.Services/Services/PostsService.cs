@@ -39,7 +39,7 @@ namespace KaderService.Services.Services
             return postsAsync;
         }
 
-        private static List<PostView> ConvertToPostViews(List<Post> posts)
+        private static List<PostView> ConvertToPostViews(IEnumerable<Post> posts)
         {
             List<PostView> postsAsync = posts.Select(p => new PostView
             {
@@ -79,6 +79,7 @@ namespace KaderService.Services.Services
                     }
                 }))
             }).ToList();
+
             return postsAsync;
         }
 
@@ -149,9 +150,15 @@ namespace KaderService.Services.Services
 
         public async Task<string> CreatePostAsync(Post post, User user, string groupId)
         {
+            post.Group = await _context.Groups.FindAsync(groupId);
+
+            if (post.Group == null)
+            {
+                throw new Exception($"GroupID '{groupId}' could NOT be found");
+            }
+
             post.IsActive = true;
             post.Creator = user;
-            post.Group = await _context.Groups.FindAsync(groupId);
             post.Location = await _commonService.GetLocationAsync(post.Address);
 
             EntityEntry<Post> entry =await _context.Posts.AddAsync(post);
