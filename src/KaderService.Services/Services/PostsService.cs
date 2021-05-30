@@ -156,13 +156,14 @@ namespace KaderService.Services.Services
 
             EntityEntry<Post> entry =await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
+            await _repository.AddRelatedPostAsync(user, post, new RelatedPost(user.UserNumber, post.PostNumber));
 
             return entry.Entity.PostId;
         }
 
         public async Task DeletePostAsync(string postId)
         {
-            var post = await _context.Posts.FindAsync(postId);
+            Post post = await _context.Posts.FindAsync(postId);
 
             if (post == null)
             {
@@ -210,7 +211,7 @@ namespace KaderService.Services.Services
             await file.CopyToAsync(fileStream);
             fileStream.Close();
 
-            post.ImagesUri = new List<string>() { $"/{serverFilePath}/{fileName}" };
+            post.ImagesUri = new List<string> { $"/{serverFilePath}/{fileName}" };
             _context.Update(post);
             await _context.SaveChangesAsync();
 

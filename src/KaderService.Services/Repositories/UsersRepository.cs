@@ -21,10 +21,11 @@ namespace KaderService.Services.Repositories
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _context.Users
-                .Include(u => u.MemberInGroups)
-                .ThenInclude(g => g.Members)
-                .Include(u => u.ManagerInGroups)
-                .ThenInclude(u => u.Managers).ToListAsync();
+                //.Include(u => u.MemberInGroups)
+                //.ThenInclude(g => g.Members)
+                //.Include(u => u.ManagerInGroups)
+                //.ThenInclude(u => u.Managers)
+                .ToListAsync();
         }
 
         public async Task<User> GetUserAsync(string id)

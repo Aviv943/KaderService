@@ -73,6 +73,7 @@ namespace KaderService.Services.Services
             comment.Created = DateTime.Now;
 
             await _repository.CreateCommentAsync(comment);
+            await _postsRepository.AddRelatedPostAsync(user, post, new RelatedPost(user.UserNumber, post.PostNumber));
         }
 
         public async Task DeleteCommentAsync(string id)

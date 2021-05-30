@@ -23,7 +23,7 @@ namespace KaderService.Services.Repositories
         public async Task<List<Post>> GetPostsAsync(User user, PagingParameters pagingParameters)
         {
             return await _context.Posts
-                .Where(post => post.Group.Members.Contains(user))
+                .Where(post => post.Creator == user)
                 .Include(p => p.Creator)
                 .Include(p => p.Group)
                 .ThenInclude(g => g.Category)

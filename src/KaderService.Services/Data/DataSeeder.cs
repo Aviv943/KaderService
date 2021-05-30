@@ -52,24 +52,7 @@ namespace KaderService.Services.Data
                     user = await _dataCreator.LoginRandomUserAsync();
                     await _dataCreator.GroupsService.AddUserRoleToGroupMemberAsync(groupId, user, "Member");
                     string postId = await _dataCreator.PostsService.CreatePostAsync(post, user, groupId);
-
-                    try
-                    {
-                        string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                        string filePath = Path.Combine(executableLocation, "Data\\images", requestedPost.ImagesUri.First());
-                        await using Stream ms = new FileStream(filePath, FileMode.Open);
-
-                        var file = new FormFile(ms, 0, ms.Length, null!, "Image.jpg")
-                        {
-                            Headers = new HeaderDictionary(),
-                        };
-
-                        await _dataCreator.PostsService.CreatePostImageAsync(postId, user, file);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Could not upload image to user {user.Id}, ex: '{e.Message}'");
-                    }
+                    await UploadPostImageAsync(requestedPost, postId, user);
 
                     foreach (Comment requestedComment in requestedPost.Comments)
                     {
@@ -78,6 +61,27 @@ namespace KaderService.Services.Data
                         await _dataCreator.CommentsService.CreateCommentAsync(requestedComment, user, postId);
                     }
                 }
+            }
+        }
+
+        private async Task UploadPostImageAsync(Post requestedPost, string postId, User user)
+        {
+            try
+            {
+                string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string filePath = Path.Combine(executableLocation, "Data\\images", requestedPost.ImagesUri.First());
+                await using Stream ms = new FileStream(filePath, FileMode.Open);
+
+                var file = new FormFile(ms, 0, ms.Length, null!, "Image.jpg")
+                {
+                    Headers = new HeaderDictionary(),
+                };
+
+                await _dataCreator.PostsService.CreatePostImageAsync(postId, user, file);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Could not upload image to user {user.Id}, ex: '{e.Message}'");
             }
         }
 
@@ -250,6 +254,63 @@ namespace KaderService.Services.Data
                                 new() { Content = "Its only on mondays?? " },
                                 new() { Content = "What is the price for two subscribers?" },
                                 new() { Content = "What is the price for a month?" },
+                            }
+                        },
+                    },
+                },
+                #endregion
+
+                #region Cars
+                new Group
+                {
+                    Name = "Pishpeshuk Car",
+                    Description = "Private, commercial, trucks, jeeps, motorcycles, scooters, motorcycles, ATVs, collectibles and car accessories",
+                    GroupPrivacy = GroupPrivacy.Public,
+                    Address = "בית הערבה 8, ראשון לציון",
+                    Category = await _dataCreator.CategoriesService.GetCategoryAsync("Cars"),
+                    Posts = new List<Post>
+                    {
+                        new()
+                        {
+                            Type = PostType.Request,
+                            Title = "Looking for someone with a battery.",
+                            Description = "Super Urgent",
+                            Address = "בית הערבה 6, ראשון לציון",
+                            ImagesUri = new List<string> { "carbattery.jpg" },
+                            Comments = new List<Comment>
+                            {
+                                new() { Content = "Hello, I'm another half hour in your area if that's relevant" },
+                                new() { Content = "Call me, I'm on the way, 055-3143948" },
+
+                            }
+                        },
+                        new()
+                        {
+                            Type = PostType.Handover,
+                            Title = "Hending over a New car mirrors",
+                            Description = "New car mirrors for free",
+                            Address = "בית הערבה 6, ראשון לציון",
+                            ImagesUri = new List<string> { "carmirrors.jpg" },
+                            Comments = new List<Comment>
+                            {
+                                new() { Content = "I would love to have them please" },
+                                new() { Content = "Is it possible to arrive in the next hour?" },
+                                new() { Content = "Can I come now?" },
+
+                            }
+                        },
+                        new()
+                        {
+                            Type = PostType.Offer,
+                            Title = "New steering wheel covers for a seat cover",
+                            Description = "I have a new steering wheel cover that I do not need, I would be happy to replace in exchange for a seat cover",
+                            Address = "בית הערבה 6, ראשון לציון",
+                            ImagesUri = new List<string> { "carsteeringwheelcovers.jpg" },
+                            Comments = new List<Comment>
+                            {
+                                new() { Content = "Call me and we'll talk about it - 0543948573" },
+                                new() { Content = "still relevant?" },
+                                new() { Content = "Coming to Ashdod?" },
                             }
                         },
                     },
