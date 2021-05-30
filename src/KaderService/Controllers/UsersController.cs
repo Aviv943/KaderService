@@ -67,6 +67,12 @@ namespace KaderService.Controllers
             return Ok(await _service.GetAdminsAsync());
         }
 
+        [HttpGet("regular")]
+        public async Task<IActionResult> GetRegularUsersAsync()
+        {
+            return Ok(await _service.GetRegularUsersAsync());
+        }
+
         [HttpGet("{userId}")]
         [Authorize]
         public async Task<IActionResult> GetUserAsync(string userId)

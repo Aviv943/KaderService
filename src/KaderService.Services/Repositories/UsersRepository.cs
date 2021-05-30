@@ -44,5 +44,14 @@ namespace KaderService.Services.Repositories
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<User>> GetRegularUsersOnlyAsync(IList<User> admins)
+        {
+            List<User> regularUsers = await _context.Users
+                .Where(x => !admins.Contains(x))
+                .ToListAsync();
+            
+            return regularUsers;
+        }
     }
 }

@@ -112,6 +112,14 @@ namespace KaderService.Services.Services
             return await _userManager.GetUsersInRoleAsync("Admin");
         }
 
+        public async Task<IList<User>> GetRegularUsersAsync()
+        {
+            IList<User> admins = await _userManager.GetUsersInRoleAsync("Admin");
+            List<User> regularUsers = await _repository.GetRegularUsersOnlyAsync(admins);
+
+            return regularUsers;
+        }
+
         private async Task<User> GetUserAsync(string id)
         {
             return await _repository.GetUserAsync(id);

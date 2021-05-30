@@ -41,9 +41,9 @@ namespace KaderService.Services.Data
             UsersService = serviceProvider.GetService<UsersService>();
         }
 
-        public async Task<User> LoginRandomUserAsync()
+        public async Task<User> LoginRandomUserAsync(UsersTypes usersTypes)
         {
-            User user = await GetRandomUserAsync(false);
+            User user = await GetRandomUserAsync(usersTypes);
             TokenInfo tokenInfo = await UsersService.LoginAsync(new LoginModel
             {
                 Username = user.UserName,
@@ -55,18 +55,14 @@ namespace KaderService.Services.Data
             return user;
         }
 
-        public async Task<User> GetRandomUserAsync(bool adminsOnly)
+        public async Task<User> GetRandomUserAsync(UsersTypes usersTypes)
         {
-            IEnumerable<User> users;
-
-            if (adminsOnly)
+            IEnumerable<User> users = usersTypes switch
             {
-                users = await UsersService.GetAdminsAsync();
-            }
-            else
-            {
-                users = await UsersService.GetUsersAsync();
-            }
+                UsersTypes.AdminsOnly => await UsersService.GetAdminsAsync(),
+                UsersTypes.RegularUsersOnly => await UsersService.GetRegularUsersAsync(),
+                _ => await UsersService.GetUsersAsync()
+            };
 
             List<User> usersList = users.ToList();
 

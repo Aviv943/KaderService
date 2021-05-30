@@ -27,7 +27,7 @@ namespace KaderService.Services.Data
         private static async Task Create()
         {
             #region Create Groups
-            await _dataCreator.LoginRandomUserAsync();
+            await _dataCreator.LoginRandomUserAsync(UsersTypes.AdminsOnly);
             List<Category> categories = GetData<Category>();
 
             foreach (Category category in categories)

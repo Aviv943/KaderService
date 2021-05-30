@@ -34,7 +34,7 @@ namespace KaderService.Services.Data
                     CategoryId = requestedGroup.Category.Id
                 };
 
-                User user = await _dataCreator.LoginRandomUserAsync();
+                User user = await _dataCreator.LoginRandomUserAsync(UsersTypes.RegularUsersOnly);
                 string groupId = await _dataCreator.GroupsService.CreateGroupAsync(group, user);
 
                 foreach (Post requestedPost in requestedGroup.Posts)
@@ -47,14 +47,14 @@ namespace KaderService.Services.Data
                         Address = requestedPost.Address
                     };
 
-                    user = await _dataCreator.LoginRandomUserAsync();
+                    user = await _dataCreator.LoginRandomUserAsync(UsersTypes.RegularUsersOnly);
                     await _dataCreator.GroupsService.AddUserRoleToGroupMemberAsync(groupId, user, "Member");
                     string postId = await _dataCreator.PostsService.CreatePostAsync(post, user, groupId);
                     await UploadPostImageAsync(requestedPost, postId, user);
 
                     foreach (Comment requestedComment in requestedPost.Comments)
                     {
-                        user = await _dataCreator.LoginRandomUserAsync();
+                        user = await _dataCreator.LoginRandomUserAsync(UsersTypes.RegularUsersOnly);
                         await _dataCreator.GroupsService.AddUserRoleToGroupMemberAsync(groupId, user, "Member");
                         await _dataCreator.CommentsService.CreateCommentAsync(requestedComment, user, postId);
                     }
