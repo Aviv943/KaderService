@@ -48,7 +48,8 @@ namespace KaderService.Services.Data
                     FirstName = "Yoni",
                     LastName = "Gross",
                     Rating = 1.3,
-                    NumberOfRatings = 100,
+                    NumberOfRatings = 7,
+                    PhoneNumber = "+972-559-555-326"
                 },
                 new()
                 {
@@ -56,8 +57,9 @@ namespace KaderService.Services.Data
                     Email = "matan18061806@gmail.com",
                     FirstName = "Matan",
                     LastName = "Hassin",
-                    Rating = 1.9,
+                    Rating = 0.2,
                     NumberOfRatings = 1,
+                    PhoneNumber = "+972-505-553-722"
                 },
                 new()
                 {
@@ -66,7 +68,8 @@ namespace KaderService.Services.Data
                     FirstName = "Aviv",
                     LastName = "Miranda",
                     Rating = 4.9,
-                    NumberOfRatings = 2000,
+                    NumberOfRatings = 11,
+                    PhoneNumber = "+972-557-055-598"
                 },
                 new()
                 {
@@ -75,7 +78,8 @@ namespace KaderService.Services.Data
                     FirstName = "Diana",
                     LastName = "Isakov",
                     Rating = 4.2,
-                    NumberOfRatings = 250,
+                    NumberOfRatings = 6,
+                    PhoneNumber = "+972-552-255-556"
                 }
             };
 

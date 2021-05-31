@@ -16,6 +16,8 @@ namespace KaderService.Services.ViewModels
 
         public string LastName { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public double Rating { get; set; }
 
         public int NumberOfRating { get; set; }

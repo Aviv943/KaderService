@@ -23,7 +23,7 @@ namespace KaderService.Services.Models
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-        
+
         public double Rating { get; set; }
 
         public int NumberOfRatings { get; set; }

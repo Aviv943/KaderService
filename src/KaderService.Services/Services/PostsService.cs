@@ -51,7 +51,8 @@ namespace KaderService.Services.Services
                     LastName = p.Creator.LastName,
                     Rating = p.Creator.Rating,
                     NumberOfRating = p.Creator.NumberOfRatings,
-                    ImageUri = p.Creator.ImageUri
+                    ImageUri = p.Creator.ImageUri,
+                    PhoneNumber = p.Creator.PhoneNumber
                 },
                 Address = p.Address,
                 Created = p.Created,
@@ -75,7 +76,8 @@ namespace KaderService.Services.Services
                         UserId = comment.Creator.Id,
                         FirstName = comment.Creator.FirstName,
                         LastName = comment.Creator.LastName,
-                        ImageUri = comment.Creator.ImageUri
+                        ImageUri = comment.Creator.ImageUri,
+                        PhoneNumber = comment.Creator.PhoneNumber
                     }
                 }))
             }).ToList();

@@ -19,5 +19,8 @@ namespace KaderService.Services.Models.AuthModels
 
         [Required(ErrorMessage = "Last Name is required")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Phone Number is required")]
+        public string PhoneNumber { get; set; }
     }
 }

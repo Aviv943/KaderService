@@ -88,7 +88,8 @@ namespace KaderService.Services.Services
                 UserName = registerModel.Username,
                 Created = DateTime.Now,
                 FirstName = registerModel.FirstName,
-                LastName = registerModel.LastName
+                LastName = registerModel.LastName,
+                PhoneNumber = registerModel.PhoneNumber
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
@@ -139,6 +140,7 @@ namespace KaderService.Services.Services
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
                 ImageUri = user.ImageUri,
                 NumberOfRating = user.NumberOfRatings,
                 Rating = user.Rating,

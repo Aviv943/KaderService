@@ -134,7 +134,8 @@ namespace KaderService.Services.Services
                         UserId = comment.Creator.Id,
                         FirstName = comment.Creator.FirstName,
                         LastName = comment.Creator.LastName,
-                        ImageUri = comment.Creator.ImageUri
+                        ImageUri = comment.Creator.ImageUri,
+                        PhoneNumber = comment.Creator.PhoneNumber
                     },
                     CommentId = comment.CommentId,
                     Content = comment.Content,
@@ -148,7 +149,8 @@ namespace KaderService.Services.Services
                         UserId = post.Creator.Id,
                         FirstName = post.Creator.FirstName,
                         LastName = post.Creator.LastName,
-                        ImageUri = post.Creator.ImageUri
+                        ImageUri = post.Creator.ImageUri,
+                        PhoneNumber = post.Creator.PhoneNumber
                     },
                     PostId = post.PostId,
                     Comments = comments,
@@ -169,7 +171,8 @@ namespace KaderService.Services.Services
                 ImageUri = member.ImageUri,
                 UserId = member.Id,
                 Rating = member.Rating,
-                NumberOfRating = member.NumberOfRatings
+                NumberOfRating = member.NumberOfRatings,
+                PhoneNumber = member.PhoneNumber
             }).ToList();
 
             List<UserView> managers = group.Managers.Select(manager => new UserView
@@ -179,7 +182,8 @@ namespace KaderService.Services.Services
                 ImageUri = manager.ImageUri,
                 UserId = manager.Id,
                 Rating = manager.Rating,
-                NumberOfRating = manager.NumberOfRatings
+                NumberOfRating = manager.NumberOfRatings,
+                PhoneNumber = manager.PhoneNumber
             }).ToList();
 
             return new GroupView
