@@ -34,14 +34,14 @@ namespace KaderService.Services.Services
         public async Task<List<PostView>> GetPostsAsync(User user, PagingParameters paging)
         {
             List<Post> posts = await _repository.GetPostsAsync(user, paging);
-            List<PostView> postsAsync = ConvertToPostViews(posts);
+            List<PostView> postsViews = posts.Select(ConvertToPostViews).ToList();
 
-            return postsAsync;
+            return postsViews;
         }
 
-        private static List<PostView> ConvertToPostViews(IEnumerable<Post> posts)
+        private static PostView ConvertToPostViews(Post p)
         {
-            List<PostView> postsAsync = posts.Select(p => new PostView
+            return new()
             {
                 Creator = new UserView
                 {
@@ -52,7 +52,8 @@ namespace KaderService.Services.Services
                     Rating = p.Creator.Rating,
                     NumberOfRating = p.Creator.NumberOfRatings,
                     ImageUri = p.Creator.ImageUri,
-                    PhoneNumber = p.Creator.PhoneNumber
+                    PhoneNumber = p.Creator.PhoneNumber,
+                    Email = p.Creator.Email
                 },
                 Address = p.Address,
                 Created = p.Created,
@@ -77,12 +78,11 @@ namespace KaderService.Services.Services
                         FirstName = comment.Creator.FirstName,
                         LastName = comment.Creator.LastName,
                         ImageUri = comment.Creator.ImageUri,
-                        PhoneNumber = comment.Creator.PhoneNumber
+                        PhoneNumber = comment.Creator.PhoneNumber,
+                        Email = comment.Creator.Email
                     }
                 }))
-            }).ToList();
-
-            return postsAsync;
+            };
         }
 
         public async Task<IEnumerable<PostView>> GetRecommendedPostsAsync(User user)
@@ -102,8 +102,8 @@ namespace KaderService.Services.Services
                 IEnumerable<KeyValuePair<int, double>> topPosts = postsScore.OrderByDescending(pair => pair.Value).Take(6);
                 IQueryable<Post> posts = _repository.GetAllPosts();
                 List<Post> recommendedPost = (from keyValuePair in topPosts from post in posts where keyValuePair.Key == post.PostNumber select post).ToList();
-                
-                return ConvertToPostViews(recommendedPost);
+
+                return recommendedPost.Select(ConvertToPostViews).ToList();
             }
             catch
             {
@@ -111,7 +111,7 @@ namespace KaderService.Services.Services
             }
         }
 
-        public async Task<Post> GetPostAsync(string id, User user)
+        public async Task<PostView> GetPostAsync(string id, User user)
         {
             Post post = await _repository.GetPostAsync(id);
 
@@ -123,7 +123,7 @@ namespace KaderService.Services.Services
             var relatedPost = new RelatedPost(user.UserNumber, post.PostNumber);
             await _repository.AddRelatedPostAsync(user, post, relatedPost);
 
-            return post;
+            return ConvertToPostViews(post);
         }
 
         public async Task UpdatePostAsync(string id, Post post)

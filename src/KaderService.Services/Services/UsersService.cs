@@ -147,7 +147,8 @@ namespace KaderService.Services.Services
                 UserId = userId,
                 MemberInGroupsCount = user.MemberInGroups.Count,
                 ManagerInGroupsCount = user.ManagerInGroups.Count,
-                PostsCount = user.Posts.Count
+                PostsCount = user.Posts.Count,
+                Email = user.Email
             };
         }
 

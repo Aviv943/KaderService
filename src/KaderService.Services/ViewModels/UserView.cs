@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +15,8 @@ namespace KaderService.Services.ViewModels
 
         public string LastName { get; set; }
 
+        public string Email { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public double Rating { get; set; }
@@ -23,8 +24,6 @@ namespace KaderService.Services.ViewModels
         public int NumberOfRating { get; set; }
 
         public string ImageUri { get; set; }
-
-        public ICollection<PostView> Posts { get; set; }
 
         //public ICollection<GroupView> MemberInGroups { get; set; }
         public int MemberInGroupsCount { get; set; }
