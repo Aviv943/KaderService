@@ -35,7 +35,8 @@ namespace KaderService.Services.Services
                     Rating = c.Creator.Rating,
                     NumberOfRating = c.Creator.NumberOfRatings,
                     PhoneNumber = c.Creator.PhoneNumber,
-                    Email = c.Creator.Email
+                    Email = c.Creator.Email,
+                    ImageUri = c.Creator.ImageUri
                 },
                 PostId = c.PostId,
                 CommentId = c.CommentId,
