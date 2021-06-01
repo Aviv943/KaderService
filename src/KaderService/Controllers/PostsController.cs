@@ -34,21 +34,16 @@ namespace KaderService.Controllers
         }
 
         [HttpGet("post/{postId}")]
-        public async Task<ActionResult<GetPostResponse>> GetPostAsync(string postId)
+        public async Task<ActionResult<PostView>> GetPostAsync(string postId)
         {
-            Post post = await _service.GetPostAsync(postId, LoggedInUser);
+            PostView post = await _service.GetPostAsync(postId, LoggedInUser);
 
             if (post == null)
             {
                 return NotFound();
             }
 
-            var response = new GetPostResponse
-            {
-                Post = post
-            };
-
-            return Ok(response);
+            return Ok(post);
         }
         
         [HttpGet]
